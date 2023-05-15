@@ -4,6 +4,9 @@ import { HiExternalLink } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { getImageUrl } from '../../lib/helpers/getImageUrl';
 import { routes } from '../routes';
+import { StaticTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 const DashboardPage: FC = () => {
   return (
@@ -15,6 +18,11 @@ const DashboardPage: FC = () => {
         Explore the whole collection of open-source web components and interactive elements built with the utility
         classes from Tailwind CSS
       </p>
+      <div style={{ width: '330px' }}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <StaticTimePicker onChange={(e) => console.log(e)} />
+        </LocalizationProvider>
+      </div>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {routes.map(({ title, href, card }, index) => {
           if (!card) return;

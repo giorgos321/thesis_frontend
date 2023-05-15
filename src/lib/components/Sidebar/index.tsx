@@ -33,7 +33,7 @@ const SidebarComponent: FC<SidebarProps> = ({
         hidden={isCollapsed && collapseBehavior === 'hide'}
         {...theirProps}
       >
-        <div className={theme.inner}>{children}</div>
+        <div style={{ cursor: 'pointer' }} className={theme.inner}>{children}</div>
       </aside>
     </SidebarContext.Provider>
   );

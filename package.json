@@ -49,11 +49,16 @@
   },
   "proxy": "http://localhost:8080",
   "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@floating-ui/react-dom": "^1.0.0",
     "@floating-ui/react-dom-interactions": "^0.9.1",
+    "@mui/material": "^5.13.0",
+    "@mui/x-date-pickers": "^6.4.0",
     "axios": "^1.1.2",
     "classnames": "^2.3.1",
     "commitizen": "^4.2.5",
+    "moment": "^2.29.4",
     "react-icons": "^4.4.0",
     "react-indiana-drag-scroll": "^2.2.0"
   },
