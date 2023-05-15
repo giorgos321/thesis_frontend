@@ -1,12 +1,12 @@
+import { StaticTimePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import classNames from 'classnames';
 import type { FC } from 'react';
 import { HiExternalLink } from 'react-icons/hi';
 import { Link } from 'react-router-dom';
 import { getImageUrl } from '../../lib/helpers/getImageUrl';
 import { routes } from '../routes';
-import { StaticTimePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 const DashboardPage: FC = () => {
   return (

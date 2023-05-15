@@ -4,26 +4,7 @@ import type { ComponentProps, FC, ReactNode } from 'react';
 // import { BsCreditCard2FrontFill, BsImages } from 'react-icons/bs';
 // import { FaBars, FaSpinner } from 'react-icons/fa';
 // import { FiNavigation } from 'react-icons/fi';
-import {
-  // HiAnnotation,
-  // HiArrowCircleDown,
-  // HiBadgeCheck,
-  // HiBell,
-  // HiChevronDoubleRight,
-  // HiClipboardList,
-  // HiCollection,
-  // HiCreditCard,
-  // HiDeviceTablet,
-  // HiDuplicate,
-  HiHome, HiUserAdd,
-  // HiMinus,
-  // HiOutlineChevronDoubleRight,
-  // HiOutlineClock,
-  // HiPencilAlt,
-  // HiStar,
-  // HiTable,
-  // HiUser,
-} from 'react-icons/hi';
+import { HiHome, HiUserAdd } from 'react-icons/hi';
 // import { MdColorLens, MdTab } from 'react-icons/md';
 // import AccordionPage from './pages/AccordionPage';
 // import AlertsPage from './pages/AlertsPage';
@@ -46,10 +27,10 @@ import Home from './pages/Home';
 // import ProgressPage from './pages/ProgressPage';
 // import RatingPage from './pages/RatingPage';
 // import SidebarPage from './pages/SidebarPage';
-import SingIn from './pages/SignIn';
-import SingUp from './pages/SingUp';
 import { GoSignIn } from 'react-icons/go';
 import DashboardPage from './pages/DashboardPage';
+import SingIn from './pages/SignIn';
+import SingUp from './pages/SingUp';
 // import SpinnersPage from './pages/SpinnersPage';
 // import TablePage from './pages/TablePage';
 // import TabsPage from './pages/TabsPage';
@@ -90,7 +71,7 @@ export const bottomRoutes: RouteProps[] = [
     group: false,
     protected: false,
   },
-]
+];
 
 export const routes: RouteProps[] = [
   {

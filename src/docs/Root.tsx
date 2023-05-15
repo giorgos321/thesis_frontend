@@ -1,18 +1,18 @@
-import { createContext, FC, useEffect, useReducer } from 'react';
-import { Suspense, useRef, useState } from 'react';
+import { createContext, FC, Suspense, useEffect, useReducer, useRef, useState } from 'react';
 import { BsGithub } from 'react-icons/bs';
+import { GoSignOut } from 'react-icons/go';
 import { HiMenuAlt1 } from 'react-icons/hi';
 import { SiStorybook } from 'react-icons/si';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { actions, actionsEnum, appReducer, appState } from '../appReducer';
 import { DarkThemeToggle, Navbar, Sidebar, Spinner } from '../lib';
-import { routes as _routes, bottomRoutes as _bottomRoutes } from './routes';
-import { appReducer, appState, actions, actionsEnum } from '../appReducer';
-import { GoSignOut } from 'react-icons/go';
+import { bottomRoutes as _bottomRoutes, routes as _routes } from './routes';
 
-export const AppContext = createContext<{ state: appState, dispatch: React.Dispatch<actions> }>({
+export const AppContext = createContext<{ state: appState; dispatch: React.Dispatch<actions> }>({
   state: {
-    auth: false
-  }, dispatch: () => { }
+    auth: false,
+  },
+  dispatch: () => {},
 });
 
 export const Root: FC = () => {
@@ -24,10 +24,10 @@ export const Root: FC = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    if(typeof token === 'string' && token.length > 0){
-      dispatch({ type: actionsEnum.auth,payload: { auth: true } });
+    if (typeof token === 'string' && token.length > 0) {
+      dispatch({ type: actionsEnum.auth, payload: { auth: true } });
     }
-  },[]);
+  }, []);
 
   const routes = _routes.filter((r) => {
     if (state.auth) {
@@ -41,7 +41,7 @@ export const Root: FC = () => {
   const logout = () => {
     dispatch({ type: actionsEnum.auth, payload: { auth: false } });
     localStorage.removeItem('token');
-  }
+  };
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden">
@@ -78,8 +78,8 @@ export const Root: FC = () => {
       <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
         <Sidebar collapsed={collapsed}>
           <Sidebar.Items>
-            <div className=' h-full flex flex-col'>
-              <div className='flex-grow'>
+            <div className=" h-full flex flex-col">
+              <div className="flex-grow">
                 <Sidebar.ItemGroup>
                   {routes.map(({ href, icon, title }, key) => (
                     <Sidebar.Item
@@ -96,12 +96,11 @@ export const Root: FC = () => {
                 </Sidebar.ItemGroup>
               </div>
               <Sidebar.ItemGroup>
-                {state.auth && <Sidebar.Item
-                  icon={GoSignOut}
-                  onClick={() => logout()}
-                >
-                  {'Log Out'}
-                </Sidebar.Item>}
+                {state.auth && (
+                  <Sidebar.Item icon={GoSignOut} onClick={() => logout()}>
+                    {'Log Out'}
+                  </Sidebar.Item>
+                )}
                 {bottomRoutes.map(({ href, icon, title }, key) => (
                   <Sidebar.Item
                     key={key}
