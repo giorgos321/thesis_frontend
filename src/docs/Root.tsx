@@ -21,6 +21,8 @@ export const Root: FC = () => {
   const { pathname } = useLocation();
 
   const [state, dispatch] = useReducer(appReducer, { auth: false });
+  console.log('ok');
+  
 
   useEffect(() => {
     const token = localStorage.getItem('token');
