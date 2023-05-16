@@ -16,12 +16,12 @@
     "url": "https://github.com/themesberg/flowbite-react/issues"
   },
   "repository": {
-    "url": "https://github.com/themesberg/flowbite-react",
+    "url": "https://github.com/giorgos321/thesis_frontend",
     "type": "git"
   },
   "license": "MIT",
   "private": false,
-  "homepage": "https://flowbite-react.com",
+  "homepage": "https://giorgos321.github.io/thesis_frontend/",
   "scripts": {
     "build": "react-app-rewired build --profile",
     "build:lib": "rimraf lib && yarn build:lib:esm && yarn build:lib:cjs",
