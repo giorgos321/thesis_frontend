@@ -2,9 +2,9 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-    'plugin:react-hooks/recommended',
-    'plugin:storybook/recommended',
+    // 'plugin:prettier/recommended',
+    // 'plugin:react-hooks/recommended',
+    // 'plugin:storybook/recommended',
     'plugin:tailwindcss/recommended',
   ],
   ignorePatterns: ['.eslintrc.js', 'config-overrides.js', 'lint-staged.js', 'postcss.config.js', 'tailwind.config.js'],

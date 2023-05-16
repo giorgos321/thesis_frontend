@@ -1,10 +1,12 @@
-import { createContext, FC, Suspense, useEffect, useReducer, useRef, useState } from 'react';
-import { BsGithub } from 'react-icons/bs';
+import type { FC } from 'react';
+import { createContext, Suspense, useEffect, useReducer, useRef, useState } from 'react';
+// import { BsGithub } from 'react-icons/bs';
 import { GoSignOut } from 'react-icons/go';
 import { HiMenuAlt1 } from 'react-icons/hi';
-import { SiStorybook } from 'react-icons/si';
+// import { SiStorybook } from 'react-icons/si';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { actions, actionsEnum, appReducer, appState } from '../appReducer';
+import type { actions, appState } from '../appReducer';
+import { actionsEnum, appReducer } from '../appReducer';
 import { DarkThemeToggle, Navbar, Sidebar, Spinner } from '../lib';
 import { bottomRoutes as _bottomRoutes, routes as _routes } from './routes';
 
@@ -12,7 +14,7 @@ export const AppContext = createContext<{ state: appState; dispatch: React.Dispa
   state: {
     auth: false,
   },
-  dispatch: () => {},
+  dispatch: () => undefined,
 });
 
 export const Root: FC = () => {
@@ -21,7 +23,6 @@ export const Root: FC = () => {
   const { pathname } = useLocation();
 
   const [state, dispatch] = useReducer(appReducer, { auth: false });
-  console.log('ok');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -55,7 +56,7 @@ export const Root: FC = () => {
           <span className="text-xl font-semibold dark:text-white">Flowbite React Components</span>
         </div>
         <div className="flex items-center gap-2">
-          <a
+          {/* <a
             className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
             href={`${process.env.PUBLIC_URL}/storybook`}
             title="Storybook"
@@ -63,8 +64,8 @@ export const Root: FC = () => {
             rel="noreferrer"
           >
             <SiStorybook className="h-5 w-5" />
-          </a>
-          <a
+          </a> */}
+          {/* <a
             className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
             href="https://github.com/themesberg/flowbite-react"
             title="Github Repository"
@@ -72,15 +73,15 @@ export const Root: FC = () => {
             rel="noreferrer"
           >
             <BsGithub className="h-5 w-5" />
-          </a>
+          </a> */}
           <DarkThemeToggle />
         </div>
       </Navbar>
       <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
         <Sidebar collapsed={collapsed}>
           <Sidebar.Items>
-            <div className=" h-full flex flex-col">
-              <div className="flex-grow">
+            <div className=" flex h-full flex-col">
+              <div className="grow">
                 <Sidebar.ItemGroup>
                   {routes.map(({ href, icon, title }, key) => (
                     <Sidebar.Item
@@ -118,7 +119,7 @@ export const Root: FC = () => {
             </div>
           </Sidebar.Items>
         </Sidebar>
-        <main className="flex-1 overflow-auto p-4 bg-[#e8f0fe] dark:bg-gray-900" ref={mainRef}>
+        <main className="flex-1 overflow-auto bg-[#e8f0fe] p-4 dark:bg-gray-900" ref={mainRef}>
           <Suspense
             fallback={
               <div className="flex h-full items-center justify-center">

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { AppContext } from '../docs/Root';
-import { routes } from '../docs/routes';
+import { AppContext } from '../app/Root';
+import { routes } from '../app/routes';
 
 const useAuthRoutes = () => {
   const ctx = useContext(AppContext);

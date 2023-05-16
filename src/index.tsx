@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { Root } from './docs/Root';
+import { Root } from './app/Root';
 import './index.css';
 import { Flowbite } from './lib/components';
 
