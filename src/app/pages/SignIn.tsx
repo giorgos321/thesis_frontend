@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 import { actionsEnum } from '../../appReducer';
 import { AppContext } from '../Root';
+import useToast from '../../hooks/useToast';
 
 const SingIn = () => {
   const _email = useRef('');
@@ -11,6 +12,8 @@ const SingIn = () => {
   const navigate = useNavigate();
 
   const { dispatch } = useContext(AppContext);
+
+  const { showToast } = useToast();
 
   const submit = async () => {
     const email = _email.current;
@@ -23,22 +26,21 @@ const SingIn = () => {
 
     if (res.status === 200) {
       localStorage.setItem('token', res.data.accessToken);
+      api.interceptors.request.use(
+        (config) => {
+          if (config.headers) {
+            config.headers['x-access-token'] = res.data.accessToken;
+          }
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        },
+      )
+      dispatch({ type: actionsEnum.auth, payload: { auth: true } });
+      navigate('/');
+      showToast('warning','User Logged In',5000);
     }
-
-    api.interceptors.request.use(
-      (config) => {
-        if (config.headers) {
-          config.headers['x-access-token'] = res.data.accessToken;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
-
-    dispatch({ type: actionsEnum.auth, payload: { auth: true } });
-    navigate('/');
   };
 
   return (

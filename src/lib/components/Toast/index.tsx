@@ -1,11 +1,12 @@
 import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
+import { ComponentProps, FC, PropsWithChildren, useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { excludeClassName } from '../../helpers/exclude';
 import { useTheme } from '../Flowbite/ThemeContext';
 import type { Duration } from './ToastContext';
 import { ToastContext } from './ToastContext';
 import { ToastToggle } from './ToastToggle';
+import { AppContext } from '../../../app/Root';
 
 export interface ToastProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className'>> {
   duration?: Duration;
@@ -23,8 +24,14 @@ const durationClasses: Record<Duration, string> = {
 };
 
 const ToastComponent: FC<ToastProps> = ({ children, duration = 300, ...props }) => {
-  const [isClosed, setIsClosed] = useState(false);
-  const [isRemoved, setIsRemoved] = useState(false);
+  const [isClosed, setIsClosed] = useState(true);
+  const [isRemoved, setIsRemoved] = useState(true);
+  const { state } = useContext(AppContext);
+
+  useEffect(() => {
+    setIsClosed(!state.toast.show);
+    setTimeout(() => setIsRemoved(!state.toast.show), duration);
+  },[state.toast.show]);
 
   const theme = useTheme().theme.toast;
   const theirProps = excludeClassName(props);

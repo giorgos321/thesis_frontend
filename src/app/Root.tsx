@@ -2,18 +2,22 @@ import type { FC } from 'react';
 import { createContext, Suspense, useEffect, useReducer, useRef, useState } from 'react';
 // import { BsGithub } from 'react-icons/bs';
 import { GoSignOut } from 'react-icons/go';
-import { HiMenuAlt1 } from 'react-icons/hi';
+import { HiCheck, HiExclamation, HiMenuAlt1, HiX } from 'react-icons/hi';
 // import { SiStorybook } from 'react-icons/si';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import type { actions, appState } from '../appReducer';
 import { actionsEnum, appReducer } from '../appReducer';
-import { DarkThemeToggle, Navbar, Sidebar, Spinner } from '../lib';
+import { DarkThemeToggle, Navbar, Sidebar, Spinner, Toast } from '../lib';
 import { bottomRoutes as _bottomRoutes, routes as _routes } from './routes';
+import api from '../api';
+
+const defaultState = {
+  auth: false,
+  toast: { show: false }
+}
 
 export const AppContext = createContext<{ state: appState; dispatch: React.Dispatch<actions> }>({
-  state: {
-    auth: false,
-  },
+  state: defaultState,
   dispatch: () => undefined,
 });
 
@@ -22,7 +26,9 @@ export const Root: FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
   const { pathname } = useLocation();
 
-  const [state, dispatch] = useReducer(appReducer, { auth: false });
+  const [state, dispatch] = useReducer(appReducer, defaultState);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -41,9 +47,41 @@ export const Root: FC = () => {
   const bottomRoutes = _bottomRoutes.filter((_) => !state.auth);
 
   const logout = () => {
+
+    api.interceptors.request.use(
+      (config) => {
+        if (config.headers) {
+          delete config.headers['x-access-token']
+        }
+
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
     dispatch({ type: actionsEnum.auth, payload: { auth: false } });
     localStorage.removeItem('token');
+    navigate('/signin');
+
   };
+
+  const getToastIcon = (type: 'success' | 'error' | 'warning') => {
+    switch (type) {
+      case 'error':
+        return <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100 text-red-500 dark:bg-red-800 dark:text-red-200">
+          <HiX className="h-5 w-5" />
+        </div>
+      case 'success':
+        return <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+          <HiCheck className="h-5 w-5" />
+        </div>
+      case 'warning':
+        return <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 dark:bg-orange-700 dark:text-orange-200">
+          <HiExclamation className="h-5 w-5" />
+        </div>
+    }
+  }
 
   return (
     <div className="flex h-screen w-full flex-col overflow-hidden">
@@ -133,8 +171,18 @@ export const Root: FC = () => {
                   <Route key={href} path={href} element={Component} />
                 ))}
               </Routes>
+              <div className='fixed bottom-3 right-8'>
+                <Toast>
+                    {typeof state.toast.toastType === 'string' && getToastIcon(state.toast.toastType)}
+                  <div className="ml-3 text-sm font-normal">
+                    {state.toast.message}
+                  </div>
+                  <Toast.Toggle />
+                </Toast>
+              </div>
             </AppContext.Provider>
           </Suspense>
+
         </main>
       </div>
     </div>

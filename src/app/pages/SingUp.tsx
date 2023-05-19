@@ -1,5 +1,8 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import api from '../../api';
+import { useNavigate } from 'react-router-dom';
+import { actionsEnum } from '../../appReducer';
+import { AppContext } from '../Root';
 
 const SingUp = () => {
   const _username = useRef<string>();
@@ -9,6 +12,9 @@ const SingUp = () => {
   const _password = useRef<string>();
 
   const _confirmPassword = useRef<string>();
+  const { dispatch } = useContext(AppContext);
+
+  const navigate = useNavigate();
 
   const submit = async () => {
     const email = _email.current;
@@ -23,7 +29,23 @@ const SingUp = () => {
         password,
         roles: ['admin'],
       });
-      console.log(res);
+      if(res.status === 200){
+        localStorage.setItem('token', res.data.accessToken);
+        api.interceptors.request.use(
+          (config) => {
+            if (config.headers) {
+              config.headers['x-access-token'] = res.data.accessToken;
+            }
+            
+            return config;
+          },
+          (error) => {
+            return Promise.reject(error);
+          },
+        );
+        dispatch({ type: actionsEnum.auth, payload: { auth: true } });
+        navigate('/')
+      }
     }
   };
 
