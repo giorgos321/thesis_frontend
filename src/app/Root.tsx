@@ -9,7 +9,7 @@ import type { actions, appState } from '../appReducer';
 import { actionsEnum, appReducer } from '../appReducer';
 import { DarkThemeToggle, Navbar, Sidebar, Spinner, Toast } from '../lib';
 import { bottomRoutes as _bottomRoutes, routes as _routes } from './routes';
-import api from '../api';
+import api, { apiParams } from '../api';
 
 const defaultState = {
   auth: false,
@@ -47,19 +47,9 @@ export const Root: FC = () => {
   const bottomRoutes = _bottomRoutes.filter((_) => !state.auth);
 
   const logout = () => {
-
-    api.interceptors.request.use(
-      (config) => {
-        if (config.headers) {
-          delete config.headers['x-access-token']
-        }
-
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      },
-    );
+    console.log(apiParams.authInterceptorId);
+    
+    api.interceptors.request.eject(apiParams.authInterceptorId)
     dispatch({ type: actionsEnum.auth, payload: { auth: false } });
     localStorage.removeItem('token');
     navigate('/signin');

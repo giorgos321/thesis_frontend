@@ -1,6 +1,6 @@
 import { useContext, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../../api';
+import api, { apiParams, authInterceptor } from '../../api';
 import { actionsEnum } from '../../appReducer';
 import { AppContext } from '../Root';
 import useToast from '../../hooks/useToast';
@@ -26,20 +26,14 @@ const SingIn = () => {
 
     if (res.status === 200) {
       localStorage.setItem('token', res.data.accessToken);
-      api.interceptors.request.use(
-        (config) => {
-          if (config.headers) {
-            config.headers['x-access-token'] = res.data.accessToken;
-          }
-          return config;
-        },
+      apiParams.authInterceptorId = api.interceptors.request.use(authInterceptor,
         (error) => {
           return Promise.reject(error);
         },
       )
       dispatch({ type: actionsEnum.auth, payload: { auth: true } });
       navigate('/');
-      showToast('warning','User Logged In',5000);
+      showToast('success','User Logged In',5000);
     }
   };
 
