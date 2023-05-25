@@ -1,8 +1,8 @@
-import { useContext, useRef } from 'react';
-import api from '../../api';
-import { useNavigate } from 'react-router-dom';
-import { actionsEnum } from '../../appReducer';
-import { AppContext } from '../Root';
+import { useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../api";
+import { actionsEnum } from "../../appReducer";
+import { AppContext } from "../Root";
 
 const SingUp = () => {
   const _username = useRef<string>();
@@ -23,28 +23,28 @@ const SingUp = () => {
     const confirmPassword = _confirmPassword.current;
 
     if (password === confirmPassword) {
-      const res = await api.post('api/auth/signup', {
+      const res = await api.post("api/auth/signup", {
         username,
         email,
         password,
-        roles: ['admin'],
+        roles: ["admin"],
       });
-      if(res.status === 200){
-        localStorage.setItem('token', res.data.accessToken);
+      if (res.status === 200) {
+        localStorage.setItem("token", res.data.accessToken);
         api.interceptors.request.use(
           (config) => {
             if (config.headers) {
-              config.headers['x-access-token'] = res.data.accessToken;
+              config.headers["x-access-token"] = res.data.accessToken;
             }
-            
+
             return config;
           },
           (error) => {
             return Promise.reject(error);
-          },
+          }
         );
         dispatch({ type: actionsEnum.auth, payload: { auth: true } });
-        navigate('/')
+        navigate("/");
       }
     }
   };
@@ -59,7 +59,10 @@ const SingUp = () => {
             </h1>
             <div className="space-y-4 md:space-y-6">
               <div>
-                <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Username
                 </label>
                 <input
@@ -73,7 +76,10 @@ const SingUp = () => {
                 />
               </div>
               <div>
-                <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="email"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Your email
                 </label>
                 <input
@@ -87,7 +93,10 @@ const SingUp = () => {
                 />
               </div>
               <div>
-                <label htmlFor="password" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                <label
+                  htmlFor="password"
+                  className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                >
                   Password
                 </label>
                 <input

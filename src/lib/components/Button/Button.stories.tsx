@@ -1,15 +1,15 @@
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import type { ButtonProps } from '.';
-import { Button } from '.';
-import theme from '../../theme/default';
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import type { ButtonProps } from ".";
+import { Button } from ".";
+import theme from "../../theme/default";
 
 export default {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
   argTypes: {
     color: {
       options: Object.keys(theme.button.color),
-      control: { type: 'radio' },
+      control: { type: "radio" },
     },
   },
 } as Meta;
@@ -17,7 +17,7 @@ export default {
 const Template: Story<ButtonProps> = (args) => <Button {...args} />;
 
 export const DefaultButton = Template.bind({});
-DefaultButton.storyName = 'Default';
+DefaultButton.storyName = "Default";
 DefaultButton.args = {
-  children: 'Button',
+  children: "Button",
 };

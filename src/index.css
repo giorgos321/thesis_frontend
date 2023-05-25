@@ -2,7 +2,7 @@ body {
   overflow: hidden;
 }
 
-@import '~flowbite';
+@import "~flowbite";
 
 @tailwind components;
 @tailwind utilities;

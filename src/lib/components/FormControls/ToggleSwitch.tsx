@@ -1,16 +1,26 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, KeyboardEvent, MouseEvent } from 'react';
-import { useId } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { useTheme } from '../Flowbite/ThemeContext';
+import classNames from "classnames";
+import type { ComponentProps, FC, KeyboardEvent, MouseEvent } from "react";
+import { useId } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export type ToggleSwitchProps = Omit<ComponentProps<'button'>, 'onChange' | 'className'> & {
+export type ToggleSwitchProps = Omit<
+  ComponentProps<"button">,
+  "onChange" | "className"
+> & {
   checked: boolean;
   label: string;
   onChange: (checked: boolean) => void;
 };
 
-export const ToggleSwitch: FC<ToggleSwitchProps> = ({ checked, disabled, label, name, onChange, ...props }) => {
+export const ToggleSwitch: FC<ToggleSwitchProps> = ({
+  checked,
+  disabled,
+  label,
+  name,
+  onChange,
+  ...props
+}) => {
   const theme = useTheme().theme.formControls.toggleSwitch;
   const theirProps = excludeClassName(props);
   const id = useId();
@@ -28,7 +38,16 @@ export const ToggleSwitch: FC<ToggleSwitchProps> = ({ checked, disabled, label, 
 
   return (
     <>
-      {name && checked && <input checked={checked} hidden name={name} readOnly type="checkbox" className="sr-only" />}
+      {name && checked && (
+        <input
+          checked={checked}
+          hidden
+          name={name}
+          readOnly
+          type="checkbox"
+          className="sr-only"
+        />
+      )}
       <button
         aria-checked={checked}
         aria-labelledby={`${id}-flowbite-toggleswitch-label`}
@@ -39,10 +58,18 @@ export const ToggleSwitch: FC<ToggleSwitchProps> = ({ checked, disabled, label, 
         role="switch"
         tabIndex={0}
         type="button"
-        className={classNames(theme.base, theme.active[disabled ? 'off' : 'on'])}
+        className={classNames(
+          theme.base,
+          theme.active[disabled ? "off" : "on"]
+        )}
         {...theirProps}
       >
-        <div className={classNames(theme.toggle.base, theme.toggle.checked[checked ? 'on' : 'off'])} />
+        <div
+          className={classNames(
+            theme.toggle.base,
+            theme.toggle.checked[checked ? "on" : "off"]
+          )}
+        />
         <span
           data-testid="flowbite-toggleswitch-label"
           id={`${id}-flowbite-toggleswitch-label`}

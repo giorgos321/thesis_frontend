@@ -1,16 +1,16 @@
-import type { FC } from 'react';
-import { Button, Spinner } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { Button, Spinner } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const SpinnersPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default spinner',
+      title: "Default spinner",
       code: <Spinner aria-label="Default status example" />,
     },
     {
-      title: 'Colors',
+      title: "Colors",
       code: (
         <div className="flex flex-wrap gap-2">
           <Spinner color="info" aria-label="Info spinner example" />
@@ -23,7 +23,7 @@ const SpinnersPage: FC = () => {
       ),
     },
     {
-      title: 'Sizing',
+      title: "Sizing",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <Spinner aria-label="Extra small spinner example" size="xs" />
@@ -35,7 +35,7 @@ const SpinnersPage: FC = () => {
       ),
     },
     {
-      title: 'Alignment',
+      title: "Alignment",
       code: (
         <div className="flex flex-col gap-2">
           <div className="text-left">
@@ -51,7 +51,7 @@ const SpinnersPage: FC = () => {
       ),
     },
     {
-      title: 'Buttons',
+      title: "Buttons",
       code: (
         <div className="flex flex-row gap-3">
           <Button>

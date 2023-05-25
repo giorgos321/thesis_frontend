@@ -1,13 +1,13 @@
-import type { FC } from 'react';
-import { HiCheck, HiClock } from 'react-icons/hi';
-import { Badge } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiCheck, HiClock } from "react-icons/hi";
+import { Badge } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const BadgesPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default badge',
+      title: "Default badge",
       code: (
         <div className="flex flex-wrap gap-2">
           <Badge color="info">Default</Badge>
@@ -22,7 +22,7 @@ const BadgesPage: FC = () => {
       ),
     },
     {
-      title: 'Large badge',
+      title: "Large badge",
       code: (
         <div className="flex flex-wrap gap-2">
           <Badge color="info" size="sm">
@@ -53,7 +53,7 @@ const BadgesPage: FC = () => {
       ),
     },
     {
-      title: 'Badges as links',
+      title: "Badges as links",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <Badge href="/badges">Default</Badge>
@@ -64,7 +64,7 @@ const BadgesPage: FC = () => {
       ),
     },
     {
-      title: 'Badges with icon',
+      title: "Badges with icon",
       code: (
         <div className="flex flex-wrap gap-2">
           <Badge icon={HiCheck}>2 minutes ago</Badge>
@@ -75,7 +75,7 @@ const BadgesPage: FC = () => {
       ),
     },
     {
-      title: 'Badge with icon only',
+      title: "Badge with icon only",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <Badge icon={HiCheck} />

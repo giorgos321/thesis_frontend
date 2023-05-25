@@ -1,13 +1,13 @@
-import { action } from '@storybook/addon-actions';
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import { HiOutlineExclamationCircle } from 'react-icons/hi';
-import type { ModalProps } from '.';
-import { Modal } from '.';
-import { Button } from '../Button';
-import { Checkbox, Label, TextInput } from '../FormControls';
+import { action } from "@storybook/addon-actions";
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
+import type { ModalProps } from ".";
+import { Modal } from ".";
+import { Button } from "../Button";
+import { Checkbox, Label, TextInput } from "../FormControls";
 
 export default {
-  title: 'Components/Modal',
+  title: "Components/Modal",
   component: Modal,
   args: {
     show: false,
@@ -17,8 +17,8 @@ export default {
 const Template: Story<ModalProps> = ({ children, ...rest }): JSX.Element => {
   return (
     <>
-      <Button onClick={action('open')}>Toggle modal</Button>
-      <Modal onClose={action('close')} {...rest}>
+      <Button onClick={action("open")}>Toggle modal</Button>
+      <Modal onClose={action("close")} {...rest}>
         {children}
       </Modal>
     </>
@@ -33,19 +33,22 @@ Default.args = {
       <Modal.Body>
         <div className="space-y-6">
           <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-            With less than a month to go before the European Union enacts new consumer privacy laws for its citizens,
-            companies around the world are updating their terms of service agreements to comply.
+            With less than a month to go before the European Union enacts new
+            consumer privacy laws for its citizens, companies around the world
+            are updating their terms of service agreements to comply.
           </p>
           <p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-            The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25 and is meant
-            to ensure a common set of data rights in the European Union. It requires organizations to notify users as
-            soon as possible of high-risk data breaches that could personally affect them.
+            The European Union’s General Data Protection Regulation (G.D.P.R.)
+            goes into effect on May 25 and is meant to ensure a common set of
+            data rights in the European Union. It requires organizations to
+            notify users as soon as possible of high-risk data breaches that
+            could personally affect them.
           </p>
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={action('close')}>I accept</Button>
-        <Button color="gray" onClick={action('close')}>
+        <Button onClick={action("close")}>I accept</Button>
+        <Button color="gray" onClick={action("close")}>
           Decline
         </Button>
       </Modal.Footer>
@@ -54,7 +57,7 @@ Default.args = {
 };
 
 export const PopUp = Template.bind({});
-PopUp.storyName = 'Pop-up modal';
+PopUp.storyName = "Pop-up modal";
 PopUp.args = {
   children: (
     <Modal.Body>
@@ -64,10 +67,10 @@ PopUp.args = {
           Are you sure you want to delete this product?
         </h3>
         <div className="flex justify-center gap-4">
-          <Button color="red" onClick={action('close')}>
+          <Button color="red" onClick={action("close")}>
             {"Yes, I'm sure"}
           </Button>
-          <Button color="gray" onClick={action('close')}>
+          <Button color="gray" onClick={action("close")}>
             No, cancel
           </Button>
         </div>
@@ -77,14 +80,16 @@ PopUp.args = {
 };
 
 export const FormElements = Template.bind({});
-FormElements.storyName = 'Form elements';
+FormElements.storyName = "Form elements";
 FormElements.args = {
   children: (
     <>
       <Modal.Header />
       <Modal.Body>
         <div className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">Sign in to our platform</h3>
+          <h3 className="text-xl font-medium text-gray-900 dark:text-white">
+            Sign in to our platform
+          </h3>
           <div>
             <div className="mb-2 block">
               <Label htmlFor="email" value="Your email" />
@@ -102,7 +107,10 @@ FormElements.args = {
               <Checkbox id="remember" />
               <Label htmlFor="remember">Remember me</Label>
             </div>
-            <a href="/modal" className="text-sm text-blue-700 hover:underline dark:text-blue-500">
+            <a
+              href="/modal"
+              className="text-sm text-blue-700 hover:underline dark:text-blue-500"
+            >
               Lost Password?
             </a>
           </div>
@@ -110,8 +118,11 @@ FormElements.args = {
             <Button>Log in to your account</Button>
           </div>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-            Not registered?{' '}
-            <a href="/modal" className="text-blue-700 hover:underline dark:text-blue-500">
+            Not registered?{" "}
+            <a
+              href="/modal"
+              className="text-blue-700 hover:underline dark:text-blue-500"
+            >
               Create account
             </a>
           </div>

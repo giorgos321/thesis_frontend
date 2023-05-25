@@ -1,9 +1,19 @@
-import type { FC } from 'react';
-import { useState } from 'react';
-import { HiMail } from 'react-icons/hi';
-import { Button, Checkbox, FileInput, Label, Radio, Select, Textarea, TextInput, ToggleSwitch } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { useState } from "react";
+import { HiMail } from "react-icons/hi";
+import {
+  Button,
+  Checkbox,
+  FileInput,
+  Label,
+  Radio,
+  Select,
+  Textarea,
+  TextInput,
+  ToggleSwitch,
+} from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const FormsPage: FC = () => {
   const [switch1, setSwitch1] = useState(false);
@@ -11,14 +21,19 @@ const FormsPage: FC = () => {
 
   const examples: CodeExample[] = [
     {
-      title: 'Form example',
+      title: "Form example",
       code: (
         <form className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
               <Label htmlFor="email1" value="Your email" />
             </div>
-            <TextInput id="email1" type="email" placeholder="name@flowbite.com" required />
+            <TextInput
+              id="email1"
+              type="email"
+              placeholder="name@flowbite.com"
+              required
+            />
           </div>
           <div>
             <div className="mb-2 block">
@@ -35,7 +50,7 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Input Sizing',
+      title: "Input Sizing",
       code: (
         <div className="flex flex-col gap-4">
           <div>
@@ -60,25 +75,42 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Disabled inputs',
+      title: "Disabled inputs",
       code: (
         <div className="flex flex-col gap-4">
           <Label htmlFor="disabledInput1">API token</Label>
-          <TextInput type="text" id="disabledInput1" placeholder="Disabled input" disabled />
+          <TextInput
+            type="text"
+            id="disabledInput1"
+            placeholder="Disabled input"
+            disabled
+          />
           <Label htmlFor="disabledInput2">Personal access token</Label>
-          <TextInput type="text" id="disabledInput2" placeholder="Disabled readonly input" disabled readOnly />
+          <TextInput
+            type="text"
+            id="disabledInput2"
+            placeholder="Disabled readonly input"
+            disabled
+            readOnly
+          />
         </div>
       ),
     },
     {
-      title: 'Shadow inputs',
+      title: "Shadow inputs",
       code: (
         <form className="flex flex-col gap-4">
           <div>
             <div className="mb-2 block">
               <Label htmlFor="email2" value="Your email" />
             </div>
-            <TextInput id="email2" type="email" placeholder="name@flowbite.com" required shadow />
+            <TextInput
+              id="email2"
+              type="email"
+              placeholder="name@flowbite.com"
+              required
+              shadow
+            />
           </div>
           <div>
             <div className="mb-2 block">
@@ -95,8 +127,11 @@ const FormsPage: FC = () => {
           <div className="flex items-center gap-2">
             <Checkbox id="agree" />
             <Label htmlFor="agree">
-              I agree with the{' '}
-              <a href="/forms" className="text-blue-600 hover:underline dark:text-blue-500">
+              I agree with the{" "}
+              <a
+                href="/forms"
+                className="text-blue-600 hover:underline dark:text-blue-500"
+              >
                 terms and conditions
               </a>
             </Label>
@@ -106,7 +141,7 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Helper text',
+      title: "Helper text",
       code: (
         <div>
           <div className="mb-2 block">
@@ -119,8 +154,11 @@ const FormsPage: FC = () => {
             required
             helperText={
               <>
-                We’ll never share your details. Read our{' '}
-                <a href="/forms" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                We’ll never share your details. Read our{" "}
+                <a
+                  href="/forms"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Privacy Policy
                 </a>
                 .
@@ -131,29 +169,40 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Input element with icon',
+      title: "Input element with icon",
       code: (
         <div>
           <div className="mb-2 block">
             <Label htmlFor="email4" value="Your email" />
           </div>
-          <TextInput id="email4" type="email" placeholder="name@flowbite.com" required icon={HiMail} />
+          <TextInput
+            id="email4"
+            type="email"
+            placeholder="name@flowbite.com"
+            required
+            icon={HiMail}
+          />
         </div>
       ),
     },
     {
-      title: 'Input element with addon',
+      title: "Input element with addon",
       code: (
         <div>
           <div className="mb-2 block">
             <Label htmlFor="username" value="Username" />
           </div>
-          <TextInput id="username3" placeholder="Bonnie Green" required addon="@" />
+          <TextInput
+            id="username3"
+            placeholder="Bonnie Green"
+            required
+            addon="@"
+          />
         </div>
       ),
     },
     {
-      title: 'Success and error validation',
+      title: "Success and error validation",
       code: (
         <div className="flex flex-col gap-4">
           <div>
@@ -167,7 +216,8 @@ const FormsPage: FC = () => {
               color="green"
               helperText={
                 <>
-                  <span className="font-medium">Alright!</span> Username available!
+                  <span className="font-medium">Alright!</span> Username
+                  available!
                 </>
               }
             />
@@ -183,7 +233,8 @@ const FormsPage: FC = () => {
               color="red"
               helperText={
                 <>
-                  <span className="font-medium">Oops!</span> Username already taken!
+                  <span className="font-medium">Oops!</span> Username already
+                  taken!
                 </>
               }
             />
@@ -192,18 +243,23 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Textarea',
+      title: "Textarea",
       code: (
         <div id="textarea">
           <div className="mb-2 block">
             <Label htmlFor="comment" value="Your message" />
           </div>
-          <Textarea id="comment" placeholder="Leave a comment..." required rows={4} />
+          <Textarea
+            id="comment"
+            placeholder="Leave a comment..."
+            required
+            rows={4}
+          />
         </div>
       ),
     },
     {
-      title: 'Select input',
+      title: "Select input",
       code: (
         <div id="select">
           <div className="mb-2 block">
@@ -219,14 +275,17 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Checkbox',
+      title: "Checkbox",
       code: (
         <div className="flex flex-col gap-4" id="checkbox">
           <div className="flex items-center gap-2">
             <Checkbox id="accept" defaultChecked />
             <Label htmlFor="accept">
-              I agree to the{' '}
-              <a href="/forms" className="text-blue-600 hover:underline dark:text-blue-500">
+              I agree to the{" "}
+              <a
+                href="/forms"
+                className="text-blue-600 hover:underline dark:text-blue-500"
+              >
                 terms and conditions
               </a>
             </Label>
@@ -247,7 +306,8 @@ const FormsPage: FC = () => {
               <Label htmlFor="shipping">Free shipping via Flowbite</Label>
               <div className="text-gray-500 dark:text-gray-300">
                 <span className="text-xs font-normal">
-                  For orders shipped from Flowbite from <span className="font-medium">€ 25</span> in books or{' '}
+                  For orders shipped from Flowbite from{" "}
+                  <span className="font-medium">€ 25</span> in books or{" "}
                   <span>€ 29</span> on other categories
                 </span>
               </div>
@@ -263,12 +323,17 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'Radio',
+      title: "Radio",
       code: (
         <fieldset className="flex flex-col gap-4" id="radio">
           <legend>Choose your favorite country</legend>
           <div className="flex items-center gap-2">
-            <Radio id="united-state" name="countries" value="USA" defaultChecked />
+            <Radio
+              id="united-state"
+              name="countries"
+              value="USA"
+              defaultChecked
+            />
             <Label htmlFor="united-state">United States</Label>
           </div>
           <div className="flex items-center gap-2">
@@ -293,23 +358,39 @@ const FormsPage: FC = () => {
       ),
     },
     {
-      title: 'File upload',
+      title: "File upload",
       code: (
         <div id="fileUpload">
           <div className="mb-2 block">
             <Label htmlFor="file" value="Upload file" />
           </div>
-          <FileInput id="file" helperText="A profile picture is useful to confirm your are logged into your account" />
+          <FileInput
+            id="file"
+            helperText="A profile picture is useful to confirm your are logged into your account"
+          />
         </div>
       ),
     },
     {
-      title: 'Toggle Switch',
+      title: "Toggle Switch",
       code: (
         <div className="flex flex-col gap-4" id="toggle">
-          <ToggleSwitch checked={switch1} label="Toggle me" onChange={setSwitch1} />
-          <ToggleSwitch checked={switch2} label="Toggle me (checked)" onChange={setSwitch2} />
-          <ToggleSwitch checked={false} disabled label="Toggle me (disabled)" onChange={() => undefined} />
+          <ToggleSwitch
+            checked={switch1}
+            label="Toggle me"
+            onChange={setSwitch1}
+          />
+          <ToggleSwitch
+            checked={switch2}
+            label="Toggle me (checked)"
+            onChange={setSwitch2}
+          />
+          <ToggleSwitch
+            checked={false}
+            disabled
+            label="Toggle me (disabled)"
+            onChange={() => undefined}
+          />
         </div>
       ),
     },

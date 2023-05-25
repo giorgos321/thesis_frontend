@@ -1,17 +1,17 @@
-import { DeepPartial } from '..';
-import type { AlertColors } from '../Alert';
-import type { AvatarSizes } from '../Avatar';
-import type { BadgeColors, BadgeSizes } from '../Badge';
+import { DeepPartial } from "..";
+import type { AlertColors } from "../Alert";
+import type { AvatarSizes } from "../Avatar";
+import type { BadgeColors, BadgeSizes } from "../Badge";
 import type {
   ButtonColors,
   ButtonGradientColors,
   ButtonGradientDuoToneColors,
   ButtonOutlineColors,
   ButtonSizes,
-} from '../Button';
-import type { PositionInButtonGroup } from '../Button/ButtonGroup';
-import { FlowbiteDropdownTheme } from '../Dropdown';
-import type { FlowbiteFloatingTheme } from '../Floating';
+} from "../Button";
+import type { PositionInButtonGroup } from "../Button/ButtonGroup";
+import { FlowbiteDropdownTheme } from "../Dropdown";
+import type { FlowbiteFloatingTheme } from "../Floating";
 import type {
   HelperColors,
   LabelColors,
@@ -20,13 +20,13 @@ import type {
   TextareaColors,
   TextInputColors,
   TextInputSizes,
-} from '../FormControls';
-import type { ModalPositions, ModalSizes } from '../Modal';
-import type { ProgressColor, ProgressSizes } from '../Progress';
-import type { StarSizes } from '../Rating';
-import type { SidebarCTAColors } from '../Sidebar/SidebarCTA';
-import type { SpinnerColors, SpinnerSizes } from '../Spinner';
-import type { TabStyleItem, TabStyles } from '../Tab';
+} from "../FormControls";
+import type { ModalPositions, ModalSizes } from "../Modal";
+import type { ProgressColor, ProgressSizes } from "../Progress";
+import type { StarSizes } from "../Rating";
+import type { SidebarCTAColors } from "../Sidebar/SidebarCTA";
+import type { SpinnerColors, SpinnerSizes } from "../Spinner";
+import type { TabStyleItem, TabStyles } from "../Tab";
 
 export type CustomFlowbiteTheme = DeepPartial<FlowbiteTheme>;
 
@@ -516,7 +516,8 @@ export interface FlowbiteColors extends FlowbiteStateColors {
   yellow: string;
 }
 
-export interface FlowbiteGradientColors extends Omit<FlowbiteStateColors, 'warning'> {
+export interface FlowbiteGradientColors
+  extends Omit<FlowbiteStateColors, "warning"> {
   [key: string]: string;
   cyan: string;
   lime: string;
@@ -535,18 +536,18 @@ export interface FlowbiteGradientDuoToneColors {
   tealToLime: string;
 }
 
-export type FlowbiteHeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type FlowbiteHeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 export interface FlowbitePositions {
-  'bottom-left': string;
-  'bottom-right': string;
-  'bottom-center': string;
-  'top-left': string;
-  'top-center': string;
-  'top-right': string;
-  'center-left': string;
+  "bottom-left": string;
+  "bottom-right": string;
+  "bottom-center": string;
+  "top-left": string;
+  "top-center": string;
+  "top-right": string;
+  "center-left": string;
   center: string;
-  'center-right': string;
+  "center-right": string;
 }
 
 export interface FlowbiteSizes {
@@ -555,12 +556,12 @@ export interface FlowbiteSizes {
   md: string;
   lg: string;
   xl: string;
-  '2xl': string;
-  '3xl': string;
-  '4xl': string;
-  '5xl': string;
-  '6xl': string;
-  '7xl': string;
+  "2xl": string;
+  "3xl": string;
+  "4xl": string;
+  "5xl": string;
+  "6xl": string;
+  "7xl": string;
 }
 
 export interface FlowbiteContentPositions {

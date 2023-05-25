@@ -1,7 +1,8 @@
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { useTheme } from '../Flowbite/ThemeContext';
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export interface FooterLinkProps extends Omit<PropsWithChildren<ComponentProps<'a'>>, 'className'> {
+export interface FooterLinkProps
+  extends Omit<PropsWithChildren<ComponentProps<"a">>, "className"> {
   href: string;
 }
 

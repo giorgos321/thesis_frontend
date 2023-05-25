@@ -1,9 +1,9 @@
-import type { Meta } from '@storybook/react/types-6-0';
-import { HiHome } from 'react-icons/hi';
-import { Breadcrumb } from '.';
+import type { Meta } from "@storybook/react/types-6-0";
+import { HiHome } from "react-icons/hi";
+import { Breadcrumb } from ".";
 
 export default {
-  title: 'Components/Breadcrumb',
+  title: "Components/Breadcrumb",
   component: Breadcrumb,
 } as Meta;
 
@@ -26,4 +26,4 @@ export const SolidBackground = (): JSX.Element => (
     <Breadcrumb.Item>Flowbite React</Breadcrumb.Item>
   </Breadcrumb>
 );
-SolidBackground.storyName = 'Solid background';
+SolidBackground.storyName = "Solid background";

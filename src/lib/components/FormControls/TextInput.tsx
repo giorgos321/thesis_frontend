@@ -1,30 +1,47 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, ReactNode } from 'react';
-import { forwardRef } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import type { FlowbiteColors, FlowbiteSizes } from '../Flowbite/FlowbiteTheme';
-import { useTheme } from '../Flowbite/ThemeContext';
-import HelperText from './HelperText';
+import classNames from "classnames";
+import type { ComponentProps, FC, ReactNode } from "react";
+import { forwardRef } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import type { FlowbiteColors, FlowbiteSizes } from "../Flowbite/FlowbiteTheme";
+import { useTheme } from "../Flowbite/ThemeContext";
+import HelperText from "./HelperText";
 
-export interface TextInputColors extends Pick<FlowbiteColors, 'gray' | 'info' | 'failure' | 'warning' | 'success'> {
+export interface TextInputColors
+  extends Pick<
+    FlowbiteColors,
+    "gray" | "info" | "failure" | "warning" | "success"
+  > {
   [key: string]: string;
 }
 
-export interface TextInputSizes extends Pick<FlowbiteSizes, 'sm' | 'md' | 'lg'> {
+export interface TextInputSizes
+  extends Pick<FlowbiteSizes, "sm" | "md" | "lg"> {
   [key: string]: string;
 }
 
-export interface TextInputProps extends Omit<ComponentProps<'input'>, 'ref' | 'color' | 'className'> {
+export interface TextInputProps
+  extends Omit<ComponentProps<"input">, "ref" | "color" | "className"> {
   sizing?: keyof TextInputSizes;
   shadow?: boolean;
   helperText?: ReactNode;
   addon?: ReactNode;
-  icon?: FC<ComponentProps<'svg'>>;
+  icon?: FC<ComponentProps<"svg">>;
   color?: keyof TextInputColors;
 }
 
 export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
-  ({ sizing = 'md', shadow, helperText, addon, icon: Icon, color = 'gray', ...props }, ref) => {
+  (
+    {
+      sizing = "md",
+      shadow,
+      helperText,
+      addon,
+      icon: Icon,
+      color = "gray",
+      ...props
+    },
+    ref
+  ) => {
     const theme = useTheme().theme.formControls.textInput;
     const theirProps = excludeClassName(props);
     return (
@@ -41,10 +58,10 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               className={classNames(
                 theme.field.input.base,
                 theme.field.input.colors[color],
-                theme.field.input.withIcon[Icon ? 'on' : 'off'],
-                theme.field.input.withAddon[addon ? 'on' : 'off'],
-                theme.field.input.withShadow[shadow ? 'on' : 'off'],
-                theme.field.input.sizes[sizing],
+                theme.field.input.withIcon[Icon ? "on" : "off"],
+                theme.field.input.withAddon[addon ? "on" : "off"],
+                theme.field.input.withShadow[shadow ? "on" : "off"],
+                theme.field.input.sizes[sizing]
               )}
               {...theirProps}
               ref={ref}
@@ -54,7 +71,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {helperText && <HelperText color={color}>{helperText}</HelperText>}
       </>
     );
-  },
+  }
 );
 
-TextInput.displayName = 'TextInput';
+TextInput.displayName = "TextInput";

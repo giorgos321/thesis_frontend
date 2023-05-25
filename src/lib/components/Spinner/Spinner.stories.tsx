@@ -1,9 +1,9 @@
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import { Spinner } from '.';
-import { Button } from '../Button';
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import { Spinner } from ".";
+import { Button } from "../Button";
 
 export default {
-  title: 'Components/Spinner',
+  title: "Components/Spinner",
   component: Spinner,
 } as Meta;
 
@@ -11,9 +11,9 @@ const Template: Story = (args) => <Spinner {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  color: 'info',
-  size: 'md',
-  title: 'Default spinner example',
+  color: "info",
+  size: "md",
+  title: "Default spinner example",
 };
 
 export const Alignment = (): JSX.Element => (

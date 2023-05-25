@@ -1,13 +1,13 @@
-import type { FC } from 'react';
-import { HiOutlineArrowRight, HiShoppingCart } from 'react-icons/hi';
-import { Button, Spinner } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiOutlineArrowRight, HiShoppingCart } from "react-icons/hi";
+import { Button, Spinner } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const ButtonsPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default button',
+      title: "Default button",
       code: (
         <div className="flex flex-wrap gap-2">
           <div>
@@ -36,10 +36,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Button pills',
+      title: "Button pills",
       code: (
         <div className="flex flex-wrap gap-2">
           <div>
@@ -79,10 +79,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Gradient Monochrome',
+      title: "Gradient Monochrome",
       code: (
         <div className="flex flex-wrap gap-2">
           <div>
@@ -111,10 +111,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Gradient duo-tone',
+      title: "Gradient duo-tone",
       code: (
         <div className="flex flex-wrap gap-2">
           <div>
@@ -140,10 +140,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Outline',
+      title: "Outline",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <div>
@@ -183,10 +183,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Button sizes',
+      title: "Button sizes",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <div>
@@ -206,10 +206,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Buttons with icon',
+      title: "Buttons with icon",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <div>
@@ -226,19 +226,19 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Button with label',
+      title: "Button with label",
       code: (
         <div className="w-3/12">
           <Button label="2">Messages</Button>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Icon buttons',
+      title: "Icon buttons",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <div>
@@ -263,10 +263,10 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Loader',
+      title: "Loader",
       code: (
         <div className="flex flex-wrap items-center gap-2">
           <div>
@@ -287,16 +287,16 @@ const ButtonsPage: FC = () => {
           </div>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Disabled',
+      title: "Disabled",
       code: (
         <div className="w-3/12">
           <Button disabled>Disabled button</Button>
         </div>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
   ];
 

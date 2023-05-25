@@ -1,12 +1,12 @@
-import { render, screen } from '@testing-library/react';
-import { FC } from 'react';
-import { HiHome } from 'react-icons/hi';
-import { describe, expect, it } from 'vitest';
-import { Breadcrumb } from '.';
-import { Flowbite } from '../Flowbite';
+import { render, screen } from "@testing-library/react";
+import { FC } from "react";
+import { HiHome } from "react-icons/hi";
+import { describe, expect, it } from "vitest";
+import { Breadcrumb } from ".";
+import { Flowbite } from "../Flowbite";
 
-describe('Components / Breadcrumb', () => {
-  describe('A11y', () => {
+describe("Components / Breadcrumb", () => {
+  describe("A11y", () => {
     it('should have `role="navigation"`', () => {
       render(<TestBreadcrumb />);
 
@@ -22,68 +22,68 @@ describe('Components / Breadcrumb', () => {
     it('should contain a `role="listitem"` for each `Breadcrumb.Item`', () => {
       render(<TestBreadcrumb />);
 
-      expect(items()[0]).toHaveTextContent('Home');
-      expect(items()[1]).toHaveTextContent('Projects');
-      expect(items()[2]).toHaveTextContent('Flowbite React');
+      expect(items()[0]).toHaveTextContent("Home");
+      expect(items()[1]).toHaveTextContent("Projects");
+      expect(items()[2]).toHaveTextContent("Flowbite React");
     });
 
     it('should contain a `role="link"` for each `Breadcrumb.Item href=".."`', () => {
       render(<TestBreadcrumb />);
 
-      expect(links()[0]).toHaveTextContent('Home');
-      expect(links()[1]).toHaveTextContent('Projects');
+      expect(links()[0]).toHaveTextContent("Home");
+      expect(links()[1]).toHaveTextContent("Projects");
     });
 
-    it('should use `aria-label` if provided', () => {
+    it("should use `aria-label` if provided", () => {
       render(<TestBreadcrumb />);
 
-      expect(breadcrumb()).toHaveAccessibleName('test label');
+      expect(breadcrumb()).toHaveAccessibleName("test label");
     });
   });
 
-  describe('Theme', () => {
-    it('should use custom list classes', () => {
+  describe("Theme", () => {
+    it("should use custom list classes", () => {
       const theme = {
         breadcrumb: {
-          list: 'gap-6',
+          list: "gap-6",
         },
       };
       render(
         <Flowbite theme={{ theme }}>
           <TestBreadcrumb />
-        </Flowbite>,
+        </Flowbite>
       );
 
-      expect(breadcrumbList()).toHaveClass('gap-6');
+      expect(breadcrumbList()).toHaveClass("gap-6");
     });
 
-    it('should use custom item classes', () => {
+    it("should use custom item classes", () => {
       const theme = {
         breadcrumb: {
           item: {
-            base: 'justify-center',
-            chevron: 'h-9 w-9',
+            base: "justify-center",
+            chevron: "h-9 w-9",
             href: {
-              off: 'text-md',
-              on: 'text-lg',
+              off: "text-md",
+              on: "text-lg",
             },
-            icon: 'h-6 w-6',
+            icon: "h-6 w-6",
           },
         },
       };
       render(
         <Flowbite theme={{ theme }}>
           <TestBreadcrumb />
-        </Flowbite>,
+        </Flowbite>
       );
 
-      expect(items()[0]).toHaveClass('justify-center');
-      expect(contents()[0]).toHaveAttribute('href');
-      expect(contents()[0]).toHaveClass('text-lg');
+      expect(items()[0]).toHaveClass("justify-center");
+      expect(contents()[0]).toHaveAttribute("href");
+      expect(contents()[0]).toHaveClass("text-lg");
 
-      expect(items()[2]).toHaveClass('justify-center');
-      expect(contents()[2]).not.toHaveAttribute('href');
-      expect(contents()[2]).toHaveClass('text-md');
+      expect(items()[2]).toHaveClass("justify-center");
+      expect(contents()[2]).not.toHaveAttribute("href");
+      expect(contents()[2]).toHaveClass("text-md");
     });
   });
 });
@@ -98,12 +98,12 @@ const TestBreadcrumb: FC = () => (
   </Breadcrumb>
 );
 
-const breadcrumb = () => screen.getByRole('navigation');
+const breadcrumb = () => screen.getByRole("navigation");
 
-const breadcrumbList = () => screen.getByRole('list');
+const breadcrumbList = () => screen.getByRole("list");
 
-const items = () => screen.getAllByRole('listitem');
+const items = () => screen.getAllByRole("listitem");
 
-const links = () => screen.getAllByRole('link');
+const links = () => screen.getAllByRole("link");
 
-const contents = () => screen.getAllByTestId('flowbite-breadcrumb-item');
+const contents = () => screen.getAllByTestId("flowbite-breadcrumb-item");

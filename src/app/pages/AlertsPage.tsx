@@ -1,23 +1,24 @@
-import type { FC } from 'react';
-import { HiEye, HiInformationCircle } from 'react-icons/hi';
-import { Alert } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiEye, HiInformationCircle } from "react-icons/hi";
+import { Alert } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const AlertsPage: FC = () => {
   const alertText = (
     <span>
-      <span className="font-medium">Info alert!</span> Change a few things up and try submitting again.
+      <span className="font-medium">Info alert!</span> Change a few things up
+      and try submitting again.
     </span>
   );
 
   const examples: CodeExample[] = [
     {
-      title: 'Default alert',
+      title: "Default alert",
       code: <Alert color="info">{alertText}</Alert>,
     },
     {
-      title: 'Alerts with icon',
+      title: "Alerts with icon",
       code: (
         <Alert color="failure" icon={HiInformationCircle}>
           {alertText}
@@ -25,16 +26,16 @@ const AlertsPage: FC = () => {
       ),
     },
     {
-      title: 'Dismissible alerts',
+      title: "Dismissible alerts",
       code: (
-        <Alert color="success" onDismiss={() => alert('Alert dismissed!')}>
+        <Alert color="success" onDismiss={() => alert("Alert dismissed!")}>
           {alertText}
         </Alert>
       ),
       codeStringifierOptions: { functionValue: (fn) => fn },
     },
     {
-      title: 'Rounded',
+      title: "Rounded",
       code: (
         <Alert color="warning" rounded={false}>
           {alertText}
@@ -42,7 +43,7 @@ const AlertsPage: FC = () => {
       ),
     },
     {
-      title: 'Border accent',
+      title: "Border accent",
       code: (
         <Alert color="warning" withBorderAccent>
           {alertText}
@@ -50,15 +51,16 @@ const AlertsPage: FC = () => {
       ),
     },
     {
-      title: 'Additional content',
+      title: "Additional content",
       code: (
         <Alert
           color="info"
           additionalContent={
             <>
               <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
-                More info about this info alert goes here. This example text is going to run a bit longer so that you
-                can see how spacing within an alert works with this kind of content.
+                More info about this info alert goes here. This example text is
+                going to run a bit longer so that you can see how spacing within
+                an alert works with this kind of content.
               </div>
               <div className="flex">
                 <button
@@ -79,23 +81,26 @@ const AlertsPage: FC = () => {
           }
           icon={HiInformationCircle}
         >
-          <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">This is a info alert</h3>
+          <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
+            This is a info alert
+          </h3>
         </Alert>
       ),
     },
     {
-      title: 'All options',
+      title: "All options",
       code: (
         <Alert
           color="success"
           rounded={false}
           withBorderAccent
-          onDismiss={() => alert('Alert dismissed!')}
+          onDismiss={() => alert("Alert dismissed!")}
           additionalContent={
             <>
               <div className="mt-2 mb-4 text-sm text-green-700 dark:text-green-800">
-                More info about this info alert goes here. This example text is going to run a bit longer so that you
-                can see how spacing within an alert works with this kind of content.
+                More info about this info alert goes here. This example text is
+                going to run a bit longer so that you can see how spacing within
+                an alert works with this kind of content.
               </div>
               <div className="flex">
                 <button
@@ -116,7 +121,9 @@ const AlertsPage: FC = () => {
           }
           icon={HiInformationCircle}
         >
-          <h3 className="text-lg font-medium text-green-700 dark:text-green-800">This is a info alert</h3>
+          <h3 className="text-lg font-medium text-green-700 dark:text-green-800">
+            This is a info alert
+          </h3>
         </Alert>
       ),
     },

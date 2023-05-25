@@ -1,9 +1,9 @@
-import { MemoryRouter } from 'react-router-dom';
-import Style from './style';
+import { MemoryRouter } from "react-router-dom";
+import Style from "./style";
 
 export const decorators = [
   (Story) => (
-    <MemoryRouter initialEntries={['/']}>
+    <MemoryRouter initialEntries={["/"]}>
       <Style />
       <Story />
     </MemoryRouter>
@@ -11,7 +11,7 @@ export const decorators = [
 ];
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
+  actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -19,8 +19,8 @@ export const parameters = {
     },
   },
   darkMode: {
-    current: 'dark',
-    darkClass: 'dark',
+    current: "dark",
+    darkClass: "dark",
     stylePreview: true,
   },
 };

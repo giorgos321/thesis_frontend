@@ -1,18 +1,26 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren, ReactElement } from 'react';
-import { Children, cloneElement, useMemo, useState } from 'react';
-import { HiChevronDown } from 'react-icons/hi';
-import { excludeClassName } from '../../helpers/exclude';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { AccordionContent } from './AccordionContent';
-import type { AccordionPanelProps } from './AccordionPanel';
-import { AccordionPanel } from './AccordionPanel';
-import { AccordionTitle } from './AccordionTitle';
+import classNames from "classnames";
+import type {
+  ComponentProps,
+  FC,
+  PropsWithChildren,
+  ReactElement,
+} from "react";
+import { Children, cloneElement, useMemo, useState } from "react";
+import { HiChevronDown } from "react-icons/hi";
+import { excludeClassName } from "../../helpers/exclude";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { AccordionContent } from "./AccordionContent";
+import type { AccordionPanelProps } from "./AccordionPanel";
+import { AccordionPanel } from "./AccordionPanel";
+import { AccordionTitle } from "./AccordionTitle";
 
-export interface AccordionProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className'>> {
+export interface AccordionProps
+  extends PropsWithChildren<Omit<ComponentProps<"div">, "className">> {
   alwaysOpen?: boolean;
-  arrowIcon?: FC<ComponentProps<'svg'>>;
-  children: ReactElement<AccordionPanelProps> | ReactElement<AccordionPanelProps>[];
+  arrowIcon?: FC<ComponentProps<"svg">>;
+  children:
+    | ReactElement<AccordionPanelProps>
+    | ReactElement<AccordionPanelProps>[];
   flush?: boolean;
 }
 
@@ -29,15 +37,21 @@ const AccordionComponent: FC<AccordionProps> = ({
   const panels = useMemo(
     () =>
       Children.map(children, (child, i) =>
-        cloneElement(child, { alwaysOpen, arrowIcon, flush, isOpen: isOpen === i, setOpen: () => setOpen(i) }),
+        cloneElement(child, {
+          alwaysOpen,
+          arrowIcon,
+          flush,
+          isOpen: isOpen === i,
+          setOpen: () => setOpen(i),
+        })
       ),
-    [alwaysOpen, arrowIcon, children, flush, isOpen],
+    [alwaysOpen, arrowIcon, children, flush, isOpen]
   );
   const theme = useTheme().theme.accordion;
 
   return (
     <div
-      className={classNames(theme.base, theme.flush[flush ? 'on' : 'off'])}
+      className={classNames(theme.base, theme.flush[flush ? "on" : "off"])}
       data-testid="flowbite-accordion"
       {...theirProps}
     >
@@ -46,10 +60,10 @@ const AccordionComponent: FC<AccordionProps> = ({
   );
 };
 
-AccordionComponent.displayName = 'Accordion';
-AccordionPanel.displayName = 'Accordion.Panel';
-AccordionTitle.displayName = 'Accordion.Title';
-AccordionContent.displayName = 'Accordion.Content';
+AccordionComponent.displayName = "Accordion";
+AccordionPanel.displayName = "Accordion.Panel";
+AccordionTitle.displayName = "Accordion.Title";
+AccordionContent.displayName = "Accordion.Content";
 
 export const Accordion = Object.assign(AccordionComponent, {
   Panel: AccordionPanel,

@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import { Checkbox, Table } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { Checkbox, Table } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const TablePage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default table',
+      title: "Default table",
       code: (
         <Table>
           <Table.Head>
@@ -27,7 +27,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop</Table.Cell>
               <Table.Cell>$2999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -40,7 +43,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop PC</Table.Cell>
               <Table.Cell>$1999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -53,7 +59,10 @@ const TablePage: FC = () => {
               <Table.Cell>Accessories</Table.Cell>
               <Table.Cell>$99</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -61,10 +70,10 @@ const TablePage: FC = () => {
           </Table.Body>
         </Table>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Striped rows',
+      title: "Striped rows",
       code: (
         <Table striped>
           <Table.Head>
@@ -85,7 +94,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop</Table.Cell>
               <Table.Cell>$2999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -98,7 +110,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop PC</Table.Cell>
               <Table.Cell>$1999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -111,7 +126,10 @@ const TablePage: FC = () => {
               <Table.Cell>Accessories</Table.Cell>
               <Table.Cell>$99</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -124,7 +142,10 @@ const TablePage: FC = () => {
               <Table.Cell>Phone</Table.Cell>
               <Table.Cell>$799</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -137,7 +158,10 @@ const TablePage: FC = () => {
               <Table.Cell>Wearables</Table.Cell>
               <Table.Cell>$999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -145,10 +169,10 @@ const TablePage: FC = () => {
           </Table.Body>
         </Table>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Hover state',
+      title: "Hover state",
       code: (
         <Table hoverable>
           <Table.Head>
@@ -169,7 +193,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop</Table.Cell>
               <Table.Cell>$2999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -182,7 +209,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop PC</Table.Cell>
               <Table.Cell>$1999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -195,7 +225,10 @@ const TablePage: FC = () => {
               <Table.Cell>Accessories</Table.Cell>
               <Table.Cell>$99</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -203,10 +236,10 @@ const TablePage: FC = () => {
           </Table.Body>
         </Table>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Checkbox',
+      title: "Checkbox",
       code: (
         <Table hoverable>
           <Table.Head>
@@ -233,7 +266,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop</Table.Cell>
               <Table.Cell>$2999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -249,7 +285,10 @@ const TablePage: FC = () => {
               <Table.Cell>Laptop PC</Table.Cell>
               <Table.Cell>$1999</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -265,7 +304,10 @@ const TablePage: FC = () => {
               <Table.Cell>Accessories</Table.Cell>
               <Table.Cell>$99</Table.Cell>
               <Table.Cell>
-                <a href="/tables" className="font-medium text-blue-600 hover:underline dark:text-blue-500">
+                <a
+                  href="/tables"
+                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                >
                   Edit
                 </a>
               </Table.Cell>
@@ -273,7 +315,7 @@ const TablePage: FC = () => {
           </Table.Body>
         </Table>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
   ];
 

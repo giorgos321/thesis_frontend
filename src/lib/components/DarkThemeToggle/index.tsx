@@ -1,10 +1,10 @@
-import type { ComponentProps, FC } from 'react';
-import { useContext } from 'react';
-import { HiMoon, HiSun } from 'react-icons/hi';
-import { excludeClassName } from '../../helpers/exclude';
-import { ThemeContext, useTheme } from '../Flowbite/ThemeContext';
+import type { ComponentProps, FC } from "react";
+import { useContext } from "react";
+import { HiMoon, HiSun } from "react-icons/hi";
+import { excludeClassName } from "../../helpers/exclude";
+import { ThemeContext, useTheme } from "../Flowbite/ThemeContext";
 
-export type DarkThemeToggleProps = Omit<ComponentProps<'button'>, 'className'>;
+export type DarkThemeToggleProps = Omit<ComponentProps<"button">, "className">;
 
 export const DarkThemeToggle: FC<DarkThemeToggleProps> = (props) => {
   const theirProps = excludeClassName(props);
@@ -20,7 +20,7 @@ export const DarkThemeToggle: FC<DarkThemeToggleProps> = (props) => {
       aria-label="Toggle dark mode"
       {...theirProps}
     >
-      {mode === 'dark' ? (
+      {mode === "dark" ? (
         <HiSun aria-label="Currently dark mode" className={theme.icon} />
       ) : (
         <HiMoon aria-label="Currently light mode" className={theme.icon} />

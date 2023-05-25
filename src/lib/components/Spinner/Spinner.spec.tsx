@@ -1,31 +1,33 @@
-import type { RenderResult } from '@testing-library/react';
-import { render } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { Spinner } from '.';
-import { Flowbite } from '../Flowbite';
+import type { RenderResult } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { Spinner } from ".";
+import { Flowbite } from "../Flowbite";
 
-describe('Components / Spinner', () => {
-  describe('A11y', () => {
+describe("Components / Spinner", () => {
+  describe("A11y", () => {
     it('should have `role="status"` by default', () => {
       const spinner = getSpinner(render(<Spinner aria-label="My spinner" />));
 
-      expect(spinner).toHaveAccessibleName('My spinner');
+      expect(spinner).toHaveAccessibleName("My spinner");
     });
 
-    it('should be able to set no `role`', () => {
-      const { getByLabelText } = render(<Spinner aria-label="My spinner" role={undefined} />);
+    it("should be able to set no `role`", () => {
+      const { getByLabelText } = render(
+        <Spinner aria-label="My spinner" role={undefined} />
+      );
 
-      const spinner = getByLabelText('My spinner');
+      const spinner = getByLabelText("My spinner");
 
-      expect(spinner).not.toHaveAttribute('role');
+      expect(spinner).not.toHaveAttribute("role");
     });
   });
 
-  describe('Theme', () => {
-    it('should use `base` classes', () => {
+  describe("Theme", () => {
+    it("should use `base` classes", () => {
       const theme = {
         spinner: {
-          base: 'text-gray-100',
+          base: "text-gray-100",
         },
       };
 
@@ -33,18 +35,18 @@ describe('Components / Spinner', () => {
         render(
           <Flowbite theme={{ theme }}>
             <Spinner />
-          </Flowbite>,
-        ),
+          </Flowbite>
+        )
       );
 
-      expect(spinner.firstElementChild).toHaveClass('text-gray-100');
+      expect(spinner.firstElementChild).toHaveClass("text-gray-100");
     });
 
-    it('should use `color` classes', () => {
+    it("should use `color` classes", () => {
       const theme = {
         spinner: {
           color: {
-            primary: 'text-gray-200',
+            primary: "text-gray-200",
           },
         },
       };
@@ -53,20 +55,20 @@ describe('Components / Spinner', () => {
         render(
           <Flowbite theme={{ theme }}>
             <Spinner color="primary" />
-          </Flowbite>,
-        ),
+          </Flowbite>
+        )
       );
 
-      expect(spinner.firstElementChild).toHaveClass('text-gray-200');
+      expect(spinner.firstElementChild).toHaveClass("text-gray-200");
     });
 
-    it('should use `light` classes', () => {
+    it("should use `light` classes", () => {
       const theme = {
         spinner: {
           light: {
             on: {
               color: {
-                success: 'text-gray-300',
+                success: "text-gray-300",
               },
             },
           },
@@ -77,13 +79,15 @@ describe('Components / Spinner', () => {
         render(
           <Flowbite theme={{ theme }}>
             <Spinner color="success" light />
-          </Flowbite>,
-        ),
+          </Flowbite>
+        )
       );
 
-      expect(spinner.firstElementChild).toHaveClass('text-gray-300');
+      expect(spinner.firstElementChild).toHaveClass("text-gray-300");
     });
   });
 });
 
-const getSpinner = ({ getByRole }: Pick<RenderResult, 'getByRole'>): HTMLElement => getByRole('status');
+const getSpinner = ({
+  getByRole,
+}: Pick<RenderResult, "getByRole">): HTMLElement => getByRole("status");

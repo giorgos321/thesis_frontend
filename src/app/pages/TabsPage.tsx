@@ -1,14 +1,14 @@
-import type { FC } from 'react';
-import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
-import { MdDashboard } from 'react-icons/md';
-import { Tabs } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
+import { MdDashboard } from "react-icons/md";
+import { Tabs } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const TabsPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default tabs',
+      title: "Default tabs",
       code: (
         <Tabs.Group aria-label="Default tabs" style="default">
           <Tabs.Item active title="Profile">
@@ -22,10 +22,10 @@ const TabsPage: FC = () => {
           </Tabs.Item>
         </Tabs.Group>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Tabs with underline',
+      title: "Tabs with underline",
       code: (
         <Tabs.Group aria-label="Tabs with underline" style="underline">
           <Tabs.Item title="Profile">Profile content</Tabs.Item>
@@ -39,10 +39,10 @@ const TabsPage: FC = () => {
           </Tabs.Item>
         </Tabs.Group>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Tabs with icons',
+      title: "Tabs with icons",
       code: (
         <Tabs.Group aria-label="Tabs with icons" style="underline">
           <Tabs.Item title="Profile" icon={HiUserCircle}>
@@ -62,10 +62,10 @@ const TabsPage: FC = () => {
           </Tabs.Item>
         </Tabs.Group>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Pills tabs',
+      title: "Pills tabs",
       code: (
         <Tabs.Group aria-label="Pills" style="pills">
           <Tabs.Item active title="Tab 1">
@@ -79,10 +79,10 @@ const TabsPage: FC = () => {
           </Tabs.Item>
         </Tabs.Group>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
     {
-      title: 'Full width tabs',
+      title: "Full width tabs",
       code: (
         <Tabs.Group aria-label="Full width tabs" style="fullWidth">
           <Tabs.Item title="Profile">Profile content</Tabs.Item>
@@ -91,7 +91,7 @@ const TabsPage: FC = () => {
           <Tabs.Item title="Invoice">Invoice content</Tabs.Item>
         </Tabs.Group>
       ),
-      codeClassName: 'dark:!bg-gray-900',
+      codeClassName: "dark:!bg-gray-900",
     },
   ];
   return <DemoPage examples={examples} />;

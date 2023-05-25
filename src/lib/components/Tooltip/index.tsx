@@ -1,14 +1,17 @@
-import type { Placement } from '@floating-ui/core';
-import type { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { Floating } from '../Floating';
-import { useTheme } from '../Flowbite/ThemeContext';
+import type { Placement } from "@floating-ui/core";
+import type { ComponentProps, FC, PropsWithChildren, ReactNode } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import { Floating } from "../Floating";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export interface TooltipProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className' | 'style'>> {
+export interface TooltipProps
+  extends PropsWithChildren<
+    Omit<ComponentProps<"div">, "className" | "style">
+  > {
   content: ReactNode;
-  placement?: 'auto' | Placement;
-  trigger?: 'hover' | 'click';
-  style?: 'dark' | 'light' | 'auto';
+  placement?: "auto" | Placement;
+  trigger?: "hover" | "click";
+  style?: "dark" | "light" | "auto";
   animation?: false | `duration-${number}`;
   arrow?: boolean;
 }
@@ -17,13 +20,13 @@ export interface TooltipProps extends PropsWithChildren<Omit<ComponentProps<'div
  * @see https://floating-ui.com/docs/react-dom-interactions
  */
 export const Tooltip: FC<TooltipProps> = ({
-  animation = 'duration-300',
+  animation = "duration-300",
   arrow = true,
   children,
   content,
-  placement = 'top',
-  style = 'dark',
-  trigger = 'hover',
+  placement = "top",
+  style = "dark",
+  trigger = "hover",
   ...props
 }) => {
   const theme = useTheme().theme.tooltip;

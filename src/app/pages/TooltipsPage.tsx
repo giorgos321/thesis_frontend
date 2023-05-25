@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import { Button, Tooltip } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { Button, Tooltip } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const TooltipsPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Using tooltips',
+      title: "Using tooltips",
       code: (
         <Tooltip content="Tooltip content">
           <Button>Default tooltip</Button>
@@ -14,7 +14,7 @@ const TooltipsPage: FC = () => {
       ),
     },
     {
-      title: 'Tooltip styles',
+      title: "Tooltip styles",
       code: (
         <div className="flex gap-2">
           <Tooltip content="Tooltip content" style="light">
@@ -27,7 +27,7 @@ const TooltipsPage: FC = () => {
       ),
     },
     {
-      title: 'Placement',
+      title: "Placement",
       code: (
         <div className="flex gap-2">
           <Tooltip content="Tooltip content" placement="top">
@@ -46,7 +46,7 @@ const TooltipsPage: FC = () => {
       ),
     },
     {
-      title: 'Triggering',
+      title: "Triggering",
       code: (
         <div className="flex gap-2">
           <Tooltip content="Tooltip content" trigger="hover">
@@ -59,7 +59,7 @@ const TooltipsPage: FC = () => {
       ),
     },
     {
-      title: 'Animation',
+      title: "Animation",
       code: (
         <div className="flex gap-2">
           <Tooltip content="Tooltip content" animation={false}>
@@ -81,7 +81,7 @@ const TooltipsPage: FC = () => {
       ),
     },
     {
-      title: 'Disable arrow',
+      title: "Disable arrow",
       code: (
         <Tooltip content="Tooltip content" arrow={false}>
           <Button>Default tooltip</Button>

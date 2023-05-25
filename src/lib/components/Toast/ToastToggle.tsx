@@ -1,14 +1,15 @@
-import type { ComponentProps, FC } from 'react';
-import { HiX } from 'react-icons/hi';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { useToastContext } from './ToastContext';
+import type { ComponentProps, FC } from "react";
+import { HiX } from "react-icons/hi";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { useToastContext } from "./ToastContext";
 
-type ToastToggleProps = ComponentProps<'button'> & {
-  xIcon?: FC<ComponentProps<'svg'>>;
+type ToastToggleProps = ComponentProps<"button"> & {
+  xIcon?: FC<ComponentProps<"svg">>;
 };
 
 export const ToastToggle: FC<ToastToggleProps> = ({ xIcon: XIcon = HiX }) => {
-  const { duration, isClosed, isRemoved, setIsClosed, setIsRemoved } = useToastContext();
+  const { duration, isClosed, isRemoved, setIsClosed, setIsRemoved } =
+    useToastContext();
   const theme = useTheme().theme.toast.toggle;
 
   const handleClick = () => {
@@ -17,7 +18,12 @@ export const ToastToggle: FC<ToastToggleProps> = ({ xIcon: XIcon = HiX }) => {
   };
 
   return (
-    <button aria-label="Close" onClick={handleClick} type="button" className={theme.base}>
+    <button
+      aria-label="Close"
+      onClick={handleClick}
+      type="button"
+      className={theme.base}
+    >
       <XIcon className={theme.icon} />
     </button>
   );

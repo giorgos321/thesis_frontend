@@ -1,22 +1,22 @@
-import type { Meta } from '@storybook/react/types-6-0';
-import { HiAdjustments, HiClipboardList, HiUserCircle } from 'react-icons/hi';
-import { MdDashboard } from 'react-icons/md';
-import type { TabsProps } from '.';
-import { Tabs, TabsComponent } from '.';
+import type { Meta } from "@storybook/react/types-6-0";
+import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
+import { MdDashboard } from "react-icons/md";
+import type { TabsProps } from ".";
+import { Tabs, TabsComponent } from ".";
 
 export default {
-  title: 'Components/Tabs',
+  title: "Components/Tabs",
   component: TabsComponent,
   args: {
-    className: 'bg-white rounded-lg dark:bg-gray-800 dark:text-white',
+    className: "bg-white rounded-lg dark:bg-gray-800 dark:text-white",
   },
   argTypes: {
     className: {
-      control: 'text',
+      control: "text",
     },
     style: {
-      control: 'radio',
-      options: ['default', 'underline', 'pills', 'fullWidth'],
+      control: "radio",
+      options: ["default", "underline", "pills", "fullWidth"],
     },
   },
 } as Meta;
@@ -45,9 +45,9 @@ export const WithUnderline = (args: TabsProps): JSX.Element => (
   </Tabs.Group>
 );
 WithUnderline.args = {
-  style: 'underline',
+  style: "underline",
 };
-WithUnderline.storyName = 'With underline';
+WithUnderline.storyName = "With underline";
 
 export const WithIcons = (args: TabsProps): JSX.Element => (
   <Tabs.Group {...args}>
@@ -69,9 +69,9 @@ export const WithIcons = (args: TabsProps): JSX.Element => (
   </Tabs.Group>
 );
 WithIcons.args = {
-  style: 'underline',
+  style: "underline",
 };
-WithIcons.storyName = 'With icons';
+WithIcons.storyName = "With icons";
 
 export const Pills = (args: TabsProps): JSX.Element => (
   <Tabs.Group {...args}>
@@ -85,7 +85,7 @@ export const Pills = (args: TabsProps): JSX.Element => (
   </Tabs.Group>
 );
 Pills.args = {
-  style: 'pills',
+  style: "pills",
 };
 
 export const FullWidth = (args: TabsProps): JSX.Element => (
@@ -100,6 +100,6 @@ export const FullWidth = (args: TabsProps): JSX.Element => (
   </Tabs.Group>
 );
 FullWidth.args = {
-  style: 'fullWidth',
+  style: "fullWidth",
 };
-FullWidth.storyName = 'Full width';
+FullWidth.storyName = "Full width";

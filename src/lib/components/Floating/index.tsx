@@ -1,4 +1,4 @@
-import type { Placement } from '@floating-ui/core';
+import type { Placement } from "@floating-ui/core";
 import {
   autoUpdate,
   useClick,
@@ -7,13 +7,17 @@ import {
   useHover,
   useInteractions,
   useRole,
-} from '@floating-ui/react-dom-interactions';
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { getArrowPlacement, getMiddleware, getPlacement } from '../../helpers/floating';
-import { FlowbiteDropdownTheme } from '../Dropdown';
+} from "@floating-ui/react-dom-interactions";
+import classNames from "classnames";
+import type { ComponentProps, FC, PropsWithChildren, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import {
+  getArrowPlacement,
+  getMiddleware,
+  getPlacement,
+} from "../../helpers/floating";
+import { FlowbiteDropdownTheme } from "../Dropdown";
 
 export interface FlowbiteFloatingTheme {
   target: string;
@@ -37,12 +41,15 @@ export interface FlowbiteFloatingTheme {
   };
 }
 
-export interface FloatingProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className' | 'style'>> {
+export interface FloatingProps
+  extends PropsWithChildren<
+    Omit<ComponentProps<"div">, "className" | "style">
+  > {
   content: ReactNode;
   theme: FlowbiteFloatingTheme | FlowbiteDropdownTheme;
-  placement?: 'auto' | Placement;
-  trigger?: 'hover' | 'click';
-  style?: 'dark' | 'light' | 'auto';
+  placement?: "auto" | Placement;
+  trigger?: "hover" | "click";
+  style?: "dark" | "light" | "auto";
   animation?: false | `duration-${number}`;
   arrow?: boolean;
 }
@@ -54,11 +61,11 @@ export const Floating: FC<FloatingProps> = ({
   children,
   content,
   theme,
-  animation = 'duration-300',
+  animation = "duration-300",
   arrow = true,
-  placement = 'top',
-  style = 'dark',
-  trigger = 'hover',
+  placement = "top",
+  style = "dark",
+  trigger = "hover",
   ...props
 }) => {
   const theirProps = excludeClassName(props);
@@ -85,10 +92,10 @@ export const Floating: FC<FloatingProps> = ({
   } = floatingTooltip;
 
   const { getFloatingProps, getReferenceProps } = useInteractions([
-    useClick(context, { enabled: trigger === 'click' }),
+    useClick(context, { enabled: trigger === "click" }),
     useFocus(context),
-    useHover(context, { enabled: trigger === 'hover' }),
-    useRole(context, { role: 'tooltip' }),
+    useHover(context, { enabled: trigger === "hover" }),
+    useRole(context, { role: "tooltip" }),
   ]);
 
   useEffect(() => {
@@ -99,7 +106,11 @@ export const Floating: FC<FloatingProps> = ({
 
   return (
     <>
-      <div className={theme.target} {...getReferenceProps({ ref: reference })} data-testid="flowbite-tooltip-target">
+      <div
+        className={theme.target}
+        {...getReferenceProps({ ref: reference })}
+        data-testid="flowbite-tooltip-target"
+      >
         {children}
       </div>
       <div
@@ -109,13 +120,13 @@ export const Floating: FC<FloatingProps> = ({
             theme.base,
             animation && `${theme.animation} ${animation}`,
             !open && theme.hidden,
-            theme.style[style],
+            theme.style[style]
           ),
           ref: floating,
           style: {
             position: strategy,
-            top: y ?? ' ',
-            left: x ?? ' ',
+            top: y ?? " ",
+            left: x ?? " ",
           },
           ...theirProps,
         })}
@@ -124,18 +135,19 @@ export const Floating: FC<FloatingProps> = ({
         {arrow && (
           <div
             className={classNames(theme.arrow.base, {
-              [theme.arrow.style.dark]: style === 'dark',
-              [theme.arrow.style.light]: style === 'light',
-              [theme.arrow.style.auto]: style === 'auto',
+              [theme.arrow.style.dark]: style === "dark",
+              [theme.arrow.style.light]: style === "light",
+              [theme.arrow.style.auto]: style === "auto",
             })}
             data-testid="flowbite-tooltip-arrow"
             ref={arrowRef}
             style={{
-              top: arrowY ?? ' ',
-              left: arrowX ?? ' ',
-              right: ' ',
-              bottom: ' ',
-              [getArrowPlacement({ placement: floatingTooltip.placement })]: theme.arrow.placement,
+              top: arrowY ?? " ",
+              left: arrowX ?? " ",
+              right: " ",
+              bottom: " ",
+              [getArrowPlacement({ placement: floatingTooltip.placement })]:
+                theme.arrow.placement,
             }}
           >
             &nbsp;

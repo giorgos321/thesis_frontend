@@ -1,14 +1,14 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
-import { excludeClassName } from '../../helpers/exclude';
-import range from '../../helpers/range';
-import { useTheme } from '../Flowbite/ThemeContext';
+import classNames from "classnames";
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
+import { excludeClassName } from "../../helpers/exclude";
+import range from "../../helpers/range";
+import { useTheme } from "../Flowbite/ThemeContext";
 
 export type PaginationProps = PropsWithChildren<Pagination>;
-interface Pagination extends Omit<ComponentProps<'nav'>, 'className'> {
+interface Pagination extends Omit<ComponentProps<"nav">, "className"> {
   currentPage: number;
-  layout?: 'navigation' | 'pagination' | 'table';
+  layout?: "navigation" | "pagination" | "table";
   onPageChange: (page: number) => void;
   showIcons?: boolean;
   totalPages: number;
@@ -18,12 +18,12 @@ interface Pagination extends Omit<ComponentProps<'nav'>, 'className'> {
 
 export const Pagination: FC<PaginationProps> = ({
   currentPage,
-  layout = 'pagination',
+  layout = "pagination",
   onPageChange,
   showIcons: showIcon = false,
   totalPages,
-  previousLabel = 'Previous',
-  nextLabel = 'Next',
+  previousLabel = "Previous",
+  nextLabel = "Next",
   ...props
 }): JSX.Element => {
   const firstPage = Math.max(1, currentPage - 3);
@@ -42,9 +42,10 @@ export const Pagination: FC<PaginationProps> = ({
 
   return (
     <nav className={theme.base} {...theirProps}>
-      {layout === 'table' && (
+      {layout === "table" && (
         <div className={theme.layout.table.base}>
-          Showing <span className={theme.layout.table.span}>{firstPage}</span> to&nbsp;
+          Showing <span className={theme.layout.table.span}>{firstPage}</span>{" "}
+          to&nbsp;
           <span className={theme.layout.table.span}>{lastPage}</span> of&nbsp;
           <span className={theme.layout.table.span}>{totalPages}</span> Entries
         </div>
@@ -52,17 +53,28 @@ export const Pagination: FC<PaginationProps> = ({
       <ul className={theme.pages.base}>
         <li>
           <button
-            className={classNames(theme.pages.previous.base, showIcon && theme.pages.showIcon)}
+            className={classNames(
+              theme.pages.previous.base,
+              showIcon && theme.pages.showIcon
+            )}
             onClick={() => goToPreviousPage()}
           >
-            {showIcon && <HiChevronLeft aria-hidden className={theme.pages.previous.icon} />}
+            {showIcon && (
+              <HiChevronLeft
+                aria-hidden
+                className={theme.pages.previous.icon}
+              />
+            )}
             {previousLabel}
           </button>
         </li>
-        {layout === 'pagination' &&
+        {layout === "pagination" &&
           range(firstPage, lastPage).map(
             (page: number): JSX.Element => (
-              <li aria-current={page === currentPage ? 'page' : undefined} key={page}>
+              <li
+                aria-current={page === currentPage ? "page" : undefined}
+                key={page}
+              >
                 <button
                   className={classNames(theme.pages.selector.base, {
                     [theme.pages.selector.active]: currentPage === page,
@@ -72,15 +84,20 @@ export const Pagination: FC<PaginationProps> = ({
                   {page}
                 </button>
               </li>
-            ),
+            )
           )}
         <li>
           <button
-            className={classNames(theme.pages.next.base, showIcon && theme.pages.showIcon)}
+            className={classNames(
+              theme.pages.next.base,
+              showIcon && theme.pages.showIcon
+            )}
             onClick={() => goToNextPage()}
           >
             {nextLabel}
-            {showIcon && <HiChevronRight aria-hidden className={theme.pages.next.icon} />}
+            {showIcon && (
+              <HiChevronRight aria-hidden className={theme.pages.next.icon} />
+            )}
           </button>
         </li>
       </ul>

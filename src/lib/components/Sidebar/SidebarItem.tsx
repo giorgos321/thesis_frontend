@@ -1,35 +1,37 @@
-import classNames from 'classnames';
-import type { ComponentProps, ElementType, FC, PropsWithChildren } from 'react';
-import { useId } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { Badge } from '../Badge';
-import type { FlowbiteColors } from '../Flowbite/FlowbiteTheme';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { Tooltip } from '../Tooltip';
-import { useSidebarContext } from './SidebarContext';
-import { useSidebarItemContext } from './SidebarItemContext';
+import classNames from "classnames";
+import type { ComponentProps, ElementType, FC, PropsWithChildren } from "react";
+import { useId } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import { Badge } from "../Badge";
+import type { FlowbiteColors } from "../Flowbite/FlowbiteTheme";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { Tooltip } from "../Tooltip";
+import { useSidebarContext } from "./SidebarContext";
+import { useSidebarItemContext } from "./SidebarItemContext";
 
 export interface SidebarItemProps
-  extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className'> & Record<string, unknown>> {
+  extends PropsWithChildren<
+    Omit<ComponentProps<"div">, "className"> & Record<string, unknown>
+  > {
   active?: boolean;
   as?: ElementType;
   href?: string;
-  icon?: FC<ComponentProps<'svg'>>;
+  icon?: FC<ComponentProps<"svg">>;
   label?: string;
   labelColor?: keyof SidebarItemLabelColors;
 }
 
-export interface SidebarItemLabelColors extends Pick<FlowbiteColors, 'gray'> {
+export interface SidebarItemLabelColors extends Pick<FlowbiteColors, "gray"> {
   [key: string]: string;
 }
 
 const SidebarItem: FC<SidebarItemProps> = ({
-  as: Component = 'a',
+  as: Component = "a",
   children,
   icon: Icon,
   active: isActive,
   label,
-  labelColor = 'info',
+  labelColor = "info",
   ...props
 }) => {
   const theirProps = excludeClassName(props);
@@ -42,7 +44,10 @@ const SidebarItem: FC<SidebarItemProps> = ({
   const ListItem: FC<PropsWithChildren> = ({ children: wrapperChildren }) => (
     <li>
       {isCollapsed ? (
-        <Tooltip content={<TooltipContent>{children}</TooltipContent>} placement="right">
+        <Tooltip
+          content={<TooltipContent>{children}</TooltipContent>}
+          placement="right"
+        >
           {wrapperChildren}
         </Tooltip>
       ) : (
@@ -51,7 +56,9 @@ const SidebarItem: FC<SidebarItemProps> = ({
     </li>
   );
 
-  const TooltipContent: FC<PropsWithChildren> = ({ children }) => <Children>{children}</Children>;
+  const TooltipContent: FC<PropsWithChildren> = ({ children }) => (
+    <Children>{children}</Children>
+  );
 
   const Children: FC<PropsWithChildren> = ({ children }) => (
     <span
@@ -70,23 +77,32 @@ const SidebarItem: FC<SidebarItemProps> = ({
         className={classNames(
           theme.base,
           isActive && theme.active,
-          !isCollapsed && isInsideCollapse && theme.collapsed.insideCollapse,
+          !isCollapsed && isInsideCollapse && theme.collapsed.insideCollapse
         )}
         {...theirProps}
       >
         {Icon && (
           <Icon
             aria-hidden
-            className={classNames(theme.icon.base, isActive && theme.icon.active)}
+            className={classNames(
+              theme.icon.base,
+              isActive && theme.icon.active
+            )}
             data-testid="flowbite-sidebar-item-icon"
           />
         )}
         {isCollapsed && !Icon && (
-          <span className={theme.collapsed.noIcon}>{(children as string).charAt(0).toLocaleUpperCase() ?? '?'}</span>
+          <span className={theme.collapsed.noIcon}>
+            {(children as string).charAt(0).toLocaleUpperCase() ?? "?"}
+          </span>
         )}
         {!isCollapsed && <Children>{children}</Children>}
         {!isCollapsed && label && (
-          <Badge color={labelColor} data-testid="flowbite-sidebar-label" hidden={isCollapsed}>
+          <Badge
+            color={labelColor}
+            data-testid="flowbite-sidebar-label"
+            hidden={isCollapsed}
+          >
             {label}
           </Badge>
         )}
@@ -95,5 +111,5 @@ const SidebarItem: FC<SidebarItemProps> = ({
   );
 };
 
-SidebarItem.displayName = 'Sidebar.Item';
+SidebarItem.displayName = "Sidebar.Item";
 export default SidebarItem;

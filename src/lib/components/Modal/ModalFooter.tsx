@@ -1,10 +1,12 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { useModalContext } from './ModalContext';
+import classNames from "classnames";
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { useModalContext } from "./ModalContext";
 
-export type ModalFooterProps = PropsWithChildren<Omit<ComponentProps<'div'>, 'className'>>;
+export type ModalFooterProps = PropsWithChildren<
+  Omit<ComponentProps<"div">, "className">
+>;
 
 export const ModalFooter: FC<ModalFooterProps> = ({ children, ...props }) => {
   const { popup } = useModalContext();

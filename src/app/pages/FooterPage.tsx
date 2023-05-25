@@ -1,13 +1,19 @@
-import type { FC } from 'react';
-import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs';
-import { Footer } from '../../lib/components/Footer';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import {
+  BsDribbble,
+  BsFacebook,
+  BsGithub,
+  BsInstagram,
+  BsTwitter,
+} from "react-icons/bs";
+import { Footer } from "../../lib/components/Footer";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const FooterPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default Footer',
+      title: "Default Footer",
       code: (
         <Footer container>
           <Footer.Copyright href="#" by="Flowbite™" year={2022} />
@@ -21,7 +27,7 @@ const FooterPage: FC = () => {
       ),
     },
     {
-      title: 'Footer with logo',
+      title: "Footer with logo",
       code: (
         <Footer container>
           <div className="w-full text-center">
@@ -46,7 +52,7 @@ const FooterPage: FC = () => {
       ),
     },
     {
-      title: 'Footer with social media icons',
+      title: "Footer with social media icons",
       code: (
         <Footer container>
           <div className="w-full">
@@ -99,7 +105,7 @@ const FooterPage: FC = () => {
       ),
     },
     {
-      title: 'Footer sitemap links',
+      title: "Footer sitemap links",
       code: (
         <Footer bgDark>
           <div className="w-full">

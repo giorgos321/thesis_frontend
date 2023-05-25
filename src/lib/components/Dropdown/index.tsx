@@ -1,15 +1,20 @@
-import type { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
-import { useMemo } from 'react';
-import { HiOutlineChevronDown, HiOutlineChevronLeft, HiOutlineChevronRight, HiOutlineChevronUp } from 'react-icons/hi';
-import { excludeClassName } from '../../helpers/exclude';
-import type { ButtonProps } from '../Button';
-import { Button } from '../Button';
-import type { FloatingProps } from '../Floating';
-import { Floating } from '../Floating';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { DropdownDivider } from './DropdownDivider';
-import { DropdownHeader } from './DropdownHeader';
-import { DropdownItem } from './DropdownItem';
+import type { ComponentProps, FC, PropsWithChildren, ReactNode } from "react";
+import { useMemo } from "react";
+import {
+  HiOutlineChevronDown,
+  HiOutlineChevronLeft,
+  HiOutlineChevronRight,
+  HiOutlineChevronUp,
+} from "react-icons/hi";
+import { excludeClassName } from "../../helpers/exclude";
+import type { ButtonProps } from "../Button";
+import { Button } from "../Button";
+import type { FloatingProps } from "../Floating";
+import { Floating } from "../Floating";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { DropdownDivider } from "./DropdownDivider";
+import { DropdownHeader } from "./DropdownHeader";
+import { DropdownItem } from "./DropdownItem";
 
 export interface FlowbiteDropdownTheme {
   target: string;
@@ -39,14 +44,16 @@ export interface FlowbiteDropdownTheme {
   divider: string;
 }
 
-export interface DropdownProps extends PropsWithChildren<Pick<FloatingProps, 'placement' | 'trigger'>>, ButtonProps {
+export interface DropdownProps
+  extends PropsWithChildren<Pick<FloatingProps, "placement" | "trigger">>,
+    ButtonProps {
   label: ReactNode;
   inline?: boolean;
   floatingArrow?: boolean;
   arrowIcon?: boolean;
 }
 
-const icons: Record<string, FC<ComponentProps<'svg'>>> = {
+const icons: Record<string, FC<ComponentProps<"svg">>> = {
   top: HiOutlineChevronUp,
   right: HiOutlineChevronRight,
   bottom: HiOutlineChevronDown,
@@ -57,8 +64,8 @@ const DropdownComponent: FC<DropdownProps> = ({ children, ...props }) => {
   const theme = useTheme().theme.dropdown;
   const theirProps = excludeClassName(props) as DropdownProps;
   const {
-    placement = props.inline ? 'bottom-start' : 'bottom',
-    trigger = 'click',
+    placement = props.inline ? "bottom-start" : "bottom",
+    trigger = "click",
     label,
     inline,
     floatingArrow = false,
@@ -67,14 +74,21 @@ const DropdownComponent: FC<DropdownProps> = ({ children, ...props }) => {
   } = theirProps;
 
   const Icon = useMemo(() => {
-    const [p] = placement.split('-');
+    const [p] = placement.split("-");
     return icons[p] ?? HiOutlineChevronDown;
   }, [placement]);
 
-  const content = useMemo(() => <ul className={theme.content}>{children}</ul>, [children, theme]);
+  const content = useMemo(
+    () => <ul className={theme.content}>{children}</ul>,
+    [children, theme]
+  );
 
   const TriggerWrapper: FC<ButtonProps> = ({ children }): JSX.Element =>
-    inline ? <button className={theme.inlineWrapper}>{children}</button> : <Button {...buttonProps}>{children}</Button>;
+    inline ? (
+      <button className={theme.inlineWrapper}>{children}</button>
+    ) : (
+      <Button {...buttonProps}>{children}</Button>
+    );
 
   return (
     <Floating
@@ -94,10 +108,10 @@ const DropdownComponent: FC<DropdownProps> = ({ children, ...props }) => {
   );
 };
 
-DropdownComponent.displayName = 'Dropdown';
-DropdownItem.displayName = 'Dropdown.Item';
-DropdownHeader.displayName = 'Dropdown.Header';
-DropdownDivider.displayName = 'Dropdown.Divider';
+DropdownComponent.displayName = "Dropdown";
+DropdownItem.displayName = "Dropdown.Item";
+DropdownHeader.displayName = "Dropdown.Header";
+DropdownDivider.displayName = "Dropdown.Divider";
 
 export const Dropdown = Object.assign(DropdownComponent, {
   Item: DropdownItem,

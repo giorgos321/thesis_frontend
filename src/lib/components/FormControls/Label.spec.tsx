@@ -1,32 +1,34 @@
-import { render } from '@testing-library/react';
-import { HiGlobe, HiLockClosed } from 'react-icons/hi';
-import { describe, expect, it } from 'vitest';
-import { Button } from '../Button';
-import { Checkbox } from './Checkbox';
-import { FileInput } from './FileInput';
-import { Label } from './Label';
-import { Radio } from './Radio';
-import { Select } from './Select';
-import { Textarea } from './Textarea';
-import { TextInput } from './TextInput';
-import { ToggleSwitch } from './ToggleSwitch';
+import { render } from "@testing-library/react";
+import { HiGlobe, HiLockClosed } from "react-icons/hi";
+import { describe, expect, it } from "vitest";
+import { Button } from "../Button";
+import { Checkbox } from "./Checkbox";
+import { FileInput } from "./FileInput";
+import { Label } from "./Label";
+import { Radio } from "./Radio";
+import { Select } from "./Select";
+import { Textarea } from "./Textarea";
+import { TextInput } from "./TextInput";
+import { ToggleSwitch } from "./ToggleSwitch";
 
-describe.concurrent('Components / Form controls / Label', () => {
-  describe.concurrent('A11y', () => {
-    it('should provide accessible name to any form control associated by `htmlFor`', () => {
+describe.concurrent("Components / Form controls / Label", () => {
+  describe.concurrent("A11y", () => {
+    it("should provide accessible name to any form control associated by `htmlFor`", () => {
       const inputLabels = [
-        'Your email',
-        'Your password',
-        'Remember me',
-        'Enable notifications',
-        'Upload file',
-        'United States',
-        'Your message',
+        "Your email",
+        "Your password",
+        "Remember me",
+        "Enable notifications",
+        "Upload file",
+        "United States",
+        "Your message",
       ];
 
       const { getByLabelText } = render(<TestForm />);
 
-      inputLabels.forEach((label) => expect(getByLabelText(label)).toHaveAccessibleName(label));
+      inputLabels.forEach((label) =>
+        expect(getByLabelText(label)).toHaveAccessibleName(label)
+      );
     });
   });
 });
@@ -34,11 +36,20 @@ describe.concurrent('Components / Form controls / Label', () => {
 const TestForm = (): JSX.Element => (
   <form>
     <div>
-      <ToggleSwitch checked={false} label="Enable notifications" onChange={console.log} />
+      <ToggleSwitch
+        checked={false}
+        label="Enable notifications"
+        onChange={console.log}
+      />
     </div>
     <div>
       <Label htmlFor="email">Your email</Label>
-      <TextInput id="email" type="email" placeholder="name@flowbite.com" required />
+      <TextInput
+        id="email"
+        type="email"
+        placeholder="name@flowbite.com"
+        required
+      />
     </div>
     <div>
       <Label htmlFor="password">Your password</Label>
@@ -70,7 +81,10 @@ const TestForm = (): JSX.Element => (
     </div>
     <div>
       <Label htmlFor="file">Upload file</Label>
-      <FileInput id="file" helperText="A profile picture is useful to confirm your are logged into your account" />
+      <FileInput
+        id="file"
+        helperText="A profile picture is useful to confirm your are logged into your account"
+      />
     </div>
     <fieldset>
       <legend>Choose your favorite country</legend>
@@ -96,7 +110,12 @@ const TestForm = (): JSX.Element => (
       </div>
       <div>
         <Label htmlFor="comment">Your message</Label>
-        <Textarea id="comment" helperText="Leave a comment..." required rows={4} />
+        <Textarea
+          id="comment"
+          helperText="Leave a comment..."
+          required
+          rows={4}
+        />
       </div>
     </fieldset>
     <Button type="submit">Submit</Button>

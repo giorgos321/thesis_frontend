@@ -1,12 +1,12 @@
-import { TimeClock } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import classNames from 'classnames';
-import type { FC } from 'react';
-import { HiExternalLink } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
-import { getImageUrl } from '../../lib/helpers/getImageUrl';
-import { routes } from '../routes';
+import { TimeClock } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import classNames from "classnames";
+import type { FC } from "react";
+import { HiExternalLink } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { getImageUrl } from "../../lib/helpers/getImageUrl";
+import { routes } from "../routes";
 
 const DashboardPage: FC = () => {
   return (
@@ -18,7 +18,7 @@ const DashboardPage: FC = () => {
         Explore the whole collection of open-source web components and interactive elements built with the utility
         classes from Tailwind CSS
       </p> */}
-      <div style={{ width: '330px' }}>
+      <div style={{ width: "330px" }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimeClock />
         </LocalizationProvider>
@@ -34,13 +34,19 @@ const DashboardPage: FC = () => {
               to={href}
             >
               <div className="flex items-center justify-between rounded-t-lg border-b border-gray-200 bg-gray-50 py-2.5 px-5 dark:border-gray-700 dark:bg-gray-700">
-                <span className="text-lg font-medium text-gray-500 dark:text-gray-400">{title}</span>
+                <span className="text-lg font-medium text-gray-500 dark:text-gray-400">
+                  {title}
+                </span>
                 <HiExternalLink className="h-5 w-5 text-gray-900 dark:text-white" />
               </div>
               <div className="flex h-52 items-center justify-center">
-                <img className={classNames(className, 'dark:hidden')} src={getImageUrl(images.light)} alt="Alerts" />
                 <img
-                  className={classNames(className, 'hidden dark:block')}
+                  className={classNames(className, "dark:hidden")}
+                  src={getImageUrl(images.light)}
+                  alt="Alerts"
+                />
+                <img
+                  className={classNames(className, "hidden dark:block")}
                   src={getImageUrl(images.dark)}
                   alt="Alerts"
                 />

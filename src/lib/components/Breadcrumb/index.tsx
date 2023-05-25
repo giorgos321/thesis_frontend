@@ -1,8 +1,11 @@
-import type { ComponentProps, FC } from 'react';
-import { useTheme } from '../Flowbite/ThemeContext';
-import BreadcrumbItem from './BreadcrumbItem';
+import type { ComponentProps, FC } from "react";
+import { useTheme } from "../Flowbite/ThemeContext";
+import BreadcrumbItem from "./BreadcrumbItem";
 
-const BreadcrumbComponent: FC<ComponentProps<'nav'>> = ({ children, ...props }) => {
+const BreadcrumbComponent: FC<ComponentProps<"nav">> = ({
+  children,
+  ...props
+}) => {
   const theme = useTheme().theme.breadcrumb;
 
   return (
@@ -12,5 +15,7 @@ const BreadcrumbComponent: FC<ComponentProps<'nav'>> = ({ children, ...props }) 
   );
 };
 
-BreadcrumbComponent.displayName = 'Breadcrumb';
-export const Breadcrumb = Object.assign(BreadcrumbComponent, { Item: BreadcrumbItem });
+BreadcrumbComponent.displayName = "Breadcrumb";
+export const Breadcrumb = Object.assign(BreadcrumbComponent, {
+  Item: BreadcrumbItem,
+});

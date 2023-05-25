@@ -1,12 +1,17 @@
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import { useTheme } from '../Flowbite/ThemeContext';
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export interface RatingAdvancedProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className'>> {
+export interface RatingAdvancedProps
+  extends PropsWithChildren<Omit<ComponentProps<"div">, "className">> {
   percentFilled?: number;
 }
 
-export const RatingAdvanced: FC<RatingAdvancedProps> = ({ percentFilled = 0, children, ...props }) => {
+export const RatingAdvanced: FC<RatingAdvancedProps> = ({
+  percentFilled = 0,
+  children,
+  ...props
+}) => {
   const theme = useTheme().theme.rating.advanced;
   const theirProps = excludeClassName(props);
 

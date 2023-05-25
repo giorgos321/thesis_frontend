@@ -1,10 +1,17 @@
-import type { ComponentProps, FC, PropsWithChildren, ReactElement } from 'react';
-import { Children, cloneElement, useMemo } from 'react';
-import type { ButtonProps } from '.';
-import { excludeClassName } from '../../helpers/exclude';
-import { useTheme } from '../Flowbite/ThemeContext';
+import type {
+  ComponentProps,
+  FC,
+  PropsWithChildren,
+  ReactElement,
+} from "react";
+import { Children, cloneElement, useMemo } from "react";
+import type { ButtonProps } from ".";
+import { excludeClassName } from "../../helpers/exclude";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export type ButtonGroupProps = PropsWithChildren<ComponentProps<'div'> & Pick<ButtonProps, 'outline' | 'pill'>>;
+export type ButtonGroupProps = PropsWithChildren<
+  ComponentProps<"div"> & Pick<ButtonProps, "outline" | "pill">
+>;
 
 export interface PositionInButtonGroup {
   none: string;
@@ -13,7 +20,12 @@ export interface PositionInButtonGroup {
   end: string;
 }
 
-const ButtonGroup: FC<ButtonGroupProps> = ({ children, outline, pill, ...props }): JSX.Element => {
+const ButtonGroup: FC<ButtonGroupProps> = ({
+  children,
+  outline,
+  pill,
+  ...props
+}): JSX.Element => {
   const theirProps = excludeClassName(props);
 
   const items = useMemo(
@@ -23,10 +35,14 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ children, outline, pill, ...props }
           outline,
           pill,
           positionInGroup:
-            index === 0 ? 'start' : index === (children as ReactElement<ButtonProps>[]).length - 1 ? 'end' : 'middle',
-        }),
+            index === 0
+              ? "start"
+              : index === (children as ReactElement<ButtonProps>[]).length - 1
+              ? "end"
+              : "middle",
+        })
       ),
-    [children, outline, pill],
+    [children, outline, pill]
   );
   const theme = useTheme().theme.buttonGroup;
 
@@ -37,5 +53,5 @@ const ButtonGroup: FC<ButtonGroupProps> = ({ children, outline, pill, ...props }
   );
 };
 
-ButtonGroup.displayName = 'Button.Group';
+ButtonGroup.displayName = "Button.Group";
 export default ButtonGroup;

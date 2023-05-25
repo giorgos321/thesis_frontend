@@ -3,5 +3,7 @@ export default (start: number, end: number): number[] => {
     return [];
   }
 
-  return [...Array(end - start + 1).keys()].map((key: number): number => key + start);
+  return [...Array(end - start + 1).keys()].map(
+    (key: number): number => key + start
+  );
 };

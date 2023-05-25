@@ -1,40 +1,41 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import { Avatar } from '.';
-import { Flowbite } from '../Flowbite';
-import type { CustomFlowbiteTheme } from '../Flowbite/FlowbiteTheme';
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { Avatar } from ".";
+import { Flowbite } from "../Flowbite";
+import type { CustomFlowbiteTheme } from "../Flowbite/FlowbiteTheme";
 
-describe('Components / Avatar', () => {
-  describe('Theme', () => {
-    it('should use custom classes', () => {
+describe("Components / Avatar", () => {
+  describe("Theme", () => {
+    it("should use custom classes", () => {
       const theme: CustomFlowbiteTheme = {
         avatar: {
           size: {
-            xxl: 'h-64 w-64',
+            xxl: "h-64 w-64",
           },
         },
       };
       render(
         <Flowbite theme={{ theme }}>
           <Avatar size="xxl" />
-        </Flowbite>,
+        </Flowbite>
       );
 
-      expect(img()).toHaveClass('h-64 w-64');
+      expect(img()).toHaveClass("h-64 w-64");
     });
   });
-  describe('Placeholder', () => {
-    it('should display placeholder initials', () => {
+  describe("Placeholder", () => {
+    it("should display placeholder initials", () => {
       render(
         <Flowbite>
           <Avatar placeholderInitials="RR" />
-        </Flowbite>,
+        </Flowbite>
       );
 
-      expect(initialsPlaceholder()).toHaveTextContent('RR');
+      expect(initialsPlaceholder()).toHaveTextContent("RR");
     });
   });
 });
 
-const img = () => screen.getByTestId('flowbite-avatar-img');
-const initialsPlaceholder = () => screen.getByTestId('flowbite-avatar-initials-placeholder');
+const img = () => screen.getByTestId("flowbite-avatar-img");
+const initialsPlaceholder = () =>
+  screen.getByTestId("flowbite-avatar-initials-placeholder");

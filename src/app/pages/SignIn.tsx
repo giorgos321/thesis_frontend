@@ -1,14 +1,14 @@
-import { useContext, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api, { apiParams, authInterceptor } from '../../api';
-import { actionsEnum } from '../../appReducer';
-import { AppContext } from '../Root';
-import useToast from '../../hooks/useToast';
+import { useContext, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import api, { apiParams, authInterceptor } from "../../api";
+import { actionsEnum } from "../../appReducer";
+import useToast from "../../hooks/useToast";
+import { AppContext } from "../Root";
 
 const SingIn = () => {
-  const _email = useRef('');
+  const _email = useRef("");
 
-  const _password = useRef('');
+  const _password = useRef("");
   const navigate = useNavigate();
 
   const { dispatch } = useContext(AppContext);
@@ -19,21 +19,22 @@ const SingIn = () => {
     const email = _email.current;
     const password = _password.current;
 
-    const res = await api.post('api/auth/signin', {
+    const res = await api.post("api/auth/signin", {
       email,
       password,
     });
 
     if (res.status === 200) {
-      localStorage.setItem('token', res.data.accessToken);
-      apiParams.authInterceptorId = api.interceptors.request.use(authInterceptor,
+      localStorage.setItem("token", res.data.accessToken);
+      apiParams.authInterceptorId = api.interceptors.request.use(
+        authInterceptor,
         (error) => {
           return Promise.reject(error);
-        },
-      )
+        }
+      );
       dispatch({ type: actionsEnum.auth, payload: { auth: true } });
-      navigate('/');
-      showToast('success','User Logged In',5000);
+      navigate("/");
+      showToast("success", "User Logged In", 5000);
     }
   };
 
@@ -47,7 +48,9 @@ const SingIn = () => {
             </h1>
             <div className="space-y-4 md:space-y-6">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                  Email
+                </label>
                 <input
                   onChange={(e) => (_email.current = e.target.value)}
                   id="name"
@@ -57,7 +60,9 @@ const SingIn = () => {
                 />
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                  Password
+                </label>
                 <input
                   onChange={(e) => (_password.current = e.target.value)}
                   type="password"

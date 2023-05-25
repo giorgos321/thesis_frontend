@@ -1,6 +1,6 @@
 // source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 
-import { DeepPartial } from '../components';
+import { DeepPartial } from "../components";
 
 /**
  * Simple object check.
@@ -8,7 +8,7 @@ import { DeepPartial } from '../components';
  * @returns {boolean}
  */
 export function isObject(item: unknown) {
-  return item && typeof item === 'object' && !Array.isArray(item);
+  return item && typeof item === "object" && !Array.isArray(item);
 }
 
 /**
@@ -16,7 +16,10 @@ export function isObject(item: unknown) {
  * @param target
  * @param ...sources
  */
-export function mergeDeep<T extends Record<string, unknown>>(target: T, ...sources: DeepPartial<T>[]): T {
+export function mergeDeep<T extends Record<string, unknown>>(
+  target: T,
+  ...sources: DeepPartial<T>[]
+): T {
   if (!sources.length) return target;
   const source = sources.shift();
 
@@ -24,7 +27,10 @@ export function mergeDeep<T extends Record<string, unknown>>(target: T, ...sourc
     for (const key in source) {
       if (isObject(source[key])) {
         if (!target[key]) Object.assign(target, { [key]: {} });
-        mergeDeep(target[key] as Record<string, unknown>, source[key] as Record<string, unknown>);
+        mergeDeep(
+          target[key] as Record<string, unknown>,
+          source[key] as Record<string, unknown>
+        );
       } else {
         Object.assign(target, { [key]: source[key] });
       }

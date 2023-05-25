@@ -1,11 +1,17 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, KeyboardEvent, PropsWithChildren, ReactElement } from 'react';
-import { Children, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import type { FlowbiteBoolean } from '../Flowbite/FlowbiteTheme';
-import { useTheme } from '../Flowbite/ThemeContext';
-import type { TabProps } from './TabItem';
-import { TabItem } from './TabItem';
+import classNames from "classnames";
+import type {
+  ComponentProps,
+  FC,
+  KeyboardEvent,
+  PropsWithChildren,
+  ReactElement,
+} from "react";
+import { Children, useEffect, useId, useMemo, useRef, useState } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import type { FlowbiteBoolean } from "../Flowbite/FlowbiteTheme";
+import { useTheme } from "../Flowbite/ThemeContext";
+import type { TabProps } from "./TabItem";
+import { TabItem } from "./TabItem";
 
 export interface TabStyles {
   default: string;
@@ -23,9 +29,12 @@ export type TabStyleItem<Type> = {
   [K in keyof Type]: TabStyleItemProps;
 };
 
-export type TabItemStatus = 'active' | 'notActive';
+export type TabItemStatus = "active" | "notActive";
 
-export interface TabsProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className' | 'style'>> {
+export interface TabsProps
+  extends PropsWithChildren<
+    Omit<ComponentProps<"div">, "className" | "style">
+  > {
   style?: keyof TabStyles;
 }
 
@@ -37,27 +46,35 @@ interface TabKeyboardEventProps extends TabEventProps {
   event: KeyboardEvent<HTMLButtonElement>;
 }
 
-export const TabsComponent: FC<TabsProps> = ({ children, style = 'default', ...rest }) => {
+export const TabsComponent: FC<TabsProps> = ({
+  children,
+  style = "default",
+  ...rest
+}) => {
   const theme = useTheme().theme.tab;
   const theirProps = excludeClassName(rest);
 
   const id = useId();
   const tabs = useMemo(
-    () => Children.map(children as ReactElement<PropsWithChildren<TabProps>>[], ({ props }) => props),
-    [children],
+    () =>
+      Children.map(
+        children as ReactElement<PropsWithChildren<TabProps>>[],
+        ({ props }) => props
+      ),
+    [children]
   );
   const tabRefs = useRef<HTMLButtonElement[]>([]);
   const [activeTab, setActiveTab] = useState(
     Math.max(
       0,
-      tabs.findIndex((tab) => tab.active),
-    ),
+      tabs.findIndex((tab) => tab.active)
+    )
   );
   const [focusedTab, setFocusedTab] = useState(
     Math.max(
       0,
-      tabs.findIndex((tab) => tab.active),
-    ),
+      tabs.findIndex((tab) => tab.active)
+    )
   );
 
   const handleClick = ({ target }: TabEventProps): void => {
@@ -66,15 +83,15 @@ export const TabsComponent: FC<TabsProps> = ({ children, style = 'default', ...r
   };
 
   const handleKeyboard = ({ event, target }: TabKeyboardEventProps): void => {
-    if (event.key === 'ArrowLeft') {
+    if (event.key === "ArrowLeft") {
       setFocusedTab(Math.max(0, focusedTab - 1));
     }
 
-    if (event.key === 'ArrowRight') {
+    if (event.key === "ArrowRight") {
       setFocusedTab(Math.min(tabs.length - 1, focusedTab + 1));
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       setActiveTab(target);
       setFocusedTab(target);
     }
@@ -98,15 +115,23 @@ export const TabsComponent: FC<TabsProps> = ({ children, style = 'default', ...r
             type="button"
             aria-controls={`${id}-tabpanel-${index}`}
             aria-selected={index === activeTab}
-            className={classNames(theme.tablist.tabitem.base, theme.tablist.tabitem.styles[style], {
-              [theme.tablist.tabitem.styles[style].active.on]: index === activeTab,
-              [theme.tablist.tabitem.styles[style].active.off]: index !== activeTab && !tab.disabled,
-            })}
+            className={classNames(
+              theme.tablist.tabitem.base,
+              theme.tablist.tabitem.styles[style],
+              {
+                [theme.tablist.tabitem.styles[style].active.on]:
+                  index === activeTab,
+                [theme.tablist.tabitem.styles[style].active.off]:
+                  index !== activeTab && !tab.disabled,
+              }
+            )}
             disabled={tab.disabled}
             id={`${id}-tab-${index}`}
             onClick={() => handleClick({ target: index })}
             onKeyDown={(event) => handleKeyboard({ event, target: index })}
-            ref={(element) => (tabRefs.current[index] = element as HTMLButtonElement)}
+            ref={(element) =>
+              (tabRefs.current[index] = element as HTMLButtonElement)
+            }
             role="tab"
             tabIndex={index === focusedTab ? 0 : -1}
           >
@@ -134,6 +159,6 @@ export const TabsComponent: FC<TabsProps> = ({ children, style = 'default', ...r
   );
 };
 
-TabsComponent.displayName = 'Tabs.Group';
-TabItem.displayName = 'Tabs.Item';
+TabsComponent.displayName = "Tabs.Group";
+TabItem.displayName = "Tabs.Item";
 export const Tabs = { Group: TabsComponent, Item: TabItem };

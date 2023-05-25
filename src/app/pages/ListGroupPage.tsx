@@ -1,13 +1,18 @@
-import type { FC } from 'react';
-import { HiCloudDownload, HiInbox, HiOutlineAdjustments, HiUserCircle } from 'react-icons/hi';
-import { ListGroup } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import {
+  HiCloudDownload,
+  HiInbox,
+  HiOutlineAdjustments,
+  HiUserCircle,
+} from "react-icons/hi";
+import { ListGroup } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const ListGroupPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default list',
+      title: "Default list",
       code: (
         <div className="w-48">
           <ListGroup>
@@ -20,7 +25,7 @@ const ListGroupPage: FC = () => {
       ),
     },
     {
-      title: 'List group with links',
+      title: "List group with links",
       code: (
         <div className="w-48">
           <ListGroup>
@@ -35,11 +40,11 @@ const ListGroupPage: FC = () => {
       ),
     },
     {
-      title: 'List group with buttons',
+      title: "List group with buttons",
       code: (
         <div className="w-48">
           <ListGroup>
-            <ListGroup.Item active onClick={() => alert('Profile clicked!')}>
+            <ListGroup.Item active onClick={() => alert("Profile clicked!")}>
               Profile
             </ListGroup.Item>
             <ListGroup.Item>Settings</ListGroup.Item>
@@ -49,18 +54,20 @@ const ListGroupPage: FC = () => {
         </div>
       ),
       codeStringifierOptions: {
-        functionValue: (fn) => (fn.name === 'onClick' ? fn : fn.name),
+        functionValue: (fn) => (fn.name === "onClick" ? fn : fn.name),
       },
     },
     {
-      title: 'List group with icons',
+      title: "List group with icons",
       code: (
         <div className="w-48">
           <ListGroup>
             <ListGroup.Item active icon={HiUserCircle}>
               Profile
             </ListGroup.Item>
-            <ListGroup.Item icon={HiOutlineAdjustments}>Settings</ListGroup.Item>
+            <ListGroup.Item icon={HiOutlineAdjustments}>
+              Settings
+            </ListGroup.Item>
             <ListGroup.Item icon={HiInbox}>Messages</ListGroup.Item>
             <ListGroup.Item icon={HiCloudDownload}>Download</ListGroup.Item>
           </ListGroup>

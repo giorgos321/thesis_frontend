@@ -1,23 +1,40 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import type { FlowbiteColors } from '../Flowbite/FlowbiteTheme';
-import { useTheme } from '../Flowbite/ThemeContext';
-import { useSidebarContext } from './SidebarContext';
+import classNames from "classnames";
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import type { FlowbiteColors } from "../Flowbite/FlowbiteTheme";
+import { useTheme } from "../Flowbite/ThemeContext";
+import { useSidebarContext } from "./SidebarContext";
 
-export interface SidebarCTAProps extends PropsWithChildren<Omit<ComponentProps<'div'>, 'className' | 'color'>> {
+export interface SidebarCTAProps
+  extends PropsWithChildren<
+    Omit<ComponentProps<"div">, "className" | "color">
+  > {
   color?: keyof SidebarCTAColors;
 }
 
 export interface SidebarCTAColors
   extends Pick<
     FlowbiteColors,
-    'blue' | 'dark' | 'failure' | 'gray' | 'green' | 'light' | 'purple' | 'red' | 'success' | 'warning' | 'yellow'
+    | "blue"
+    | "dark"
+    | "failure"
+    | "gray"
+    | "green"
+    | "light"
+    | "purple"
+    | "red"
+    | "success"
+    | "warning"
+    | "yellow"
   > {
   [key: string]: string;
 }
 
-const SidebarCTA: FC<SidebarCTAProps> = ({ children, color = 'info', ...props }): JSX.Element => {
+const SidebarCTA: FC<SidebarCTAProps> = ({
+  children,
+  color = "info",
+  ...props
+}): JSX.Element => {
   const theirProps = excludeClassName(props);
 
   const { isCollapsed } = useSidebarContext();
@@ -35,5 +52,5 @@ const SidebarCTA: FC<SidebarCTAProps> = ({ children, color = 'info', ...props })
   );
 };
 
-SidebarCTA.displayName = 'Sidebar.CTA';
+SidebarCTA.displayName = "Sidebar.CTA";
 export default SidebarCTA;

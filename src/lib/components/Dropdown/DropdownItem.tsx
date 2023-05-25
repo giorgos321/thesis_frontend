@@ -1,12 +1,16 @@
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { useTheme } from '../Flowbite/ThemeContext';
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { useTheme } from "../Flowbite/ThemeContext";
 
 export type DropdownItemProps = PropsWithChildren<{
   onClick?: () => void;
-  icon?: FC<ComponentProps<'svg'>>;
+  icon?: FC<ComponentProps<"svg">>;
 }>;
 
-export const DropdownItem: FC<DropdownItemProps> = ({ children, onClick, icon: Icon }) => {
+export const DropdownItem: FC<DropdownItemProps> = ({
+  children,
+  onClick,
+  icon: Icon,
+}) => {
   const theme = useTheme().theme.dropdown.floating.item;
 
   return (

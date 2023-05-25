@@ -1,10 +1,10 @@
-import type { ComponentProps, FC, ReactNode } from 'react';
+import type { ComponentProps, FC, ReactNode } from "react";
 // import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 // import { BiNotification } from 'react-icons/bi';
 // import { BsCreditCard2FrontFill, BsImages } from 'react-icons/bs';
 // import { FaBars, FaSpinner } from 'react-icons/fa';
 // import { FiNavigation } from 'react-icons/fi';
-import { HiHome, HiUserAdd } from 'react-icons/hi';
+import { HiHome, HiUserAdd } from "react-icons/hi";
 // import { MdColorLens, MdTab } from 'react-icons/md';
 // import AccordionPage from './pages/AccordionPage';
 // import AlertsPage from './pages/AlertsPage';
@@ -19,7 +19,7 @@ import { HiHome, HiUserAdd } from 'react-icons/hi';
 // import DropdownPage from './pages/DropdownPage';
 // import FooterPage from './pages/FooterPage';
 // import FormsPage from './pages/FormsPage';
-import Home from './pages/Home';
+import Home from "./pages/Home";
 // import ListGroupPage from './pages/ListGroupPage';
 // import ModalPage from './pages/ModalPage';
 // import NavbarPage from './pages/NavbarPage';
@@ -27,10 +27,10 @@ import Home from './pages/Home';
 // import ProgressPage from './pages/ProgressPage';
 // import RatingPage from './pages/RatingPage';
 // import SidebarPage from './pages/SidebarPage';
-import { GoSignIn } from 'react-icons/go';
-import DashboardPage from './pages/DashboardPage';
-import SingIn from './pages/SignIn';
-import SingUp from './pages/SingUp';
+import { GoSignIn } from "react-icons/go";
+import DashboardPage from "./pages/DashboardPage";
+import SingIn from "./pages/SignIn";
+import SingUp from "./pages/SingUp";
 // import SpinnersPage from './pages/SpinnersPage';
 // import TablePage from './pages/TablePage';
 // import TabsPage from './pages/TabsPage';
@@ -46,7 +46,7 @@ export type ComponentCardItem = {
 
 export type RouteProps = {
   title: string;
-  icon: FC<ComponentProps<'svg'>>;
+  icon: FC<ComponentProps<"svg">>;
   href: string;
   component: ReactNode;
   protected: boolean;
@@ -56,17 +56,17 @@ export type RouteProps = {
 
 export const bottomRoutes: RouteProps[] = [
   {
-    title: 'Sign In',
+    title: "Sign In",
     icon: GoSignIn,
-    href: '/signin',
+    href: "/signin",
     component: <SingIn />,
     group: false,
     protected: false,
   },
   {
-    title: 'Sign Up',
+    title: "Sign Up",
     icon: HiUserAdd,
-    href: '/signup',
+    href: "/signup",
     component: <SingUp />,
     group: false,
     protected: false,
@@ -75,17 +75,17 @@ export const bottomRoutes: RouteProps[] = [
 
 export const routes: RouteProps[] = [
   {
-    title: 'Home',
+    title: "Home",
     icon: HiHome,
-    href: '/',
+    href: "/",
     component: <Home />,
     group: false,
     protected: false,
   },
   {
-    title: 'Dashboard',
+    title: "Dashboard",
     icon: HiHome,
-    href: '/dashboard',
+    href: "/dashboard",
     component: <DashboardPage />,
     group: false,
     protected: true,

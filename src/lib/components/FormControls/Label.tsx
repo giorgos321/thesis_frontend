@@ -1,15 +1,18 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren } from 'react';
-import { excludeClassName } from '../../helpers/exclude';
-import type { FlowbiteStateColors } from '../Flowbite/FlowbiteTheme';
-import { useTheme } from '../Flowbite/ThemeContext';
+import classNames from "classnames";
+import type { ComponentProps, FC, PropsWithChildren } from "react";
+import { excludeClassName } from "../../helpers/exclude";
+import type { FlowbiteStateColors } from "../Flowbite/FlowbiteTheme";
+import { useTheme } from "../Flowbite/ThemeContext";
 
 export interface LabelColors extends FlowbiteStateColors {
   [key: string]: string;
   default: string;
 }
 
-export interface LabelProps extends PropsWithChildren<Omit<ComponentProps<'label'>, 'className' | 'color'>> {
+export interface LabelProps
+  extends PropsWithChildren<
+    Omit<ComponentProps<"label">, "className" | "color">
+  > {
   color?: keyof LabelColors;
   value?: string;
   disabled?: boolean;
@@ -17,7 +20,7 @@ export interface LabelProps extends PropsWithChildren<Omit<ComponentProps<'label
 
 export const Label: FC<LabelProps> = ({
   children,
-  color = 'default',
+  color = "default",
   disabled = false,
   value,
   ...props
@@ -25,8 +28,15 @@ export const Label: FC<LabelProps> = ({
   const theme = useTheme().theme.formControls.label;
   const theirProps = excludeClassName(props);
   return (
-    <label className={classNames(theme.base, theme.colors[color], disabled ?? theme.disabled)} {...theirProps}>
-      {value ?? children ?? ''}
+    <label
+      className={classNames(
+        theme.base,
+        theme.colors[color],
+        disabled ?? theme.disabled
+      )}
+      {...theirProps}
+    >
+      {value ?? children ?? ""}
     </label>
   );
 };

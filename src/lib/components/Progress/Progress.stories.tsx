@@ -1,9 +1,9 @@
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import type { ProgressProps } from '.';
-import { Progress } from '.';
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import type { ProgressProps } from ".";
+import { Progress } from ".";
 
 export default {
-  title: 'Components/Progress',
+  title: "Components/Progress",
   component: Progress,
   decorators: [
     (Story): JSX.Element => (
@@ -54,18 +54,18 @@ export const Colors = (): JSX.Element => (
 );
 
 export const WithLabelInside = Template.bind({});
-WithLabelInside.storyName = 'With label inside';
+WithLabelInside.storyName = "With label inside";
 WithLabelInside.args = {
-  label: 'Flowbite',
+  label: "Flowbite",
   progress: 45,
-  size: 'lg',
+  size: "lg",
 };
 
 export const WithLabelOutside = Template.bind({});
-WithLabelOutside.storyName = 'With label outside';
+WithLabelOutside.storyName = "With label outside";
 WithLabelOutside.args = {
-  label: 'Flowbite',
-  labelPosition: 'outside',
+  label: "Flowbite",
+  labelPosition: "outside",
   labelProgress: true,
   progress: 45,
 };

@@ -1,12 +1,12 @@
 interface toast {
   show: boolean;
-  toastType?: 'error' | 'success' | 'warning';
+  toastType?: "error" | "success" | "warning";
   message?: string;
 }
 
 interface showToast extends toast {
   show: boolean;
-  toastType: 'error' | 'success' | 'warning';
+  toastType: "error" | "success" | "warning";
   message: string;
 }
 
@@ -14,7 +14,7 @@ interface hideToast extends toast {
   show: boolean;
 }
 
-type toastContent = showToast | hideToast
+type toastContent = showToast | hideToast;
 export interface appState {
   auth: boolean;
   toast: toastContent;
@@ -22,7 +22,7 @@ export interface appState {
 
 export enum actionsEnum {
   auth,
-  toast
+  toast,
 }
 
 interface appStateActions {
@@ -47,7 +47,7 @@ export const appReducer = (state: appState, action: actions): appState => {
     case actionsEnum.auth:
       return { ...state, auth: action.payload.auth };
     case actionsEnum.toast:
-      return { ...state,toast: action.payload }
+      return { ...state, toast: action.payload };
     default:
       return state;
   }

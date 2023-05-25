@@ -1,13 +1,28 @@
-import classNames from 'classnames';
-import type { ComponentProps, FC, PropsWithChildren, ReactElement, ReactNode } from 'react';
-import { Children, cloneElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { HiOutlineChevronLeft, HiOutlineChevronRight } from 'react-icons/hi';
-import ScrollContainer from 'react-indiana-drag-scroll';
-import { excludeClassName } from '../../helpers/exclude';
-import windowExists from '../../helpers/window-exists';
-import { useTheme } from '../Flowbite/ThemeContext';
+import classNames from "classnames";
+import type {
+  ComponentProps,
+  FC,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+} from "react";
+import {
+  Children,
+  cloneElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
+import ScrollContainer from "react-indiana-drag-scroll";
+import { excludeClassName } from "../../helpers/exclude";
+import windowExists from "../../helpers/window-exists";
+import { useTheme } from "../Flowbite/ThemeContext";
 
-export interface CarouselProps extends PropsWithChildren<ComponentProps<'div'>> {
+export interface CarouselProps
+  extends PropsWithChildren<ComponentProps<"div">> {
   indicators?: boolean;
   leftControl?: ReactNode;
   rightControl?: ReactNode;
@@ -24,7 +39,8 @@ export const Carousel: FC<CarouselProps> = ({
   slideInterval,
   ...props
 }): JSX.Element => {
-  const isDeviceMobile = windowExists() && navigator.userAgent.indexOf('IEMobile') !== -1;
+  const isDeviceMobile =
+    windowExists() && navigator.userAgent.indexOf("IEMobile") !== -1;
   const theirProps = excludeClassName(props);
 
   const carouselContainer = useRef<HTMLDivElement>(null);
@@ -37,31 +53,40 @@ export const Carousel: FC<CarouselProps> = ({
       Children.map(children as ReactElement[], (child: ReactElement) =>
         cloneElement(child, {
           className: classNames(theme.item.base, child.props.className),
-        }),
+        })
       ),
-    [children, theme.item.base],
+    [children, theme.item.base]
   );
 
   const navigateTo = useCallback(
     (item: number) => () => {
       item = (item + items.length) % items.length;
       if (carouselContainer.current) {
-        carouselContainer.current.scrollLeft = carouselContainer.current.clientWidth * item;
+        carouselContainer.current.scrollLeft =
+          carouselContainer.current.clientWidth * item;
       }
       setActiveItem(item);
     },
-    [items.length],
+    [items.length]
   );
 
   useEffect(() => {
     if (carouselContainer.current && !isDragging) {
-      setActiveItem(Math.round(carouselContainer.current.scrollLeft / carouselContainer.current.clientWidth));
+      setActiveItem(
+        Math.round(
+          carouselContainer.current.scrollLeft /
+            carouselContainer.current.clientWidth
+        )
+      );
     }
   }, [isDragging]);
 
   useEffect(() => {
     if (slide) {
-      const intervalId = setInterval(() => !isDragging && navigateTo(activeItem + 1)(), slideInterval ?? 3000);
+      const intervalId = setInterval(
+        () => !isDragging && navigateTo(activeItem + 1)(),
+        slideInterval ?? 3000
+      );
 
       return () => clearInterval(intervalId);
     }
@@ -74,7 +99,7 @@ export const Carousel: FC<CarouselProps> = ({
       <ScrollContainer
         className={classNames(
           theme.scrollContainer.base,
-          (isDeviceMobile || !isDragging) && theme.scrollContainer.snap,
+          (isDeviceMobile || !isDragging) && theme.scrollContainer.snap
         )}
         draggingClassName="cursor-grab"
         innerRef={carouselContainer}
@@ -92,7 +117,7 @@ export const Carousel: FC<CarouselProps> = ({
             >
               {item}
             </div>
-          ),
+          )
         )}
       </ScrollContainer>
       {indicators && (
@@ -103,12 +128,12 @@ export const Carousel: FC<CarouselProps> = ({
                 key={index}
                 className={classNames(
                   theme.indicators.base,
-                  theme.indicators.active[index === activeItem ? 'on' : 'off'],
+                  theme.indicators.active[index === activeItem ? "on" : "off"]
                 )}
                 onClick={navigateTo(index)}
                 data-testid="carousel-indicator"
               />
-            ),
+            )
           )}
         </div>
       )}

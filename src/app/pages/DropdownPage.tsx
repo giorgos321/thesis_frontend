@@ -1,13 +1,13 @@
-import type { FC } from 'react';
-import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from 'react-icons/hi';
-import { Dropdown } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiCog, HiCurrencyDollar, HiLogout, HiViewGrid } from "react-icons/hi";
+import { Dropdown } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const DropdownPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Dropdown example',
+      title: "Dropdown example",
       code: (
         <Dropdown label="Dropdown button">
           <Dropdown.Item>Dashboard</Dropdown.Item>
@@ -18,7 +18,7 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Dropdown divider',
+      title: "Dropdown divider",
       code: (
         <Dropdown label="Dropdown button">
           <Dropdown.Item>Dashboard</Dropdown.Item>
@@ -30,12 +30,14 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Dropdown header',
+      title: "Dropdown header",
       code: (
         <Dropdown label="Dropdown button">
           <Dropdown.Header>
             <span className="block text-sm">Bonnie Green</span>
-            <span className="block text-sm font-medium truncate">bonnie@flowbite.com</span>
+            <span className="block text-sm font-medium truncate">
+              bonnie@flowbite.com
+            </span>
           </Dropdown.Header>
           <Dropdown.Item>Dashboard</Dropdown.Item>
           <Dropdown.Item>Settings</Dropdown.Item>
@@ -46,7 +48,7 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Inline dropdown',
+      title: "Inline dropdown",
       code: (
         <Dropdown label="Dropdown" inline>
           <Dropdown.Item>Dashboard</Dropdown.Item>
@@ -57,12 +59,14 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Dropdown items with icon',
+      title: "Dropdown items with icon",
       code: (
         <Dropdown label="Dropdown">
           <Dropdown.Header>
             <span className="block text-sm">Bonnie Green</span>
-            <span className="block text-sm font-medium truncate">bonnie@flowbite.com</span>
+            <span className="block text-sm font-medium truncate">
+              bonnie@flowbite.com
+            </span>
           </Dropdown.Header>
           <Dropdown.Item icon={HiViewGrid}>Dashboard</Dropdown.Item>
           <Dropdown.Item icon={HiCog}>Settings</Dropdown.Item>
@@ -73,18 +77,26 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Dropdown item on click handler',
+      title: "Dropdown item on click handler",
       code: (
         <Dropdown label="Dropdown">
-          <Dropdown.Item onClick={() => alert('Dashboard!')}>Dashboard</Dropdown.Item>
-          <Dropdown.Item onClick={() => alert('Settings!')}>Settings</Dropdown.Item>
-          <Dropdown.Item onClick={() => alert('Earnings!')}>Earnings</Dropdown.Item>
-          <Dropdown.Item onClick={() => alert('Sign out!')}>Sign out</Dropdown.Item>
+          <Dropdown.Item onClick={() => alert("Dashboard!")}>
+            Dashboard
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => alert("Settings!")}>
+            Settings
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => alert("Earnings!")}>
+            Earnings
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => alert("Sign out!")}>
+            Sign out
+          </Dropdown.Item>
         </Dropdown>
       ),
     },
     {
-      title: 'Sizing',
+      title: "Sizing",
       code: (
         <div className="flex gap-4 items-center">
           <Dropdown label="Small dropdown" size="sm">
@@ -103,7 +115,7 @@ const DropdownPage: FC = () => {
       ),
     },
     {
-      title: 'Placement',
+      title: "Placement",
       code: (
         <div className="flex flex-col gap-4">
           <div className="flex gap-4 items-center">

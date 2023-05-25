@@ -1,16 +1,16 @@
-import type { FC } from 'react';
-import { Progress } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { Progress } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const ProgressPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default Progress',
+      title: "Default Progress",
       code: <Progress progress={45} />,
     },
     {
-      title: 'Sizing',
+      title: "Sizing",
       code: (
         <div className="flex flex-col gap-2">
           <div className="text-base font-medium dark:text-white">Small</div>
@@ -25,7 +25,7 @@ const ProgressPage: FC = () => {
       ),
     },
     {
-      title: 'Colors',
+      title: "Colors",
       code: (
         <div className="flex flex-col gap-2">
           <div className="text-base font-medium">Dark</div>
@@ -46,12 +46,19 @@ const ProgressPage: FC = () => {
       ),
     },
     {
-      title: 'With label inside',
+      title: "With label inside",
       code: <Progress progress={50} label="Flowbite" size="lg" />,
     },
     {
-      title: 'With label outside',
-      code: <Progress progress={45} label="Flowbite" labelPosition="outside" labelProgress={true} />,
+      title: "With label outside",
+      code: (
+        <Progress
+          progress={45}
+          label="Flowbite"
+          labelPosition="outside"
+          labelProgress={true}
+        />
+      ),
     },
   ];
 

@@ -1,12 +1,12 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { FC, useState } from 'react';
-import { HiEye, HiInformationCircle } from 'react-icons/hi';
-import { describe, expect, it, vi } from 'vitest';
-import { Alert } from '.';
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { FC, useState } from "react";
+import { HiEye, HiInformationCircle } from "react-icons/hi";
+import { describe, expect, it, vi } from "vitest";
+import { Alert } from ".";
 
-describe.concurrent('Components / Alert', () => {
-  describe.concurrent('A11y', () => {
+describe.concurrent("Components / Alert", () => {
+  describe.concurrent("A11y", () => {
     it('should have `role="alert"`', () => {
       render(<TestAlert />);
 
@@ -14,8 +14,8 @@ describe.concurrent('Components / Alert', () => {
     });
   });
 
-  describe.concurrent('Keyboard interactions', () => {
-    it('should dismiss when `Tab` is pressed to navigate to Dismiss button and `Space` is pressed', async () => {
+  describe.concurrent("Keyboard interactions", () => {
+    it("should dismiss when `Tab` is pressed to navigate to Dismiss button and `Space` is pressed", async () => {
       const onDismiss = vi.fn();
       const user = userEvent.setup();
       render(<Alert onDismiss={onDismiss} />);
@@ -26,14 +26,14 @@ describe.concurrent('Components / Alert', () => {
         expect(dismiss()).toHaveFocus();
       });
 
-      await user.keyboard('[Space]');
+      await user.keyboard("[Space]");
 
       expect(onDismiss).toHaveBeenCalled();
     });
   });
 
-  describe.concurrent('Props', () => {
-    it('should call `onDismiss` when clicked', async () => {
+  describe.concurrent("Props", () => {
+    it("should call `onDismiss` when clicked", async () => {
       const onDismiss = vi.fn();
       const user = userEvent.setup();
       render(<Alert onDismiss={onDismiss} />);
@@ -53,8 +53,9 @@ const TestAlert: FC = () => {
       additionalContent={
         <>
           <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
-            More info about this info alert goes here. This example text is going to run a bit longer so that you can
-            see how spacing within an alert works with this kind of content.
+            More info about this info alert goes here. This example text is
+            going to run a bit longer so that you can see how spacing within an
+            alert works with this kind of content.
           </div>
           <div className="flex">
             <button
@@ -79,11 +80,11 @@ const TestAlert: FC = () => {
       rounded
       withBorderAccent
     >
-      {isDismissed ? 'dismissed' : 'waiting'}
+      {isDismissed ? "dismissed" : "waiting"}
     </Alert>
   );
 };
 
-const alert = () => screen.getByRole('alert');
+const alert = () => screen.getByRole("alert");
 
-const dismiss = () => screen.getByLabelText('Dismiss');
+const dismiss = () => screen.getByLabelText("Dismiss");

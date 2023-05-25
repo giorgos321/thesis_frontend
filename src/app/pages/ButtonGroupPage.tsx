@@ -1,13 +1,13 @@
-import type { FC } from 'react';
-import { HiAdjustments, HiCloudDownload, HiUserCircle } from 'react-icons/hi';
-import { Button } from '../../lib';
-import type { CodeExample } from './DemoPage';
-import { DemoPage } from './DemoPage';
+import type { FC } from "react";
+import { HiAdjustments, HiCloudDownload, HiUserCircle } from "react-icons/hi";
+import { Button } from "../../lib";
+import type { CodeExample } from "./DemoPage";
+import { DemoPage } from "./DemoPage";
 
 const ButtonGroupPage: FC = () => {
   const examples: CodeExample[] = [
     {
-      title: 'Default example',
+      title: "Default example",
       code: (
         <Button.Group>
           <Button color="gray">Profile</Button>
@@ -17,7 +17,7 @@ const ButtonGroupPage: FC = () => {
       ),
     },
     {
-      title: 'Group buttons with icons',
+      title: "Group buttons with icons",
       code: (
         <Button.Group>
           <Button color="gray">
@@ -33,7 +33,7 @@ const ButtonGroupPage: FC = () => {
       ),
     },
     {
-      title: 'All colors',
+      title: "All colors",
       code: (
         <div className="flex flex-wrap gap-2">
           <Button.Group>
@@ -55,7 +55,7 @@ const ButtonGroupPage: FC = () => {
       ),
     },
     {
-      title: 'Outline',
+      title: "Outline",
       code: (
         <div className="flex flex-wrap gap-2">
           <Button.Group outline>
@@ -77,7 +77,7 @@ const ButtonGroupPage: FC = () => {
       ),
     },
     {
-      title: 'Outline with icons',
+      title: "Outline with icons",
       code: (
         <div className="flex flex-wrap gap-2">
           <Button.Group outline>

@@ -1,78 +1,81 @@
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import { HiEye, HiInformationCircle } from 'react-icons/hi';
-import type { AlertProps } from '.';
-import { Alert } from '.';
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import { HiEye, HiInformationCircle } from "react-icons/hi";
+import type { AlertProps } from ".";
+import { Alert } from ".";
 
 export default {
-  title: 'Components/Alert',
+  title: "Components/Alert",
   component: Alert,
 } as Meta;
 
 const Template: Story<AlertProps> = (props) => <Alert {...props} />;
 
 export const DefaultAlert = Template.bind({});
-DefaultAlert.storyName = 'Default';
+DefaultAlert.storyName = "Default";
 DefaultAlert.args = {
   onDismiss: false,
   children: (
     <>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta minima rerum veritatis optio atque impedit, enim
-      quisquam, excepturi consectetur quaerat odio hic, natus aspernatur ex architecto quas dolor nemo alias.
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Soluta minima
+      rerum veritatis optio atque impedit, enim quisquam, excepturi consectetur
+      quaerat odio hic, natus aspernatur ex architecto quas dolor nemo alias.
     </>
   ),
 };
 
 export const AlertWithIcons = Template.bind({});
-AlertWithIcons.storyName = 'With icons';
+AlertWithIcons.storyName = "With icons";
 AlertWithIcons.args = {
   icon: HiInformationCircle,
   onDismiss: false,
   children: (
     <>
-      More info about this info alert goes here. This example text is going to run a bit longer so that you can see how
-      spacing within an alert works with this kind of content.
+      More info about this info alert goes here. This example text is going to
+      run a bit longer so that you can see how spacing within an alert works
+      with this kind of content.
     </>
   ),
 };
 
 export const AlertDismissible = Template.bind({});
-AlertDismissible.storyName = 'Dismissible';
+AlertDismissible.storyName = "Dismissible";
 AlertDismissible.args = {
-  color: 'success',
-  onDismiss: () => alert('Alert dismissed!'),
+  color: "success",
+  onDismiss: () => alert("Alert dismissed!"),
   children: <>Info alert! Change a few things up and try submitting again.</>,
 };
 
 export const AlertRounded = Template.bind({});
-AlertRounded.storyName = 'Not rounded';
+AlertRounded.storyName = "Not rounded";
 AlertRounded.args = {
-  color: 'warning',
+  color: "warning",
   rounded: false,
   onDismiss: false,
   children: <>Info alert! Change a few things up and try submitting again.</>,
 };
 
 export const AlertWithBorderAccent = Template.bind({});
-AlertWithBorderAccent.storyName = 'Border accent';
+AlertWithBorderAccent.storyName = "Border accent";
 AlertWithBorderAccent.args = {
-  color: 'warning',
+  color: "warning",
   onDismiss: false,
   withBorderAccent: true,
   children: <>Info alert! Change a few things up and try submitting again.</>,
 };
 
 export const AlertWithAdditionalContent = Template.bind({});
-AlertWithAdditionalContent.storyName = 'Additional content';
+AlertWithAdditionalContent.storyName = "Additional content";
 AlertWithAdditionalContent.args = {
-  color: 'info',
+  color: "info",
   icon: HiInformationCircle,
   onDismiss: false,
   withBorderAccent: true,
   additionalContent: (
     <>
       <div className="mt-2 mb-4 text-sm text-blue-700 dark:text-blue-800">
-        More info about this info alert goes here. This example text is going to run a bit longer so that you can see
-        how spacing within an alert works with this kind of content.
+        More info about this info alert goes here. This example text is going to
+        run a bit longer so that you can see how spacing within an alert works
+        with this kind of content.
       </div>
       <div className="flex">
         <button
@@ -93,24 +96,27 @@ AlertWithAdditionalContent.args = {
   ),
   children: (
     <>
-      <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">This is a info alert</h3>
+      <h3 className="text-lg font-medium text-blue-700 dark:text-blue-800">
+        This is a info alert
+      </h3>
     </>
   ),
 };
 
 export const AlertWithAllOptions = Template.bind({});
-AlertWithAllOptions.storyName = 'All options';
+AlertWithAllOptions.storyName = "All options";
 AlertWithAllOptions.args = {
-  color: 'success',
+  color: "success",
   rounded: false,
   withBorderAccent: true,
-  onDismiss: () => alert('Alert dismissed!'),
+  onDismiss: () => alert("Alert dismissed!"),
   icon: HiInformationCircle,
   additionalContent: (
     <>
       <div className="mt-2 mb-4 text-sm text-green-700 dark:text-green-800">
-        More info about this info alert goes here. This example text is going to run a bit longer so that you can see
-        how spacing within an alert works with this kind of content.
+        More info about this info alert goes here. This example text is going to
+        run a bit longer so that you can see how spacing within an alert works
+        with this kind of content.
       </div>
       <div className="flex">
         <button

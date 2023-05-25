@@ -1,10 +1,10 @@
-import type { Meta, Story } from '@storybook/react/types-6-0';
-import { HiFire } from 'react-icons/hi';
-import type { ToastProps } from '.';
-import { Toast } from '.';
+import type { Meta, Story } from "@storybook/react/types-6-0";
+import { HiFire } from "react-icons/hi";
+import type { ToastProps } from ".";
+import { Toast } from ".";
 
 export default {
-  title: 'Components/Toast',
+  title: "Components/Toast",
   component: Toast,
 } as Meta;
 
@@ -20,4 +20,4 @@ export const DefaultToast: Story<ToastProps> = (args) => {
   );
 };
 
-DefaultToast.storyName = 'Default';
+DefaultToast.storyName = "Default";
