@@ -2,13 +2,29 @@ import { TimeClock } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import classNames from "classnames";
-import type { FC } from "react";
+import type { FC } from 'react' 
+import { useEffect, useState } from "react";
 import { HiExternalLink } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { getImageUrl } from "../../lib/helpers/getImageUrl";
 import { routes } from "../routes";
+import { FiUsers } from 'react-icons/fi';
+import api from "../../api";
+
 
 const DashboardPage: FC = () => {
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [data, setData] = useState<any[]>([]);
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const { data } = await api.get('api/labinstance');
+    setData(data);
+  };
+
   return (
     <div className="mx-auto max-w-screen-xl p-4 lg:p-12 lg:text-center">
       {/* <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white lg:text-center lg:text-4xl lg:font-extrabold lg:leading-snug 2xl:px-48">
@@ -18,6 +34,22 @@ const DashboardPage: FC = () => {
         Explore the whole collection of open-source web components and interactive elements built with the utility
         classes from Tailwind CSS
       </p> */}
+      {data.map((lab) => (
+          <div key={lab.id} className="min-w-[500px] max-w-[500px] rounded-md bg-white p-4">
+            <div className="flex flex-row items-center justify-between gap-8">
+              <h5 className="text-left text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {lab.lab.lab_name}
+              </h5>
+              <span className="flex flex-row items-end align-bottom text-xl leading-none">
+                <FiUsers className="mr-2" size={20} />
+                {lab.students.length}
+              </span>
+            </div>
+            <div className='flex flex-row'>
+            <div className="text-gray-900 dark:text-white">{lab.startAt}</div>
+            </div>
+          </div>
+        ))}
       <div style={{ width: "330px" }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimeClock />
