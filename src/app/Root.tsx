@@ -60,7 +60,7 @@ export const Root: FC = () => {
     return !r.protected;
   });
 
-  const bottomRoutes = _bottomRoutes.filter((_) => !state.auth);
+  const bottomRoutes = _bottomRoutes.filter(() => !state.auth);
 
   const logout = () => {
     console.log(apiParams.authInterceptorId);
