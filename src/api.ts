@@ -1,8 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
+import type { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
-export const apiParams: any = {};
+export const apiParams = {};
 
-export const authInterceptor = (config: AxiosRequestConfig<any>) => {
+export const authInterceptor = (config: AxiosRequestConfig) => {
   if (config.headers) {
     console.log("setting access token 123124");
 
