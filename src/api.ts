@@ -1,7 +1,11 @@
 import type { AxiosRequestConfig } from "axios";
 import axios from "axios";
 
-export const apiParams = {};
+export const apiParams: {
+  authInterceptorId: number | null;
+} = {
+  authInterceptorId: null,
+};
 
 export const authInterceptor = (config: AxiosRequestConfig) => {
   if (config.headers) {

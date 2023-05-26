@@ -63,9 +63,9 @@ export const Root: FC = () => {
   const bottomRoutes = _bottomRoutes.filter(() => !state.auth);
 
   const logout = () => {
-    console.log(apiParams.authInterceptorId);
-
-    api.interceptors.request.eject(apiParams.authInterceptorId);
+    if (apiParams.authInterceptorId) {
+      api.interceptors.request.eject(apiParams.authInterceptorId);
+    }
     dispatch({ type: actionsEnum.auth, payload: { auth: false } });
     localStorage.removeItem("token");
     navigate("/signin");
