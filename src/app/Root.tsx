@@ -103,7 +103,7 @@ export const Root: FC = () => {
             onClick={() => setCollapsed(!collapsed)}
           />
           <span className="text-xl font-semibold dark:text-white">
-            Flowbite React Components
+            AbsenceMonitor
           </span>
         </div>
         <div className="flex items-center gap-2">

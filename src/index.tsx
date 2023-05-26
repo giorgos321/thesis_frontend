@@ -18,7 +18,7 @@ if (container) {
 
   root.render(
     <Flowbite theme={{ theme }}>
-      <BrowserRouter>
+      <BrowserRouter basename="/thesis_frontend">
         <Root />
       </BrowserRouter>
     </Flowbite>
