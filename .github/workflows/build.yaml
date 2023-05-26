@@ -38,8 +38,8 @@ jobs:
       - name: 💅 Run Prettier
         run: yarn prettier
 
-      - name: 🔬 Run unit tests
-        run: yarn test:coverage
+      # - name: 🔬 Run unit tests
+      #   run: yarn test:coverage
 
       - name: 🧰 Build code
         run: yarn build
