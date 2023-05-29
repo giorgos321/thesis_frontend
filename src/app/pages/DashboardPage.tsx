@@ -2,18 +2,16 @@ import { TimeClock } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import classNames from "classnames";
-import type { FC } from 'react' 
+import type { FC } from "react";
 import { useEffect, useState } from "react";
+import { FiUsers } from "react-icons/fi";
 import { HiExternalLink } from "react-icons/hi";
 import { Link } from "react-router-dom";
+import api from "../../api";
 import { getImageUrl } from "../../lib/helpers/getImageUrl";
 import { routes } from "../routes";
-import { FiUsers } from 'react-icons/fi';
-import api from "../../api";
-
 
 const DashboardPage: FC = () => {
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
@@ -21,7 +19,7 @@ const DashboardPage: FC = () => {
   }, []);
 
   const getData = async () => {
-    const { data } = await api.get('api/labinstance');
+    const { data } = await api.get("api/labinstance");
     setData(data);
   };
 
@@ -35,21 +33,24 @@ const DashboardPage: FC = () => {
         classes from Tailwind CSS
       </p> */}
       {data.map((lab) => (
-          <div key={lab.id} className="min-w-[500px] max-w-[500px] rounded-md bg-white p-4">
-            <div className="flex flex-row items-center justify-between gap-8">
-              <h5 className="text-left text-xl font-bold tracking-tight text-gray-900 dark:text-white">
-                {lab.lab.lab_name}
-              </h5>
-              <span className="flex flex-row items-end align-bottom text-xl leading-none">
-                <FiUsers className="mr-2" size={20} />
-                {lab.students.length}
-              </span>
-            </div>
-            <div className='flex flex-row'>
-            <div className="text-gray-900 dark:text-white">{lab.startAt}</div>
-            </div>
+        <div
+          key={lab.id}
+          className="min-w-[500px] max-w-[500px] rounded-md bg-white p-4"
+        >
+          <div className="flex flex-row items-center justify-between gap-8">
+            <h5 className="text-left text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+              {lab.lab.lab_name}
+            </h5>
+            <span className="flex flex-row items-end align-bottom text-xl leading-none">
+              <FiUsers className="mr-2" size={20} />
+              {lab.students.length}
+            </span>
           </div>
-        ))}
+          <div className="flex flex-row">
+            <div className="text-gray-900 dark:text-white">{lab.startAt}</div>
+          </div>
+        </div>
+      ))}
       <div style={{ width: "330px" }}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <TimeClock />

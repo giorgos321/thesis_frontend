@@ -11,6 +11,7 @@ import {
 import { GoSignOut } from "react-icons/go";
 import { HiCheck, HiExclamation, HiMenuAlt1, HiX } from "react-icons/hi";
 // import { SiStorybook } from 'react-icons/si';
+import { DarkThemeToggle, Navbar, Sidebar, Spinner } from "flowbite-react";
 import {
   Link,
   Route,
@@ -21,7 +22,9 @@ import {
 import api, { apiParams } from "../api";
 import type { actions, appState } from "../appReducer";
 import { actionsEnum, appReducer } from "../appReducer";
-import { DarkThemeToggle, Navbar, Sidebar, Spinner, Toast } from "../lib";
+import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
+import { Toast } from "../lib";
+import RootUtils from "./RootUtils";
 import { bottomRoutes as _bottomRoutes, routes as _routes } from "./routes";
 
 const defaultState = {
@@ -66,10 +69,15 @@ export const Root: FC = () => {
     if (apiParams.authInterceptorId) {
       api.interceptors.request.eject(apiParams.authInterceptorId);
     }
-    dispatch({ type: actionsEnum.auth, payload: { auth: false } });
     localStorage.removeItem("token");
     navigate("/signin");
   };
+
+  useDidUpdateEffect(() => {
+    if (!state.auth) {
+      logout();
+    }
+  }, [state.auth]);
 
   const getToastIcon = (type: "success" | "error" | "warning") => {
     switch (type) {
@@ -128,13 +136,47 @@ export const Root: FC = () => {
           <DarkThemeToggle />
         </div>
       </Navbar>
-      <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
-        <Sidebar collapsed={collapsed}>
-          <Sidebar.Items>
-            <div className=" flex h-full flex-col">
-              <div className="grow">
+      <AppContext.Provider value={{ state, dispatch }}>
+        <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
+          <Sidebar
+            collapsed={collapsed}
+            className="h-full border-r-2 border-gray-200"
+          >
+            <Sidebar.Items className="h-full">
+              <div className=" flex h-full flex-col">
+                <div className="grow">
+                  <Sidebar.ItemGroup>
+                    {routes.map(({ href, icon, title }, key) => (
+                      <Sidebar.Item
+                        key={key}
+                        icon={icon}
+                        as={Link}
+                        to={href}
+                        active={href === pathname}
+                        onClick={() => mainRef.current?.scrollTo({ top: 0 })}
+                      >
+                        {title}
+                      </Sidebar.Item>
+                    ))}
+                  </Sidebar.ItemGroup>
+                </div>
                 <Sidebar.ItemGroup>
-                  {routes.map(({ href, icon, title }, key) => (
+                  {state.auth && (
+                    <Sidebar.Item
+                      as={Link}
+                      to={"/signin"}
+                      icon={GoSignOut}
+                      onClick={() =>
+                        dispatch({
+                          type: actionsEnum.auth,
+                          payload: { auth: false },
+                        })
+                      }
+                    >
+                      Log Out
+                    </Sidebar.Item>
+                  )}
+                  {bottomRoutes.map(({ href, icon, title }, key) => (
                     <Sidebar.Item
                       key={key}
                       icon={icon}
@@ -148,61 +190,42 @@ export const Root: FC = () => {
                   ))}
                 </Sidebar.ItemGroup>
               </div>
-              <Sidebar.ItemGroup>
-                {state.auth && (
-                  <Sidebar.Item icon={GoSignOut} onClick={() => logout()}>
-                    {"Log Out"}
-                  </Sidebar.Item>
-                )}
-                {bottomRoutes.map(({ href, icon, title }, key) => (
-                  <Sidebar.Item
-                    key={key}
-                    icon={icon}
-                    as={Link}
-                    to={href}
-                    active={href === pathname}
-                    onClick={() => mainRef.current?.scrollTo({ top: 0 })}
-                  >
-                    {title}
-                  </Sidebar.Item>
-                ))}
-              </Sidebar.ItemGroup>
-            </div>
-          </Sidebar.Items>
-        </Sidebar>
-        <main
-          className="flex-1 overflow-auto bg-[#e8f0fe] p-4 dark:bg-gray-900"
-          ref={mainRef}
-        >
-          <Suspense
-            fallback={
-              <div className="flex h-full items-center justify-center">
-                <Spinner />
-              </div>
-            }
+            </Sidebar.Items>
+          </Sidebar>
+          <main
+            className="flex-1 overflow-auto bg-white p-4 dark:bg-gray-900"
+            ref={mainRef}
           >
-            <AppContext.Provider value={{ state, dispatch }}>
-              <Routes>
-                {[...routes, ...bottomRoutes].map(
-                  ({ href, component: Component }) => (
-                    <Route key={href} path={href} element={Component} />
-                  )
-                )}
-              </Routes>
-              <div className="fixed bottom-3 right-8">
-                <Toast>
-                  {typeof state.toast.toastType === "string" &&
-                    getToastIcon(state.toast.toastType)}
-                  <div className="ml-3 text-sm font-normal">
-                    {state.toast.message}
-                  </div>
-                  <Toast.Toggle />
-                </Toast>
-              </div>
-            </AppContext.Provider>
-          </Suspense>
-        </main>
-      </div>
+            <Suspense
+              fallback={
+                <div className="flex h-full items-center justify-center">
+                  <Spinner />
+                </div>
+              }
+            >
+              <RootUtils>
+                <Routes>
+                  {[...routes, ...bottomRoutes].map(
+                    ({ href, component: Component }) => (
+                      <Route key={href} path={href} element={Component} />
+                    )
+                  )}
+                </Routes>
+                <div className="fixed bottom-3 right-8">
+                  <Toast>
+                    {typeof state.toast.toastType === "string" &&
+                      getToastIcon(state.toast.toastType)}
+                    <div className="ml-3 text-sm font-normal">
+                      {state.toast.message}
+                    </div>
+                    <Toast.Toggle />
+                  </Toast>
+                </div>
+              </RootUtils>
+            </Suspense>
+          </main>
+        </div>
+      </AppContext.Provider>
     </div>
   );
 };

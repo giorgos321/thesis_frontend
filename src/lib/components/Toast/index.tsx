@@ -4,10 +4,10 @@ import {
   FC,
   PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from "react";
 import { AppContext } from "../../../app/Root";
+import useDidUpdateEffect from "../../../hooks/useDidUpdateEffect";
 import { excludeClassName } from "../../helpers/exclude";
 import { useTheme } from "../Flowbite/ThemeContext";
 import type { Duration } from "./ToastContext";
@@ -32,16 +32,24 @@ const durationClasses: Record<Duration, string> = {
 
 const ToastComponent: FC<ToastProps> = ({
   children,
-  duration = 300,
+  duration = 700,
   ...props
 }) => {
   const [isClosed, setIsClosed] = useState(true);
   const [isRemoved, setIsRemoved] = useState(true);
   const { state } = useContext(AppContext);
 
-  useEffect(() => {
-    setIsClosed(!state.toast.show);
-    setTimeout(() => setIsRemoved(!state.toast.show), duration);
+  useDidUpdateEffect(() => {
+    const show = state.toast.show;
+    console.log(show);
+
+    setIsClosed(!show);
+
+    if (!show) {
+      setTimeout(() => setIsRemoved(!show), duration);
+    } else {
+      setIsRemoved(!show);
+    }
   }, [state.toast.show]);
 
   const theme = useTheme().theme.toast;

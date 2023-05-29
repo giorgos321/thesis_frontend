@@ -1,7 +1,9 @@
-import { useContext, useRef } from "react";
+import { Button } from "flowbite-react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { actionsEnum } from "../../appReducer";
+import useToast from "../../hooks/useToast";
 import { AppContext } from "../Root";
 
 const SingUp = () => {
@@ -14,7 +16,26 @@ const SingUp = () => {
   const _confirmPassword = useRef<string>();
   const { dispatch } = useContext(AppContext);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    function handleKeyPress(event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        submit();
+      }
+    }
+
+    document.addEventListener("keypress", handleKeyPress);
+
+    // Return a cleanup function to remove the event listener
+    return () => {
+      document.removeEventListener("keypress", handleKeyPress);
+    };
+  }, []);
 
   const submit = async () => {
     const email = _email.current;
@@ -23,36 +44,44 @@ const SingUp = () => {
     const confirmPassword = _confirmPassword.current;
 
     if (password === confirmPassword) {
-      const res = await api.post("api/auth/signup", {
-        username,
-        email,
-        password,
-        roles: ["admin"],
-      });
-      if (res.status === 200) {
-        localStorage.setItem("token", res.data.accessToken);
-        api.interceptors.request.use(
-          (config) => {
-            if (config.headers) {
-              config.headers["x-access-token"] = res.data.accessToken;
-            }
+      setIsLoading(true);
+      try {
+        const res = await api.post("api/auth/signup", {
+          username,
+          email,
+          password,
+          roles: ["admin"],
+        });
+        setIsLoading(false);
+        if (res.status === 200) {
+          localStorage.setItem("token", res.data.accessToken);
+          api.interceptors.request.use(
+            (config) => {
+              if (config.headers) {
+                config.headers["x-access-token"] = res.data.accessToken;
+              }
 
-            return config;
-          },
-          (error) => {
-            return Promise.reject(error);
-          }
-        );
-        dispatch({ type: actionsEnum.auth, payload: { auth: true } });
-        navigate("/");
+              return config;
+            },
+            (error) => {
+              return Promise.reject(error);
+            }
+          );
+          dispatch({ type: actionsEnum.auth, payload: { auth: true } });
+          navigate("/");
+        }
+      } catch (error) {
+        setIsLoading(false);
       }
+    } else {
+      showToast("error", "Οι κωδικοί δεν ταιριάζουν !", 5000);
     }
   };
 
   return (
     <section className="h-full">
       <div className="flex h-full flex-col items-center justify-center">
-        <div className="w-full rounded-lg bg-white shadow dark:border dark:border-gray-700 dark:bg-gray-800 sm:max-w-md md:mt-0 xl:p-0">
+        <div className="w-full rounded-lg bg-white shadow-2xl border-2 border-gray-200 sm:max-w-md md:mt-0 xl:p-0">
           <div className="space-y-4 p-6 sm:p-8 md:space-y-6">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 dark:text-white md:text-2xl">
               Create and account
@@ -126,23 +155,13 @@ const SingUp = () => {
                   required={true}
                 />
               </div>
-              {/* <div className="flex items-start">
-                                <div className="flex items-center h-5">
-                                    <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required={true} />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                    <label htmlFor="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
-                                </div>
-                            </div> */}
-              <button
+              <Button
+                isProcessing={isLoading}
                 onClick={submit}
-                className="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="w-full"
               >
                 Create an account
-              </button>
-              {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                                Already have an account? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</a>
-                            </p> */}
+              </Button>
             </div>
           </div>
         </div>

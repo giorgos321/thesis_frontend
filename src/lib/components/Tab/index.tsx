@@ -115,16 +115,16 @@ export const TabsComponent: FC<TabsProps> = ({
             type="button"
             aria-controls={`${id}-tabpanel-${index}`}
             aria-selected={index === activeTab}
-            className={classNames(
-              theme.tablist.tabitem.base,
-              theme.tablist.tabitem.styles[style],
-              {
-                [theme.tablist.tabitem.styles[style].active.on]:
-                  index === activeTab,
-                [theme.tablist.tabitem.styles[style].active.off]:
-                  index !== activeTab && !tab.disabled,
-              }
-            )}
+            // className={classNames(
+            //   theme.tablist.tabitem.base,
+            //   theme.tablist.tabitem.styles[style],
+            //   {
+            //     [theme.tablist.tabitem.styles[style].active.on]:
+            //       index === activeTab,
+            //     [theme.tablist.tabitem.styles[style].active.off]:
+            //       index !== activeTab && !tab.disabled,
+            //   }
+            // )}
             disabled={tab.disabled}
             id={`${id}-tab-${index}`}
             onClick={() => handleClick({ target: index })}
