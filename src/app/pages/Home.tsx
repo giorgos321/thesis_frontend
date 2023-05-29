@@ -1,25 +1,38 @@
 import type { FC } from "react";
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { FiUsers } from 'react-icons/fi';
-// import api from '../../api';
+import api from '../../api';
 import Calendar from "../../lib/components/Calendar";
+import moment, { MomentInput } from "moment";
 // import { Card } from '../../lib';
 
 const Home: FC = () => {
-  // const [data, setData] = useState<any[]>([]);
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  const [data, setData] = useState<any[]>([]);
+  useEffect(() => {
+    getData();
+  }, []);
 
-  // const getData = async () => {
-  //   const { data } = await api.get('api/labinstance');
-  //   setData(data);
-  // };
+  const getData = async () => {
+    const { data } = await api.get('api/labinstance');
+    
+    const events = data.map((lab: {
+      endRecur: MomentInput;
+      startRecur: MomentInput; lab: { lab_name: any; }; daysOfWeek: string; 
+}) => ({ ...lab,
+      title: lab.lab.lab_name,
+      daysOfWeek: [parseInt(lab.daysOfWeek)],
+      startRecur: moment(lab.startRecur).format('YYYY-MM-DD'),
+      endRecur: moment(lab.endRecur).format('YYYY-MM-DD'),
+    }))
 
+    setData(events);
+  };
+  console.log(data);
+  
   return (
     <div className="mx-auto max-w-screen-xl lg:p-12 lg:text-center">
       <div className="flex flex-row flex-wrap gap-2">
-        <Calendar />
+        <Calendar events={data} />
         {/* {data.map((lab) => (
           <div key={lab.id} className="max-w-[500px] min-w-[500px] rounded-md bg-white p-4">
             <div className="flex flex-row items-center justify-between gap-8">

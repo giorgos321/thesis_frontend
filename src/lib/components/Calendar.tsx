@@ -15,26 +15,32 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 // type CalendarProps = {
 //   eventsCalendar: IEventCalendar[];
 // }
-const events = [
-  {
-    title: "Daily Meeting",
-    daysOfWeek: [1, 2, 3, 4, 5], // Monday to Friday
-    startTime: "10:00", // Start time in HH:mm format
-    endTime: "11:00", // End time in HH:mm format
-    startRecur: "2023-05-01", // Start date for recurring events
-    endRecur: "2023-05-31", // End date for recurring events
-  },
-  {
-    title: "Weekly Presentation",
-    daysOfWeek: [2], // Tuesday
-    startTime: "14:00", // Start time in HH:mm format
-    endTime: "16:00", // End time in HH:mm format
-    startRecur: "2023-05-02", // Start date for recurring events
-    endRecur: "2023-05-30", // End date for recurring events
-  },
-  // Add more recurring events as needed
-];
-const Calendar = () => {
+
+const Calendar = ({ events }: { events: any }) => {
+  console.log(events);
+  // events = [
+  //   {
+  //     "id": 1,
+  //     "startTime": "10:10:00",
+  //     "endTime": "10:30:00",
+  //     "daysOfWeek": [
+  //         0
+  //     ],
+  //     "startRecur": "2023-05-02",
+  //     "endRecur": "2023-06-30",
+  //     "title": "Database Management Systems"
+  // },
+  //   // {
+  //   //   title: "Weekly Presentation",
+  //   //   daysOfWeek: [2], // Tuesday
+  //   //   startTime: "14:00", // Start time in HH:mm format
+  //   //   endTime: "16:00", // End time in HH:mm format
+  //   //   startRecur: "2023-05-02", // Start date for recurring events
+  //   //   endRecur: "2023-05-30", // End date for recurring events
+  //   // },
+  //   // Add more recurring events as needed
+  // ];
+  
   //   const [eventInfos, setEventInfos] = useState();
   //   const [isEditCard, setIsEditCard] = useState<boolean>(false);
 
@@ -90,7 +96,7 @@ const Calendar = () => {
         select={handleAddEventSelectAndOpenModal}
         eventClick={handleEditEventSelectAndOpenModal}
         eventChange={handleUpdateEventSelect}
-        initialEvents={events}
+        events={events}
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}
