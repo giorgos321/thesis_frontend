@@ -30,12 +30,12 @@ module.exports = {
   ],
   root: true,
   rules: {
-    "@typescript-eslint/consistent-type-imports": "warn",
-    "tailwindcss/classnames-order": [
-      "warn",
-      {
-        officialSorting: true,
-      },
-    ],
+    // "@typescript-eslint/consistent-type-imports": "warn",
+    // "tailwindcss/classnames-order": [
+    //   "warn",
+    //   {
+    //     officialSorting: true,
+    //   },
+    // ],
   },
 };
