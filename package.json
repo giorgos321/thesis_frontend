@@ -32,7 +32,7 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "eject": "react-app-rewired eject",
-    "lint": "eslint --color .",
+    "lint": "eslint --color --fix .",
     "lint:staged": "lint-staged --config lint-staged.js",
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",

@@ -35,7 +35,7 @@ const DropdownPage: FC = () => {
         <Dropdown label="Dropdown button">
           <Dropdown.Header>
             <span className="block text-sm">Bonnie Green</span>
-            <span className="block text-sm font-medium truncate">
+            <span className="block truncate text-sm font-medium">
               bonnie@flowbite.com
             </span>
           </Dropdown.Header>
@@ -64,7 +64,7 @@ const DropdownPage: FC = () => {
         <Dropdown label="Dropdown">
           <Dropdown.Header>
             <span className="block text-sm">Bonnie Green</span>
-            <span className="block text-sm font-medium truncate">
+            <span className="block truncate text-sm font-medium">
               bonnie@flowbite.com
             </span>
           </Dropdown.Header>
@@ -98,7 +98,7 @@ const DropdownPage: FC = () => {
     {
       title: "Sizing",
       code: (
-        <div className="flex gap-4 items-center">
+        <div className="flex items-center gap-4">
           <Dropdown label="Small dropdown" size="sm">
             <Dropdown.Item>Dashboard</Dropdown.Item>
             <Dropdown.Item>Settings</Dropdown.Item>
@@ -118,7 +118,7 @@ const DropdownPage: FC = () => {
       title: "Placement",
       code: (
         <div className="flex flex-col gap-4">
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             <Dropdown label="Dropdown top" placement="top">
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>
@@ -144,7 +144,7 @@ const DropdownPage: FC = () => {
               <Dropdown.Item>Sign out</Dropdown.Item>
             </Dropdown>
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             <Dropdown label="Dropdown left start" placement="left-start">
               <Dropdown.Item>Dashboard</Dropdown.Item>
               <Dropdown.Item>Settings</Dropdown.Item>
