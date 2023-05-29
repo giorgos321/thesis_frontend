@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/thesis_frontend/static/css/main.1833125b.css",
-    "main.js": "/thesis_frontend/static/js/main.b65fd443.js",
-    "static/css/871.68c6dcf4.css": "/thesis_frontend/static/css/871.68c6dcf4.css",
-    "static/js/871.82659a41.js": "/thesis_frontend/static/js/871.82659a41.js",
+    "main.css": "/thesis_frontend/static/css/main.a97aebd0.css",
+    "main.js": "/thesis_frontend/static/js/main.5c608fee.js",
+    "static/css/818.c0fef03e.css": "/thesis_frontend/static/css/818.c0fef03e.css",
+    "static/js/818.972338f1.js": "/thesis_frontend/static/js/818.972338f1.js",
     "index.html": "/thesis_frontend/index.html",
-    "main.1833125b.css.map": "/thesis_frontend/static/css/main.1833125b.css.map",
-    "main.b65fd443.js.map": "/thesis_frontend/static/js/main.b65fd443.js.map",
-    "871.68c6dcf4.css.map": "/thesis_frontend/static/css/871.68c6dcf4.css.map",
-    "871.82659a41.js.map": "/thesis_frontend/static/js/871.82659a41.js.map"
+    "main.a97aebd0.css.map": "/thesis_frontend/static/css/main.a97aebd0.css.map",
+    "main.5c608fee.js.map": "/thesis_frontend/static/js/main.5c608fee.js.map",
+    "818.c0fef03e.css.map": "/thesis_frontend/static/css/818.c0fef03e.css.map",
+    "818.972338f1.js.map": "/thesis_frontend/static/js/818.972338f1.js.map"
   },
   "entrypoints": [
-    "static/css/871.68c6dcf4.css",
-    "static/js/871.82659a41.js",
-    "static/css/main.1833125b.css",
-    "static/js/main.b65fd443.js"
+    "static/css/818.c0fef03e.css",
+    "static/js/818.972338f1.js",
+    "static/css/main.a97aebd0.css",
+    "static/js/main.5c608fee.js"
   ]
 }
