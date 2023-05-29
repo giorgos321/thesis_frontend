@@ -23,10 +23,10 @@ module.exports = {
   },
   plugins: [
     "@typescript-eslint",
-    "prettier",
-    "react-hooks",
-    "storybook",
-    "tailwindcss",
+    // "prettier",
+    // "react-hooks",
+    // "storybook",
+    // "tailwindcss",
   ],
   root: true,
   rules: {
