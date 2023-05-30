@@ -40,7 +40,7 @@ const Calendar = ({ events }: { events: any }) => {
   //   // },
   //   // Add more recurring events as needed
   // ];
-  
+
   //   const [eventInfos, setEventInfos] = useState();
   //   const [isEditCard, setIsEditCard] = useState<boolean>(false);
 
