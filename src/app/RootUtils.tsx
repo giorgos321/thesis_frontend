@@ -11,10 +11,13 @@ const RootUtils: FC<PropsWithChildren> = ({ children }) => {
   const { dispatch } = useContext(AppContext);
 
   useEffect(() => {
+    console.log("init useEffect");
+
     api.interceptors.response.use(
       (response) => response,
       (error: AxiosError<{ message: string }>) => {
         const { response } = error;
+        console.log(response);
 
         if (response) {
           showToast("error", response.data.message, 5000);
