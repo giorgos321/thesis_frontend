@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/thesis_frontend/static/css/main.36d8045e.css",
-    "main.js": "/thesis_frontend/static/js/main.157649b5.js",
+    "main.css": "/thesis_frontend/static/css/main.32872d87.css",
+    "main.js": "/thesis_frontend/static/js/main.fb48f563.js",
     "static/css/213.05c6b017.css": "/thesis_frontend/static/css/213.05c6b017.css",
-    "static/js/213.9b71c74c.js": "/thesis_frontend/static/js/213.9b71c74c.js",
+    "static/js/213.5e37ac3b.js": "/thesis_frontend/static/js/213.5e37ac3b.js",
     "index.html": "/thesis_frontend/index.html",
-    "main.36d8045e.css.map": "/thesis_frontend/static/css/main.36d8045e.css.map",
-    "main.157649b5.js.map": "/thesis_frontend/static/js/main.157649b5.js.map",
+    "main.32872d87.css.map": "/thesis_frontend/static/css/main.32872d87.css.map",
+    "main.fb48f563.js.map": "/thesis_frontend/static/js/main.fb48f563.js.map",
     "213.05c6b017.css.map": "/thesis_frontend/static/css/213.05c6b017.css.map",
-    "213.9b71c74c.js.map": "/thesis_frontend/static/js/213.9b71c74c.js.map"
+    "213.5e37ac3b.js.map": "/thesis_frontend/static/js/213.5e37ac3b.js.map"
   },
   "entrypoints": [
     "static/css/213.05c6b017.css",
-    "static/js/213.9b71c74c.js",
-    "static/css/main.36d8045e.css",
-    "static/js/main.157649b5.js"
+    "static/js/213.5e37ac3b.js",
+    "static/css/main.32872d87.css",
+    "static/js/main.fb48f563.js"
   ]
 }
