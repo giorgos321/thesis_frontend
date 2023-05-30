@@ -2,6 +2,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+// import { useEffect } from "react";
 // import { useState } from "react";
 
 // import { ModalInfosEventCalendar } from "./ModalInfosEventCalendar";
@@ -52,18 +53,22 @@ const Calendar = ({ events }: { events: any }) => {
   //   const modalInfosEvent = useDisclosure(false);
 
   const handleAddEventSelectAndOpenModal = (_selectInfo: any) => {
+    console.log(_selectInfo);
     // setIsEditCard(false);
     // setEventInfos(selectInfo);
     // modalInfosEvent.handleOpen();
   };
 
   const handleEditEventSelectAndOpenModal = (_clickInfo: any) => {
+    console.log(_clickInfo);
+
     // setIsEditCard(true);
     // setEventInfos(clickInfo);
     // modalInfosEvent.handleOpen();
   };
 
   const handleUpdateEventSelect = async (_changeInfo: any) => {
+    console.log(_changeInfo);
     try {
       //   const eventCalendarUpdated = {
       //     eventCalendar: {
@@ -81,8 +86,24 @@ const Calendar = ({ events }: { events: any }) => {
     }
   };
 
+  // useEffect(() => {
+  //   for (const event of events) {
+  //     const el = document.getElementById(`draggable-${event.id}`);
+  //     if (el) {
+  //       new Draggable(el);
+  //     }
+  //   }
+  // }, [events]);
+
   return (
     <div className="w-full">
+      {/* <div id="events-container">
+        {events.map((evt: any) => (
+          <div id={`draggable-${evt.id}`} data-event={`${JSON.stringify(evt)}`}>
+            {evt?.title}
+          </div>
+        ))}
+      </div> */}
       <FullCalendar
         plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
