@@ -11,6 +11,7 @@ import {
 import { GoSignOut } from "react-icons/go";
 import { HiCheck, HiExclamation, HiMenuAlt1, HiX } from "react-icons/hi";
 // import { SiStorybook } from 'react-icons/si';
+import { Draggable } from "@fullcalendar/interaction";
 import { DarkThemeToggle, Navbar, Sidebar, Spinner } from "flowbite-react";
 import {
   Link,
@@ -26,6 +27,14 @@ import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { Toast } from "../lib";
 import RootUtils from "./RootUtils";
 import { bottomRoutes as _bottomRoutes, routes as _routes } from "./routes";
+
+interface Lab {
+  id?: number;
+  lab_name: string;
+  lab_description: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
 const defaultState = {
   auth: false,
@@ -46,6 +55,7 @@ export const Root: FC = () => {
   const { pathname } = useLocation();
 
   const [state, dispatch] = useReducer(appReducer, defaultState);
+  const [labs, setLabs] = useState<Lab[]>([]);
 
   const navigate = useNavigate();
 
@@ -54,7 +64,13 @@ export const Root: FC = () => {
     if (typeof token === "string" && token.length > 0) {
       dispatch({ type: actionsEnum.auth, payload: { auth: true } });
     }
+    getLabs();
   }, []);
+
+  const getLabs = async () => {
+    const { data } = await api.get<Lab[]>("api/labs");
+    setLabs(data);
+  };
 
   const routes = _routes.filter((r) => {
     if (state.auth) {
@@ -78,6 +94,15 @@ export const Root: FC = () => {
       logout();
     }
   }, [state.auth]);
+
+  useEffect(() => {
+    for (const event of labs) {
+      const el = document.getElementById(`draggable-${event.id}`);
+      if (el) {
+        new Draggable(el);
+      }
+    }
+  }, [labs]);
 
   const getToastIcon = (type: "success" | "error" | "warning") => {
     switch (type) {
@@ -158,6 +183,27 @@ export const Root: FC = () => {
                         {title}
                       </Sidebar.Item>
                     ))}
+                  </Sidebar.ItemGroup>
+                  <Sidebar.ItemGroup>
+                    <div className="flex flex-col gap-1">
+                      {labs.map((lab) => {
+                        const event = {
+                          title: lab.lab_name,
+                          duration: "02:00",
+                        };
+
+                        return (
+                          <div
+                            key={lab.id}
+                            id={`draggable-${lab.id}`}
+                            data-event={`${JSON.stringify(event)}`}
+                            className=" cursor-pointer rounded bg-blue-500 p-2 text-white"
+                          >
+                            {lab.lab_name}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </Sidebar.ItemGroup>
                 </div>
                 <Sidebar.ItemGroup>
