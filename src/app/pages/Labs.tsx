@@ -2,11 +2,13 @@ import {
   Button,
   Label,
   Modal,
+  Select,
   Spinner,
   Table,
   Textarea,
   TextInput,
 } from "flowbite-react";
+import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -17,6 +19,8 @@ interface Lab {
   id?: number;
   lab_name: string;
   lab_description: string;
+  lab_year: number;
+  lab_semester: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -26,18 +30,31 @@ enum ModalMode {
   update,
 }
 
+const currentYear = moment().year();
+
 const Labs = () => {
   const [labs, setLabs] = useState<Lab[]>([]);
   const [load, setLoad] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
+  const [isValid, setIsValid] = useState(true);
+  const [year, setYear] = useState<number>(currentYear);
+  const [semester, setSemester] = useState<number>(1);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const selectedLab = useRef<Lab>({
     id: NaN,
     lab_name: "",
     lab_description: "",
+    lab_year: currentYear,
+    lab_semester: 1,
     createdAt: "",
     updatedAt: "",
   });
+
+  useEffect(() => {
+    selectedLab.current.lab_year = year;
+    selectedLab.current.lab_semester = semester;
+  }, [year, semester]);
 
   useEffect(() => {
     getData();
@@ -55,17 +72,33 @@ const Labs = () => {
     }
   };
 
+  const checkValidation = () => {
+    const nameLength = selectedLab.current.lab_name.length;
+    if (nameLength > 0) {
+      return true;
+    } else {
+      setIsValid(false);
+      return false;
+    }
+  };
+
   const sendEdit = async () => {
+    if (!checkValidation()) return;
+    setIsProcessing(true);
     await api.put<Lab>(
       `api/labs/${selectedLab.current.id}`,
       selectedLab.current
     );
+    setIsProcessing(false);
     closeModal();
     getData();
   };
 
   const sendNew = async () => {
+    if (!checkValidation()) return;
+    setIsProcessing(true);
     await api.post<Lab>(`api/labs`, selectedLab.current);
+    setIsProcessing(false);
     closeModal();
     getData();
   };
@@ -77,13 +110,41 @@ const Labs = () => {
 
   const onEdit = (lab: Lab) => {
     selectedLab.current = lab;
+    setYear(lab.lab_year);
+    setSemester(lab.lab_semester);
     openModal(ModalMode.update);
   };
+
+  const getYearsRange = () => {
+    const range = 5;
+    const startRange = currentYear - range;
+    const endRange = currentYear + range;
+    const years = [];
+    for (let year = startRange; year < endRange; year++) {
+      years.push(year);
+    }
+
+    return years;
+  };
+
+  const getSemesters = () => {
+    const semesters = [];
+    for (let semester = 1; semester <= 8; semester++) {
+      semesters.push(semester);
+    }
+    return semesters;
+  };
+
+  const years = useRef(getYearsRange());
+
+  const semesters = useRef(getSemesters());
 
   const addNew = () => {
     selectedLab.current = {
       lab_name: "",
       lab_description: "",
+      lab_year: year,
+      lab_semester: semester,
     };
     openModal(ModalMode.create);
   };
@@ -110,7 +171,9 @@ const Labs = () => {
         </div>
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Lab</Table.HeadCell>
+            <Table.HeadCell>Όνομα Εργαστίριου</Table.HeadCell>
+            <Table.HeadCell>Ακαδημαϊκό έτος</Table.HeadCell>
+            <Table.HeadCell>Εξάμηνο</Table.HeadCell>
             <Table.HeadCell className=" w-3">
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
@@ -127,6 +190,12 @@ const Labs = () => {
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                   {lab.lab_name}
+                </Table.Cell>
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  {lab.lab_year}
+                </Table.Cell>
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  {lab.lab_semester}
                 </Table.Cell>
                 <Table.Cell>
                   <Button
@@ -166,13 +235,28 @@ const Labs = () => {
           <div className="space-y-6">
             <div>
               <div className="mb-2 block">
-                <Label value="Lab Name" />
+                <Label value="Όνομα Εργαστίριου" />
               </div>
               <TextInput
-                defaultValue={selectedLab.current.lab_name}
-                onChange={(e) =>
-                  (selectedLab.current.lab_name = e.target.value)
+                color={isValid ? undefined : "failure"}
+                helperText={
+                  isValid ? undefined : (
+                    <>
+                      <span className="font-medium"></span>Το όνομα εργαστιρίου
+                      είναι υποχρεωτικό.
+                    </>
+                  )
                 }
+                defaultValue={selectedLab.current.lab_name}
+                onChange={(e) => {
+                  selectedLab.current.lab_name = e.target.value;
+                  if (!isValid && e.target.value.length > 0) {
+                    setIsValid(true);
+                    setTimeout(() => {
+                      e.target.focus();
+                    });
+                  }
+                }}
               />
             </div>
             <div>
@@ -184,10 +268,43 @@ const Labs = () => {
                 onChange={(e) =>
                   (selectedLab.current.lab_description = e.target.value)
                 }
-                placeholder="Lab Description..."
+                placeholder="Περιγραφή εργαστιρίου..."
                 required
                 rows={4}
+                style={{ resize: "none" }}
               />
+            </div>
+            <div className="flex flex-row gap-2">
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Ακαδημαϊκό έτος" />
+                </div>
+                <Select
+                  value={year}
+                  onChange={(e) => {
+                    setYear(parseInt(e.target.value));
+                  }}
+                  required
+                >
+                  {years.current.map((year) => (
+                    <option key={year}>{year}</option>
+                  ))}
+                </Select>
+              </div>
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Εξάμηνο" />
+                </div>
+                <Select
+                  value={semester}
+                  onChange={(e) => setSemester(parseInt(e.target.value))}
+                  required
+                >
+                  {semesters.current.map((semester) => (
+                    <option key={semester}>{semester}</option>
+                  ))}
+                </Select>
+              </div>
             </div>
           </div>
         </Modal.Body>
@@ -195,7 +312,10 @@ const Labs = () => {
           <Button color="gray" onClick={closeModal}>
             Άκυρο
           </Button>
-          <Button onClick={modalMode === ModalMode.update ? sendEdit : sendNew}>
+          <Button
+            isProcessing={isProcessing}
+            onClick={modalMode === ModalMode.update ? sendEdit : sendNew}
+          >
             Αποθήκευση
           </Button>
         </Modal.Footer>

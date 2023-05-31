@@ -64,7 +64,6 @@ export const Root: FC = () => {
     if (typeof token === "string" && token.length > 0) {
       dispatch({ type: actionsEnum.auth, payload: { auth: true } });
     }
-    getLabs();
   }, []);
 
   const getLabs = async () => {
@@ -92,6 +91,9 @@ export const Root: FC = () => {
   useDidUpdateEffect(() => {
     if (!state.auth) {
       logout();
+      setLabs([]);
+    } else {
+      getLabs();
     }
   }, [state.auth]);
 
