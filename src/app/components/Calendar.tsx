@@ -1,8 +1,4 @@
-import type {
-  EventChangeArg,
-  EventClickArg,
-  EventDropArg,
-} from "@fullcalendar/core";
+import type { EventChangeArg, EventClickArg } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
@@ -17,8 +13,11 @@ import { Accordion, Button, Label, Modal, Radio, Select } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
 import { useEffect, useMemo, useState } from "react";
+import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import api from "../../api";
+// import useToast from "../../hooks/useToast";
 
 interface Lab {
   id?: number;
@@ -114,6 +113,9 @@ const Calendar = ({
 
   const [startRecur, setStartRecur] = useState<Moment>(moment());
   const [endRecur, setEndRecur] = useState<Moment>(moment());
+  const navigate = useNavigate();
+
+  // const { showToast } = useToast();
 
   // const currLabInstance = useRef<LabInstance>(emptyLabInstance);
 
@@ -178,13 +180,38 @@ const Calendar = ({
   };
 
   const handleChange = (event: any) => {
-    let value = parseInt(event.target.value);
-    if (isNaN(value)) {
+    let value: string | number = parseInt(event.target.value);
+    if (event.target.id === "startRecur" || event.target.id === "endRecur") {
+      const m = moment(event.target.value);
+      value = m.format("YYYY-MM-DD");
+      if (event.target.id === "startRecur") {
+        setStartRecur(m);
+      } else {
+        setEndRecur(m);
+      }
+    } else if (
+      event.target.id === "startTime" ||
+      event.target.id === "endTime"
+    ) {
       value = event.target.value;
+      const m = moment(value, "HH:mm");
+      if (event.target.id === "startTime") {
+        setStartTime(m);
+      } else {
+        setEndTime(m);
+      }
+    } else {
+      if (isNaN(value)) {
+        value = event.target.value;
+      }
     }
+
     setForm({
       ...form,
       [event.target.id]: value,
+    });
+    setTimeout(() => {
+      event.target.focus();
     });
   };
 
@@ -239,7 +266,7 @@ const Calendar = ({
   };
 
   const weekends = {
-    weekendsVisible: true,
+    weekendsVisible: false,
     currentEvents: [],
   };
 
@@ -250,30 +277,39 @@ const Calendar = ({
     labInstance.teacherId = labInstance.teacher?.id;
     labInstance.labId = labInstance.lab?.id;
 
+    delete labInstance.teacher;
+    delete labInstance.lab;
+    delete labInstance.students;
+
     setStartRecur(moment(labInstance.startRecur));
     setEndRecur(moment(labInstance.endRecur));
     setStartTime(moment(labInstance.startTime, "HH:mm"));
     setEndTime(moment(labInstance.endTime, "HH:mm"));
-
-    delete labInstance.teacher;
-    delete labInstance.lab;
-    delete labInstance.students;
 
     setModal(true);
     setForm(labInstance);
     setModalMode(ModalMode.update);
   };
 
-  const eventDroped = (e: EventDropArg) => {
-    console.log(e);
-  };
-
   const eventChanged = async (e: EventChangeArg) => {
-    console.log(e);
+    const eventObj = e.event.toPlainObject();
+
+    const labInstance: LabInstance = eventObj.extendedProps.instanceData;
+    labInstance.teacherId = labInstance.teacher?.id;
+    labInstance.labId = labInstance.lab?.id;
+    labInstance.startTime = moment(e.event.startStr).format("HH:mm");
+    labInstance.endTime = moment(e.event.endStr).format("HH:mm");
+    labInstance.daysOfWeek = moment(e.event.endStr).day() + 1;
+    console.log(labInstance.daysOfWeek);
+
+    delete labInstance.teacher;
+    delete labInstance.lab;
+    delete labInstance.students;
     try {
-      //wtvr
+      await api.put(`api/labinstance/${labInstance.id}`, labInstance);
+      refresh();
     } catch (err) {
-      //   toast.error('Houve um erro ao atualizar o evento');
+      e.revert();
     }
   };
 
@@ -304,6 +340,10 @@ const Calendar = ({
       teacherId: teachers[0]?.id,
       daysOfWeek: 1,
       color: colorList[0],
+      startRecur: getDateFormat(moment()),
+      endRecur: getDateFormat(moment()),
+      startTime: getTimeFormat(moment(), true),
+      endTime: getTimeFormat(moment(), true),
     });
     setStartRecur(moment());
     setEndRecur(moment());
@@ -320,6 +360,7 @@ const Calendar = ({
   //   setStartTime(moment(form.startTime, "HH:mm"));
   //   setEndTime(moment(form.endTime, "HH:mm"));
   // }, [form.startTime, form.endTime]);
+  console.log(startRecur.format("yyyy-MM-DD"), form);
 
   return (
     <div className="w-full">
@@ -343,18 +384,16 @@ const Calendar = ({
         headerToolbar={{
           left: "prev,next today",
           center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
+          right: "timeGridWeek,timeGridDay",
         }}
         locale="el"
         weekends={weekends.weekendsVisible}
         eventClick={eventClick}
-        eventDrop={eventDroped}
         eventChange={eventChanged}
         events={events}
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}
-        selectable={false}
         dayMaxEvents={true}
         allDaySlot={false}
         editable={true}
@@ -367,7 +406,7 @@ const Calendar = ({
           list: "Λίστα",
         }}
       />
-      <Modal onClose={closeModal} position="center" show={modal}>
+      <Modal onClose={closeModal} position="center" show={modal} size={"3xl"}>
         <Modal.Header>{"Νέο Εργαστίριο"}</Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
@@ -407,6 +446,56 @@ const Calendar = ({
                 </Select>
               </div>
             </div>
+            {/* 
+            <div className="flex flex-row items-center gap-2">
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Άρχη περιόδου μαθήματος" />
+                </div>
+                <TextInput 
+                  id="startRecur"
+                  type="date"
+                  value={form.startRecur}
+                  onChange={handleChange}
+                  required></TextInput>
+              </div>
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Τέλος περιόδου μαθήματος" />
+                </div>
+                <TextInput 
+                  id="endRecur"
+                  type="date"
+                  value={form.endRecur}
+                  onChange={handleChange}
+                  required></TextInput>
+              </div>
+            </div>
+
+            <div className="flex flex-row items-center gap-2">
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Ώρα έναρξης" />
+                </div>
+                <TextInput 
+                  id="startTime"
+                  type="time"
+                  value={form.startTime}
+                  onChange={handleChange}
+                  required ></TextInput>
+              </div>
+              <div className="flex-1">
+                <div className="mb-2 block">
+                  <Label value="Ώρα λήξης" />
+                </div>
+                <TextInput 
+                  id="endTime"
+                  type="time"
+                  value={form.endTime}
+                  onChange={handleChange}
+                  required></TextInput>
+              </div>
+            </div> */}
 
             <div className="flex flex-row items-center gap-2">
               <div className="flex-1">
@@ -503,9 +592,27 @@ const Calendar = ({
                 </Accordion.Panel>
               </Accordion>
             </LocalizationProvider>
+            {/* <Alert color="failure" icon={IoMdAlert}>
+              <span>
+                <p>
+                  <span className="font-medium">Info alert!</span>
+                  Change a few things up and try submitting again.
+                </p>
+              </span>
+            </Alert> */}
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-end">
+          {modalMode === ModalMode.update && (
+            <Button
+              color="light"
+              className=" mr-auto"
+              onClick={() => navigate(`/subscriptions/${form.id}`)}
+            >
+              <span className="mr-2">Έλεγχος Απουσιών</span>
+              <BsBoxArrowInUpRight />
+            </Button>
+          )}
           <Button color="gray" onClick={closeModal}>
             Άκυρο
           </Button>

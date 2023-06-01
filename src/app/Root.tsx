@@ -25,6 +25,7 @@ import type { actions, appState } from "../appReducer";
 import { actionsEnum, appReducer } from "../appReducer";
 import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { Toast } from "../lib";
+import Absences from "./pages/Absences";
 import RootUtils from "./RootUtils";
 import { bottomRoutes as _bottomRoutes, routes as _routes } from "./routes";
 
@@ -258,9 +259,10 @@ export const Root: FC = () => {
                       <Route key={href} path={href} element={Component} />
                     )
                   )}
+                  <Route path="/subscriptions/:id" element={<Absences />} />
                 </Routes>
                 <div className="fixed bottom-3 right-8">
-                  <Toast>
+                  <Toast style={{ zIndex: 9999 }}>
                     {typeof state.toast.toastType === "string" &&
                       getToastIcon(state.toast.toastType)}
                     <div className="ml-3 text-sm font-normal">
