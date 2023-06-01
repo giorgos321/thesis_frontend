@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/thesis_frontend/static/css/main.148e9c42.css",
-    "main.js": "/thesis_frontend/static/js/main.26fec524.js",
+    "main.css": "/thesis_frontend/static/css/main.e8593183.css",
+    "main.js": "/thesis_frontend/static/js/main.54d4648a.js",
     "static/css/941.a67b33bc.css": "/thesis_frontend/static/css/941.a67b33bc.css",
     "static/js/941.da03015b.js": "/thesis_frontend/static/js/941.da03015b.js",
     "index.html": "/thesis_frontend/index.html",
-    "main.148e9c42.css.map": "/thesis_frontend/static/css/main.148e9c42.css.map",
-    "main.26fec524.js.map": "/thesis_frontend/static/js/main.26fec524.js.map",
+    "main.e8593183.css.map": "/thesis_frontend/static/css/main.e8593183.css.map",
+    "main.54d4648a.js.map": "/thesis_frontend/static/js/main.54d4648a.js.map",
     "941.a67b33bc.css.map": "/thesis_frontend/static/css/941.a67b33bc.css.map",
     "941.da03015b.js.map": "/thesis_frontend/static/js/941.da03015b.js.map"
   },
   "entrypoints": [
     "static/css/941.a67b33bc.css",
     "static/js/941.da03015b.js",
-    "static/css/main.148e9c42.css",
-    "static/js/main.26fec524.js"
+    "static/css/main.e8593183.css",
+    "static/js/main.54d4648a.js"
   ]
 }
