@@ -16,5 +16,5 @@ export const authInterceptor = (config: AxiosRequestConfig) => {
 
 export default axios.create({
   headers: { "x-access-token": localStorage.getItem("token") },
-  baseURL: "http://thesis-backend-one.vercel.app/",
+  baseURL: "https://thesis-backend-one.vercel.app/",
 });
