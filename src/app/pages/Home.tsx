@@ -1,6 +1,5 @@
 import type { FC } from "react";
 import { useEffect, useState } from "react";
-// import { FiUsers } from 'react-icons/fi';
 import api from "../../api";
 import Calendar from "../components/Calendar";
 
@@ -15,12 +14,15 @@ const Home: FC = () => {
 
     setData(data);
   };
-  console.log(data);
+
+  const refresh = async () => {
+    await getData();
+  };
 
   return (
-    <div className="mx-auto max-w-screen-xl lg:p-12 lg:text-center">
+    <div className="mx-auto max-w-screen-xl lg:px-12 lg:text-center">
       <div className="flex flex-row flex-wrap gap-2">
-        <Calendar data={data} />
+        <Calendar data={data} refresh={refresh} />
       </div>
     </div>
   );

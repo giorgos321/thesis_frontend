@@ -1,3 +1,8 @@
+import type {
+  EventChangeArg,
+  EventClickArg,
+  EventDropArg,
+} from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
@@ -9,9 +14,10 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { Accordion, Button, Label, Modal, Radio, Select } from "flowbite-react";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import "moment/locale/el";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { IoMdAdd } from "react-icons/io";
 import api from "../../api";
 
 interface Lab {
@@ -32,17 +38,18 @@ interface Teacher {
 }
 
 interface LabInstance {
-  id: number;
-  startTime: string;
-  endTime: string;
-  daysOfWeek: number;
-  startRecur: string;
-  endRecur: string;
-  labId: number;
-  teacherId: number;
-  color: string;
+  id?: number;
+  startTime?: string;
+  endTime?: string;
+  daysOfWeek?: number;
+  startRecur?: string;
+  endRecur?: string;
+  labId?: number;
+  teacherId?: number;
+  color?: string;
   lab?: Lab;
   teacher?: Teacher;
+  students?: Array<any>;
 }
 
 enum ModalMode {
@@ -61,15 +68,15 @@ const daysOfWeek = [
 ];
 
 const emptyLabInstance: LabInstance = {
-  id: NaN,
-  startTime: "",
-  endTime: "",
-  daysOfWeek: NaN,
-  startRecur: "",
-  teacherId: NaN,
-  labId: NaN,
-  endRecur: "",
-  color: "",
+  id: undefined,
+  startTime: undefined,
+  endTime: undefined,
+  daysOfWeek: undefined,
+  startRecur: undefined,
+  teacherId: undefined,
+  labId: undefined,
+  endRecur: undefined,
+  color: undefined,
 };
 
 const colorList = [
@@ -83,25 +90,38 @@ const colorList = [
 
 moment.locale("el");
 
-const Calendar = ({ data }: { data: any }) => {
+const Calendar = ({
+  data,
+  refresh,
+}: {
+  data: any;
+  refresh: () => Promise<void>;
+}) => {
   const [modal, setModal] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<ModalMode | undefined>(
     ModalMode.create
   );
 
+  const [form, setForm] = useState<LabInstance>(emptyLabInstance);
+  const [invalid, setInvalid] = useState(true);
+
   const [labs, setLabs] = useState<Lab[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
 
-  const [startTime, setStartTime] = useState<any>(moment(moment(new Date())));
-  const [endTime, setEndTime] = useState<any>(moment(moment(new Date())));
+  const [startTime, setStartTime] = useState<Moment>(moment());
+  const [endTime, setEndTime] = useState<Moment>(moment());
 
-  const currLabInstance = useRef<LabInstance>(emptyLabInstance);
+  const [startRecur, setStartRecur] = useState<Moment>(moment());
+  const [endRecur, setEndRecur] = useState<Moment>(moment());
+
+  // const currLabInstance = useRef<LabInstance>(emptyLabInstance);
 
   const events = useMemo(
     () =>
       data.map((lab: LabInstance) => ({
         ...lab,
+        instanceData: lab,
         title: lab.lab?.lab_name,
         startTime: lab.startTime,
         endTime: lab.endTime,
@@ -123,18 +143,77 @@ const Calendar = ({ data }: { data: any }) => {
     const { data } = await api.get<Lab[]>("api/labs");
     setLabs(data);
   };
+
   useEffect(() => {
     getLabs();
     getTeachers();
   }, []);
 
   useEffect(() => {
-    currLabInstance.current.startTime = startTime.format("HH:mm");
-    currLabInstance.current.endTime = endTime.format("HH:mm");
+    if (modalMode === ModalMode.create) {
+      setForm({
+        ...form,
+        labId: labs[0]?.id,
+        teacherId: teachers[0]?.id,
+        daysOfWeek: 1,
+        color: colorList[0],
+      });
+    }
+  }, [labs, teachers]);
+
+  const getTimeFormat = (moment: Moment | string, forForm = false): string => {
+    if (typeof moment === "string") {
+      return moment;
+    } else {
+      return forForm ? moment.format("HH:mm") : moment.format("hh:mm a");
+    }
+  };
+
+  const getDateFormat = (moment: Moment | string): string => {
+    if (typeof moment === "string") {
+      return moment;
+    } else {
+      return moment.format("YYYY-MM-DD");
+    }
+  };
+
+  const handleChange = (event: any) => {
+    let value = parseInt(event.target.value);
+    if (isNaN(value)) {
+      value = event.target.value;
+    }
+    setForm({
+      ...form,
+      [event.target.id]: value,
+    });
+  };
+
+  useEffect(() => {
+    // currLabInstance.current.startTime = getTimeFormat(startTime);
+    // currLabInstance.current.endTime = getTimeFormat(endTime);
+    setForm({
+      ...form,
+      startTime: getTimeFormat(startTime, true),
+      endTime: getTimeFormat(endTime, true),
+    });
   }, [startTime, endTime]);
+
+  useEffect(() => {
+    // currLabInstance.current.startTime = getTimeFormat(startTime);
+    // currLabInstance.current.endTime = getTimeFormat(endTime);
+    setForm({
+      ...form,
+      startRecur: getDateFormat(startRecur),
+      endRecur: getDateFormat(endRecur),
+    });
+  }, [startRecur, endRecur]);
 
   const closeModal = () => {
     setModal(false);
+  };
+
+  const openModal = () => {
+    setModal(true);
   };
 
   // const sendEdit = () => {
@@ -142,11 +221,20 @@ const Calendar = ({ data }: { data: any }) => {
   // }
 
   const sendNew = async () => {
-    modalMode;
-    console.log("This works?");
-
     setIsProcessing(true);
-    await api.post("api/labinstance", currLabInstance.current);
+    await api.post("api/labinstance", form);
+    refresh().then(() => {
+      closeModal();
+    });
+    setIsProcessing(false);
+  };
+
+  const sendEdit = async () => {
+    setIsProcessing(true);
+    await api.put(`api/labinstance/${form.id}`, form);
+    refresh().then(() => {
+      closeModal();
+    });
     setIsProcessing(false);
   };
 
@@ -155,27 +243,33 @@ const Calendar = ({ data }: { data: any }) => {
     currentEvents: [],
   };
 
-  //   const modalInfosEvent = useDisclosure(false);
+  const eventClick = (e: EventClickArg) => {
+    const eventObj = e.event.toPlainObject();
 
-  const handleAddEventSelectAndOpenModal = (_selectInfo: any) => {
-    console.log(_selectInfo, "modalll");
+    const labInstance: LabInstance = eventObj.extendedProps.instanceData;
+    labInstance.teacherId = labInstance.teacher?.id;
+    labInstance.labId = labInstance.lab?.id;
 
-    // setIsEditCard(false);
-    // setEventInfos(selectInfo);
-    // modalInfosEvent.handleOpen();
-  };
+    setStartRecur(moment(labInstance.startRecur));
+    setEndRecur(moment(labInstance.endRecur));
+    setStartTime(moment(labInstance.startTime, "HH:mm"));
+    setEndTime(moment(labInstance.endTime, "HH:mm"));
 
-  const eventClick = (_clickInfo: any) => {
-    console.log(_clickInfo.event);
+    delete labInstance.teacher;
+    delete labInstance.lab;
+    delete labInstance.students;
+
     setModal(true);
+    setForm(labInstance);
     setModalMode(ModalMode.update);
-    // setIsEditCard(true);
-    // setEventInfos(clickInfo);
-    // modalInfosEvent.handleOpen();
   };
 
-  const handleUpdateEventSelect = async (_changeInfo: any) => {
-    console.log(_changeInfo);
+  const eventDroped = (e: EventDropArg) => {
+    console.log(e);
+  };
+
+  const eventChanged = async (e: EventChangeArg) => {
+    console.log(e);
     try {
       //wtvr
     } catch (err) {
@@ -183,8 +277,66 @@ const Calendar = ({ data }: { data: any }) => {
     }
   };
 
+  useEffect(() => {
+    const timeIsNotGood = startTime.isSameOrAfter(endTime);
+    const dateIsNotGood = moment(form.startRecur).isSameOrAfter(form.endRecur);
+    if (timeIsNotGood || dateIsNotGood) {
+      setInvalid(true);
+      return;
+    }
+    let invalid = false;
+
+    for (const [k, v] of Object.entries(form)) {
+      if (k === "id") {
+        continue;
+      }
+      if (v === undefined) {
+        invalid = true;
+      }
+    }
+    setInvalid(invalid);
+  }, [form]);
+
+  const resetForm = () => {
+    setForm({
+      id: undefined,
+      labId: labs[0]?.id,
+      teacherId: teachers[0]?.id,
+      daysOfWeek: 1,
+      color: colorList[0],
+    });
+    setStartRecur(moment());
+    setEndRecur(moment());
+    setStartTime(moment());
+    setEndTime(moment());
+  };
+
+  // useEffect(() => {
+  //   setStartRecur(moment(form.startRecur));
+  //   setEndRecur(moment(form.endRecur));
+  // }, [form.startRecur, form.endRecur]);
+
+  // useEffect(() => {
+  //   setStartTime(moment(form.startTime, "HH:mm"));
+  //   setEndTime(moment(form.endTime, "HH:mm"));
+  // }, [form.startTime, form.endTime]);
+
   return (
     <div className="w-full">
+      <div className="flex flex-row items-center justify-between pb-8">
+        <div className="text-2xl">Εργαστίρια</div>
+        <Button
+          size={"md"}
+          onClick={() => {
+            resetForm();
+            setModalMode(ModalMode.create);
+            openModal();
+          }}
+        >
+          <IoMdAdd className="mr-2" />
+          Προσθήκη
+        </Button>
+      </div>
       <FullCalendar
         plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
@@ -195,14 +347,14 @@ const Calendar = ({ data }: { data: any }) => {
         }}
         locale="el"
         weekends={weekends.weekendsVisible}
-        select={handleAddEventSelectAndOpenModal}
         eventClick={eventClick}
-        eventChange={handleUpdateEventSelect}
+        eventDrop={eventDroped}
+        eventChange={eventChanged}
         events={events}
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}
-        selectable={true}
+        selectable={false}
         dayMaxEvents={true}
         allDaySlot={false}
         editable={true}
@@ -225,9 +377,9 @@ const Calendar = ({ data }: { data: any }) => {
                   <Label value="Εργαστίριο" />
                 </div>
                 <Select
-                  onChange={(e) =>
-                    (currLabInstance.current.labId = parseInt(e.target.value))
-                  }
+                  id="labId"
+                  value={form.labId}
+                  onChange={handleChange}
                   required
                 >
                   {labs.map((lab) => (
@@ -242,11 +394,9 @@ const Calendar = ({ data }: { data: any }) => {
                   <Label value="Διδάσκον καθηγητής" />
                 </div>
                 <Select
-                  onChange={(e) =>
-                    (currLabInstance.current.teacherId = parseInt(
-                      e.target.value
-                    ))
-                  }
+                  id="teacherId"
+                  value={form.teacherId}
+                  onChange={handleChange}
                   required
                 >
                   {teachers.map((teacher) => (
@@ -258,18 +408,16 @@ const Calendar = ({ data }: { data: any }) => {
               </div>
             </div>
 
-            <div className="flex flex-row gap-2 items-center">
+            <div className="flex flex-row items-center gap-2">
               <div className="flex-1">
                 <div className="mb-2 block">
                   <Label value="Ημέρα" />
                 </div>
                 <Select
+                  id="daysOfWeek"
                   defaultValue={1}
-                  onChange={(e) =>
-                    (currLabInstance.current.daysOfWeek = parseInt(
-                      e.target.value
-                    ))
-                  }
+                  value={form.daysOfWeek}
+                  onChange={handleChange}
                   required
                 >
                   {daysOfWeek.map((day, i) => (
@@ -284,19 +432,16 @@ const Calendar = ({ data }: { data: any }) => {
                   <Label value="Χρώμα" />
                 </div>
                 <fieldset
-                  className="flex flex-row justify-center items-center gap-6 h-[40px]"
-                  id="radio"
-                  onChange={(e) =>
-                    (currLabInstance.current.color = (
-                      e.target as HTMLInputElement
-                    ).value)
-                  }
+                  className="flex h-[40px] flex-row items-center justify-center gap-6"
+                  id="color"
+                  onChange={handleChange}
                 >
                   {colorList.map((color, i) => (
                     <Radio
-                      id={color}
+                      id={"color"}
                       key={color}
                       defaultChecked={i === 0}
+                      checked={form.color === color}
                       name={"colors"}
                       value={color}
                       style={{ color }}
@@ -315,16 +460,12 @@ const Calendar = ({ data }: { data: any }) => {
                   <Accordion.Content>
                     <div className="flex flex-row">
                       <DateCalendar
-                        onChange={(e: any) =>
-                          (currLabInstance.current.startRecur =
-                            moment(e).format("YYYY-MM-DD"))
-                        }
+                        value={startRecur}
+                        onChange={(e: any) => setStartRecur(moment(e))}
                       />
                       <DateCalendar
-                        onChange={(e: any) =>
-                          (currLabInstance.current.endRecur =
-                            moment(e).format("YYYY-MM-DD"))
-                        }
+                        value={endRecur}
+                        onChange={(e: any) => setEndRecur(moment(e))}
                       />
                     </div>
                   </Accordion.Content>
@@ -332,12 +473,12 @@ const Calendar = ({ data }: { data: any }) => {
                 <Accordion.Panel>
                   <Accordion.Title>Επιλογή ώρας</Accordion.Title>
                   <Accordion.Content>
-                    <div className="flex flex-row gap-2 text-base font-bold text-center">
+                    <div className="flex flex-row gap-2 text-center text-base font-bold">
                       <div className="flex-1">
-                        Αρχή {startTime.format("hh:mm a")}
+                        Αρχή {getTimeFormat(startTime)}
                       </div>
                       <div className="flex-1">
-                        Τέλος {endTime.format("hh:mm a")}
+                        Τέλος {getTimeFormat(endTime)}
                       </div>
                     </div>
                     <div className="flex flex-row">
@@ -368,7 +509,11 @@ const Calendar = ({ data }: { data: any }) => {
           <Button color="gray" onClick={closeModal}>
             Άκυρο
           </Button>
-          <Button isProcessing={isProcessing} onClick={sendNew}>
+          <Button
+            disabled={invalid}
+            isProcessing={isProcessing}
+            onClick={modalMode === ModalMode.update ? sendEdit : sendNew}
+          >
             Αποθήκευση
           </Button>
         </Modal.Footer>

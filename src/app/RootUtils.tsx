@@ -17,20 +17,15 @@ const RootUtils: FC<PropsWithChildren> = ({ children }) => {
       (response) => response,
       (error: AxiosError<{ message: string }>) => {
         const { response } = error;
-        console.log(response);
 
         if (response) {
           showToast("error", response.data.message, 5000);
+          if (response.status === 401) {
+            dispatch({ type: actionsEnum.auth, payload: { auth: false } });
+          }
         } else {
           showToast("error", "Υπήρξε κάποιο πρόβλημα", 5000);
         }
-
-        // You can show a custom error message here
-        console.error(
-          "Failed request message:",
-          "An error occurred during the request."
-        );
-        dispatch({ type: actionsEnum.auth, payload: { auth: false } });
         return Promise.reject(error);
       }
     );
