@@ -15,6 +15,7 @@ import { Draggable } from "@fullcalendar/interaction";
 import { DarkThemeToggle, Navbar, Sidebar, Spinner } from "flowbite-react";
 import {
   Link,
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -239,6 +240,7 @@ export const Root: FC = () => {
                     )
                   )}
                   <Route path="/subscriptions/:id" element={<Absences />} />
+                  <Route path="*" element={<Navigate to="/" />}></Route>
                 </Routes>
                 <div className="fixed bottom-3 right-8">
                   <Toast style={{ zIndex: 9999 }}>
