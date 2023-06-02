@@ -1,16 +1,21 @@
 import {
   Button,
   //   Label,
-  //   Modal,
+  Modal,
   //   Select,
   Spinner,
   Table,
+  TextInput,
 } from "flowbite-react";
 // import moment from "moment";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { BiMinus } from "react-icons/bi";
+import { BsPlusLg } from "react-icons/bs";
+import { FiSearch } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 import ModuleWrapper from "../components/ModuleWrapper";
@@ -23,6 +28,14 @@ interface Subscription {
   subscribedDate: string;
 }
 
+interface Student {
+  id: number;
+  name: string;
+  register_number: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // enum ModalMode {
 //   create,
 //   update,
@@ -32,13 +45,15 @@ interface Subscription {
 
 const Absences = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [load, setLoad] = useState<boolean>(true);
-  //   const [modal, setModal] = useState<boolean>(false);
+  const [modal, setModal] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
   //   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
   //   const [isValid, setIsValid] = useState(true);
   //   const [year, setYear] = useState<number>(currentYear);
   //   const [semester, setSemester] = useState<number>(1);
-  //   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
   //   const selectedLab = useRef<Absence>({
   //     id: NaN,
   //     lab_name: "",
@@ -49,7 +64,8 @@ const Absences = () => {
   //     updatedAt: "",
   //   });
 
-  const { id } = useParams();
+  const { id: labInstanceId } = useParams();
+  const id = parseInt(labInstanceId as string);
   //   console.log(id);
 
   //   useEffect(() => {
@@ -57,17 +73,37 @@ const Absences = () => {
   //     selectedLab.current.lab_semester = semester;
   //   }, [year, semester]);
 
+  const getStudents = async (subs: Subscription[]) => {
+    const studentIds = subs.map((sub) => sub.id);
+    try {
+      const { data } = await api.get<Student[]>("api/student");
+      const students = data.filter(
+        (student) => !studentIds.includes(student.id)
+      );
+      console.log("setting students");
+      setStudents(students);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    getData();
+    getData().then((subs) => {
+      getStudents(subs);
+    });
   }, []);
+
+  const refresh = () => {
+    getData().then((subs) => {
+      getStudents(subs);
+    });
+  };
 
   const getData = async () => {
     setLoad(true);
     setSubscriptions([]);
     try {
       const { data } = await api.get<any[]>(`api/subscriptions/${id}`);
-      console.log(data);
-
       const subscriptions: Subscription[] = data.map((el) => ({
         id: el.studentId,
         name: el.students[0].name,
@@ -75,101 +111,28 @@ const Absences = () => {
         register_number: el.students[0].register_number,
         subscribedDate: moment(el.createdAt).format("DD/MM/YYYY"),
       }));
-      console.log(subscriptions);
-
       setSubscriptions(subscriptions);
       setLoad(false);
+      return subscriptions;
     } catch (error) {
       setLoad(false);
+      return [];
     }
   };
 
-  //   const checkValidation = () => {
-  //     const nameLength = selectedLab.current.lab_name.length;
-  //     if (nameLength > 0) {
-  //       return true;
-  //     } else {
-  //       setIsValid(false);
-  //       return false;
-  //     }
-  //   };
+  const _subs = useMemo(() => {
+    return subscriptions.filter((s) => s.name.includes(search));
+  }, [subscriptions, search]);
 
-  //   const sendEdit = async () => {
-  //     // if (!checkValidation()) return;
-  //     // setIsProcessing(true);
-  //     // await api.put<Lab>(
-  //     //   `api/labs/${selectedLab.current.id}`,
-  //     //   selectedLab.current
-  //     // );
-  //     // setIsProcessing(false);
-  //     // closeModal();
-  //     // getData();
-  //   };
+  const openModal = () => {
+    // setModalMode(mode);
+    setModal(true);
+  };
 
-  //   const sendNew = async () => {
-  //     // if (!checkValidation()) return;
-  //     // setIsProcessing(true);
-  //     // await api.post<Lab>(`api/labs`, selectedLab.current);
-  //     // setIsProcessing(false);
-  //     // closeModal();
-  //     // getData();
-  //   };
-
-  //   const sendDelete = async (id: number) => {
-  //     // await api.delete<Lab>(`api/labs/${id}`);
-  //     // getData();
-  //   };
-
-  //   const onEdit = (lab: Absence) => {
-  //     // selectedLab.current = lab;
-  //     // setYear(lab.lab_year);
-  //     // setSemester(lab.lab_semester);
-  //     // openModal(ModalMode.update);
-  //   };
-
-  //   const getYearsRange = () => {
-  //     const range = 5;
-  //     const startRange = currentYear - range;
-  //     const endRange = currentYear + range;
-  //     const years = [];
-  //     for (let year = startRange; year < endRange; year++) {
-  //       years.push(year);
-  //     }
-
-  //     return years;
-  //   };
-
-  //   const getSemesters = () => {
-  //     const semesters = [];
-  //     for (let semester = 1; semester <= 8; semester++) {
-  //       semesters.push(semester);
-  //     }
-  //     return semesters;
-  //   };
-
-  //   const years = useRef(getYearsRange());
-
-  //   const semesters = useRef(getSemesters());
-
-  //   const addNew = () => {
-  //     selectedLab.current = {
-  //       lab_name: "",
-  //       lab_description: "",
-  //       lab_year: year,
-  //       lab_semester: semester,
-  //     };
-  //     openModal(ModalMode.create);
-  //   };
-
-  //   const openModal = (mode: ModalMode) => {
-  //     setModalMode(mode);
-  //     setModal(true);
-  //   };
-
-  //   const closeModal = () => {
-  //     setModalMode(undefined);
-  //     setModal(false);
-  //   };
+  const closeModal = () => {
+    // setModalMode(undefined);
+    setModal(false);
+  };
 
   const updateAbcense = async (
     subscription: Subscription,
@@ -194,29 +157,50 @@ const Absences = () => {
     }
   };
 
+  const sendDelete = async (sub: Subscription) => {
+    await api.delete(`api/subscriptions/${id}`, {
+      data: { labInstanceId: id, studentId: sub.id },
+    });
+    refresh();
+  };
+
   return (
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
-          <div className="text-2xl">Εργαστίρια</div>
-          <Button size={"md"}>
+          <div className="text-2xl">Απουσίες</div>
+          <Button size={"md"} onClick={openModal}>
             <IoMdAdd className="mr-2" />
             Προσθήκη
           </Button>
         </div>
+        <TextInput
+          id="search"
+          placeholder="Αναζήτηση"
+          className="max-w-sm"
+          required
+          rightIcon={FiSearch}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setTimeout(() => {
+              e.target.focus();
+            });
+          }}
+          type="text"
+        />
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>A/M</Table.HeadCell>
             <Table.HeadCell>Όνομα</Table.HeadCell>
             <Table.HeadCell>Ημερομινία Εγγραφής</Table.HeadCell>
             <Table.HeadCell>Απουσίες</Table.HeadCell>
-            {/* <Table.HeadCell className=" w-3">
-              <span className="sr-only">Edit</span>
-            </Table.HeadCell> */}
+            <Table.HeadCell className=" w-3">
+              <span className="sr-only">Delete</span>
+            </Table.HeadCell>
           </Table.Head>
 
           <Table.Body className="divide-y">
-            {subscriptions.map((subscription, i) => (
+            {_subs.map((subscription, i) => (
               <Table.Row
                 key={subscription.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -231,7 +215,7 @@ const Absences = () => {
                   {subscription.subscribedDate}
                 </Table.Cell>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  <div className="flex flex-row gap-3 items-center">
+                  <div className="flex flex-row items-center gap-3">
                     <Button
                       color="gray"
                       onClick={() =>
@@ -240,7 +224,7 @@ const Absences = () => {
                     >
                       <AiOutlineMinus />
                     </Button>
-                    <div className=" text-base">{subscription.absences}</div>
+                    <div className="text-base">{subscription.absences}</div>
                     <Button
                       color="gray"
                       onClick={() =>
@@ -251,11 +235,16 @@ const Absences = () => {
                     </Button>
                   </div>
                 </Table.Cell>
-                {/* <Table.Cell>
-                  <Button pill size={"xs"}>
-                    <MdEdit />
+                <Table.Cell>
+                  <Button
+                    pill
+                    size={"xs"}
+                    color="failure"
+                    onClick={() => sendDelete(subscription)}
+                  >
+                    <MdDelete />
                   </Button>
-                </Table.Cell> */}
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -266,7 +255,192 @@ const Absences = () => {
           </div>
         )}
       </div>
+      {modal && (
+        <ModalComponent
+          closeModal={closeModal}
+          modal={modal}
+          students={students}
+          labId={id}
+          refresh={refresh}
+        />
+      )}
     </ModuleWrapper>
+  );
+};
+
+const ModalComponent: FC<{
+  closeModal: () => void;
+  refresh: () => void;
+  modal: boolean;
+  students: Student[];
+  labId: number;
+}> = ({ closeModal, modal, students, labId, refresh }) => {
+  const [newSubscriptions, setNewSubscriptions] = useState<Student[]>([]);
+  const [search, setSearch] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  const ref1 = useRef<HTMLDivElement>(null);
+
+  const ref2 = useRef<HTMLDivElement>(null);
+
+  const _students = useMemo(() => {
+    const ids = newSubscriptions.map((s) => s.id);
+    return students.filter((s) => !ids.includes(s.id));
+  }, [newSubscriptions, modal, students]);
+
+  const filteredStudents = useMemo(() => {
+    return _students.filter((s) => s.name.includes(search));
+  }, [_students, search]);
+
+  const addStudentForSubscription = (student: Student) => {
+    setNewSubscriptions([...newSubscriptions, student]);
+  };
+
+  const removeStudentForSubscription = (student: Student) => {
+    setNewSubscriptions([
+      ...newSubscriptions.filter((s) => s.id !== student.id),
+    ]);
+  };
+
+  const sendSubscriptions = async () => {
+    const subs = newSubscriptions.map((s) => ({
+      absense: 0,
+      labInstanceId: labId,
+      studentId: s.id,
+    }));
+    setIsProcessing(true);
+    await api.post(`api/subscriptions/`, subs);
+    setNewSubscriptions([]);
+    refresh();
+    closeModal();
+    setIsProcessing(false);
+  };
+
+  return (
+    <Modal onClose={closeModal} position="center" show={modal}>
+      <Modal.Header>{"Νέο Εργαστίριο"}</Modal.Header>
+      <Modal.Body>
+        <div className="flex flex-col gap-3">
+          <TextInput
+            id="search"
+            placeholder="Αναζήτηση"
+            required
+            rightIcon={FiSearch}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setTimeout(() => {
+                e.target.focus();
+              });
+            }}
+            type="text"
+          />
+          <div
+            className="max-h-[230px] overflow-y-auto"
+            onWheel={(e) => {
+              const delta = e.deltaY;
+              if (ref1.current) {
+                if (delta > 0) {
+                  ref1.current.scrollTop += 20;
+                } else {
+                  ref1.current.scrollTop -= 20;
+                }
+              }
+            }}
+            ref={ref1}
+          >
+            <Table hoverable>
+              <Table.Head style={{ position: "sticky", top: "0px" }}>
+                <Table.HeadCell className="w-5">A/M</Table.HeadCell>
+                <Table.HeadCell>Όνομα</Table.HeadCell>
+                <Table.HeadCell className=" w-3">
+                  <span className="sr-only">Add</span>
+                </Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {filteredStudents.map((student) => (
+                  <Table.Row
+                    key={student.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {student.register_number}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {student.name}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      <Button
+                        size={"xs"}
+                        color={"light"}
+                        onClick={() => addStudentForSubscription(student)}
+                      >
+                        <BsPlusLg />
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
+          <div
+            className="max-h-[230px] overflow-y-auto"
+            onWheel={(e) => {
+              const delta = e.deltaY;
+              if (ref2.current) {
+                if (delta > 0) {
+                  ref2.current.scrollTop += 20;
+                } else {
+                  ref2.current.scrollTop -= 20;
+                }
+              }
+            }}
+            ref={ref2}
+          >
+            <Table hoverable>
+              <Table.Head style={{ position: "sticky", top: "0px" }}>
+                <Table.HeadCell className="w-5">A/M</Table.HeadCell>
+                <Table.HeadCell>Όνομα</Table.HeadCell>
+                <Table.HeadCell className=" w-3">
+                  <span className="sr-only">Add</span>
+                </Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {newSubscriptions.map((student) => (
+                  <Table.Row
+                    key={student.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {student.register_number}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {student.name}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      <Button
+                        size={"xs"}
+                        color={"light"}
+                        onClick={() => removeStudentForSubscription(student)}
+                      >
+                        <BiMinus />
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
+        </div>
+      </Modal.Body>
+      <Modal.Footer className="justify-end">
+        <Button color="gray" onClick={closeModal}>
+          Άκυρο
+        </Button>
+        <Button isProcessing={isProcessing} onClick={sendSubscriptions}>
+          Αποθήκευση
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 };
 
