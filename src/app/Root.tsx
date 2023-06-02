@@ -139,7 +139,7 @@ export const Root: FC = () => {
             onClick={() => setCollapsed(!collapsed)}
           />
           <span className="text-xl font-semibold dark:text-white">
-            AbsenceMonitor
+            Διαχηριστικό απουσιών
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -201,7 +201,7 @@ export const Root: FC = () => {
                         })
                       }
                     >
-                      Log Out
+                      Αποσύνδεση
                     </Sidebar.Item>
                   )}
                   {bottomRoutes.map(({ href, icon, title }, key) => (

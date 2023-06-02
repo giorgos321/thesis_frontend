@@ -28,7 +28,7 @@ export type RouteProps = {
 
 export const bottomRoutes: RouteProps[] = [
   {
-    title: "Sign In",
+    title: "Σύνδεση",
     icon: GoSignIn,
     href: "/signin",
     component: <SingIn />,
@@ -36,7 +36,7 @@ export const bottomRoutes: RouteProps[] = [
     protected: false,
   },
   {
-    title: "Sign Up",
+    title: "Εγγραφή",
     icon: HiUserAdd,
     href: "/signup",
     component: <SingUp />,
@@ -47,7 +47,7 @@ export const bottomRoutes: RouteProps[] = [
 
 export const routes: RouteProps[] = [
   {
-    title: "Home",
+    title: "Αρχική",
     icon: HiHome,
     href: "/",
     component: <Home />,
@@ -55,7 +55,7 @@ export const routes: RouteProps[] = [
     protected: false,
   },
   {
-    title: "Labs",
+    title: "Εργαστίρια",
     icon: ImLab,
     href: "/labs",
     component: <Labs />,
@@ -63,7 +63,7 @@ export const routes: RouteProps[] = [
     protected: true,
   },
   {
-    title: "Teachers",
+    title: "Καθηγητές",
     icon: FaChalkboardTeacher,
     href: "/teachers",
     component: <Teachers />,
@@ -71,7 +71,7 @@ export const routes: RouteProps[] = [
     protected: true,
   },
   {
-    title: "Students",
+    title: "Φοιτητές",
     icon: BsFillPersonBadgeFill,
     href: "/students",
     component: <Students />,

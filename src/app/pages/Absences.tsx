@@ -49,6 +49,7 @@ const Absences = () => {
   const [load, setLoad] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
   const [search, setSearch] = useState<string>("");
+  const [max, setMax] = useState<number>(0);
   //   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
   //   const [isValid, setIsValid] = useState(true);
   //   const [year, setYear] = useState<number>(currentYear);
@@ -120,9 +121,13 @@ const Absences = () => {
     }
   };
 
-  const _subs = useMemo(() => {
+  const searchedSubs = useMemo(() => {
     return subscriptions.filter((s) => s.name.includes(search));
   }, [subscriptions, search]);
+
+  const _subs = useMemo(() => {
+    return searchedSubs.filter((s) => s.absences >= max);
+  }, [searchedSubs, max]);
 
   const openModal = () => {
     // setModalMode(mode);
@@ -171,23 +176,38 @@ const Absences = () => {
           <div className="text-2xl">Απουσίες</div>
           <Button size={"md"} onClick={openModal}>
             <IoMdAdd className="mr-2" />
-            Προσθήκη
+            Εγγραφή φοιτητή
           </Button>
         </div>
-        <TextInput
-          id="search"
-          placeholder="Αναζήτηση"
-          className="max-w-sm"
-          required
-          rightIcon={FiSearch}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setTimeout(() => {
-              e.target.focus();
-            });
-          }}
-          type="text"
-        />
+        <div className=" flex flex-row justify-between">
+          <TextInput
+            id="search"
+            placeholder="Αναζήτηση"
+            className=" basis-[400px]"
+            rightIcon={FiSearch}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setTimeout(() => {
+                e.target.focus();
+              });
+            }}
+            type="text"
+          />
+          <TextInput
+            id="absencemax"
+            placeholder="Αριθμός απουσιών"
+            className=" basis-[400px]"
+            onChange={(e) => {
+              setMax(
+                parseInt(e.target.value.length === 0 ? "0" : e.target.value)
+              );
+              setTimeout(() => {
+                e.target.focus();
+              });
+            }}
+            type="number"
+          />
+        </div>
         <Table hoverable>
           <Table.Head>
             <Table.HeadCell>A/M</Table.HeadCell>

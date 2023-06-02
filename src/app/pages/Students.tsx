@@ -101,7 +101,7 @@ const Students = () => {
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
-          <div className="text-2xl">Εργαστίρια</div>
+          <div className="text-2xl">Φοιτητές</div>
           <Button size={"md"} onClick={addNew}>
             <IoMdAdd className="mr-2" />
             Προσθήκη
@@ -109,7 +109,7 @@ const Students = () => {
         </div>
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Lab</Table.HeadCell>
+            <Table.HeadCell>Όνομα</Table.HeadCell>
             <Table.HeadCell className=" w-3">
               <span className="sr-only">Delete</span>
             </Table.HeadCell>
@@ -159,13 +159,13 @@ const Students = () => {
         <Modal.Header>
           {modalMode === ModalMode.update
             ? selectedStudent.current.name
-            : "Νέο Εργαστίριο"}
+            : "Προσθήκη φοιτητή"}
         </Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
             <div>
               <div className="mb-2 block">
-                <Label value="Lab Name" />
+                <Label value="Όνομα φοιτητή" />
               </div>
               <TextInput
                 defaultValue={selectedStudent.current.name}

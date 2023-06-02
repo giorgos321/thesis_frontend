@@ -106,7 +106,7 @@ const Teachers = () => {
         </div>
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Lab</Table.HeadCell>
+            <Table.HeadCell>Όνομα</Table.HeadCell>
             <Table.HeadCell className=" w-3">
               <span className="sr-only">Delete</span>
             </Table.HeadCell>

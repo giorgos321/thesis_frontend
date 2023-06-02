@@ -365,7 +365,7 @@ const Calendar = ({
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
-        <div className="text-2xl">Εργαστίρια</div>
+        <div className="text-2xl">Πρόγραμμα Εργαστιρίων</div>
         <Button
           size={"md"}
           onClick={() => {
@@ -416,7 +416,11 @@ const Calendar = ({
         }}
       />
       <Modal onClose={closeModal} position="center" show={modal} size={"3xl"}>
-        <Modal.Header>{"Νέο Εργαστίριο"}</Modal.Header>
+        <Modal.Header>
+          {modalMode === ModalMode.create
+            ? "Νέο Εργαστίριο"
+            : "Ενημέρωση εργαστιρίου"}
+        </Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
             <div className="flex flex-row gap-2">
