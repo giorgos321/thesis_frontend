@@ -187,27 +187,6 @@ export const Root: FC = () => {
                       </Sidebar.Item>
                     ))}
                   </Sidebar.ItemGroup>
-                  <Sidebar.ItemGroup>
-                    <div className="flex flex-col gap-1">
-                      {labs.map((lab) => {
-                        const event = {
-                          title: lab.lab_name,
-                          duration: "02:00",
-                        };
-
-                        return (
-                          <div
-                            key={lab.id}
-                            id={`draggable-${lab.id}`}
-                            data-event={`${JSON.stringify(event)}`}
-                            className=" cursor-pointer rounded bg-blue-500 p-2 text-white"
-                          >
-                            {lab.lab_name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </Sidebar.ItemGroup>
                 </div>
                 <Sidebar.ItemGroup>
                   {state.auth && (

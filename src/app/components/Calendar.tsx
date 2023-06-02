@@ -124,7 +124,7 @@ const Calendar = ({
       data.map((lab: LabInstance) => ({
         ...lab,
         instanceData: lab,
-        title: lab.lab?.lab_name,
+        title: `${lab.lab?.lab_name} - ${lab.teacher?.name}`,
         startTime: lab.startTime,
         endTime: lab.endTime,
         daysOfWeek: [lab.daysOfWeek],
@@ -391,6 +391,15 @@ const Calendar = ({
         eventClick={eventClick}
         eventChange={eventChanged}
         events={events}
+        eventDisplay=""
+        eventDidMount={(e) => {
+          setTimeout(() => {
+            const el = e.el.querySelector(".fc-event-title") as Element;
+            // const innerHtml = el.textContent?.replace("-", "<br>") as string;
+            el.firstElementChild?.remove();
+            // el.innerHTML = innerHtml;
+          }, 100);
+        }}
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}

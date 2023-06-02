@@ -1,64 +1,61 @@
 import {
   Button,
-  Label,
-  Modal,
-  Select,
+  //   Label,
+  //   Modal,
+  //   Select,
   Spinner,
   Table,
-  Textarea,
-  TextInput,
 } from "flowbite-react";
+// import moment from "moment";
 import moment from "moment";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { IoMdAdd } from "react-icons/io";
-import { MdDelete, MdEdit } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 import ModuleWrapper from "../components/ModuleWrapper";
 
-interface Lab {
-  id?: number;
-  lab_name: string;
-  lab_description: string;
-  lab_year: number;
-  lab_semester: number;
-  createdAt?: string;
-  updatedAt?: string;
+interface Subscription {
+  id: number;
+  name: string;
+  absences: number;
+  register_number: number;
+  subscribedDate: string;
 }
 
-enum ModalMode {
-  create,
-  update,
-}
+// enum ModalMode {
+//   create,
+//   update,
+// }
 
-const currentYear = moment().year();
+// const currentYear = moment().year();
 
 const Absences = () => {
-  const [subscriptions, setSubscriptions] = useState<Lab[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [load, setLoad] = useState<boolean>(true);
-  const [modal, setModal] = useState<boolean>(false);
-  const [modalMode, setModalMode] = useState<ModalMode | undefined>();
-  const [isValid, setIsValid] = useState(true);
-  const [year, setYear] = useState<number>(currentYear);
-  const [semester, setSemester] = useState<number>(1);
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const selectedLab = useRef<Lab>({
-    id: NaN,
-    lab_name: "",
-    lab_description: "",
-    lab_year: currentYear,
-    lab_semester: 1,
-    createdAt: "",
-    updatedAt: "",
-  });
+  //   const [modal, setModal] = useState<boolean>(false);
+  //   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
+  //   const [isValid, setIsValid] = useState(true);
+  //   const [year, setYear] = useState<number>(currentYear);
+  //   const [semester, setSemester] = useState<number>(1);
+  //   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  //   const selectedLab = useRef<Absence>({
+  //     id: NaN,
+  //     lab_name: "",
+  //     lab_description: "",
+  //     lab_year: currentYear,
+  //     lab_semester: 1,
+  //     createdAt: "",
+  //     updatedAt: "",
+  //   });
 
   const { id } = useParams();
-  console.log(id);
+  //   console.log(id);
 
-  useEffect(() => {
-    selectedLab.current.lab_year = year;
-    selectedLab.current.lab_semester = semester;
-  }, [year, semester]);
+  //   useEffect(() => {
+  //     selectedLab.current.lab_year = year;
+  //     selectedLab.current.lab_semester = semester;
+  //   }, [year, semester]);
 
   useEffect(() => {
     getData();
@@ -68,101 +65,133 @@ const Absences = () => {
     setLoad(true);
     setSubscriptions([]);
     try {
-      const { data } = await api.get<Lab[]>(`api/subscriptions/${id}`);
+      const { data } = await api.get<any[]>(`api/subscriptions/${id}`);
       console.log(data);
 
-      // setSubscriptions(data);
+      const subscriptions: Subscription[] = data.map((el) => ({
+        id: el.studentId,
+        name: el.students[0].name,
+        absences: el.absense,
+        register_number: el.students[0].register_number,
+        subscribedDate: moment(el.createdAt).format("DD/MM/YYYY"),
+      }));
+      console.log(subscriptions);
+
+      setSubscriptions(subscriptions);
       setLoad(false);
     } catch (error) {
       setLoad(false);
     }
   };
 
-  const checkValidation = () => {
-    const nameLength = selectedLab.current.lab_name.length;
-    if (nameLength > 0) {
-      return true;
+  //   const checkValidation = () => {
+  //     const nameLength = selectedLab.current.lab_name.length;
+  //     if (nameLength > 0) {
+  //       return true;
+  //     } else {
+  //       setIsValid(false);
+  //       return false;
+  //     }
+  //   };
+
+  //   const sendEdit = async () => {
+  //     // if (!checkValidation()) return;
+  //     // setIsProcessing(true);
+  //     // await api.put<Lab>(
+  //     //   `api/labs/${selectedLab.current.id}`,
+  //     //   selectedLab.current
+  //     // );
+  //     // setIsProcessing(false);
+  //     // closeModal();
+  //     // getData();
+  //   };
+
+  //   const sendNew = async () => {
+  //     // if (!checkValidation()) return;
+  //     // setIsProcessing(true);
+  //     // await api.post<Lab>(`api/labs`, selectedLab.current);
+  //     // setIsProcessing(false);
+  //     // closeModal();
+  //     // getData();
+  //   };
+
+  //   const sendDelete = async (id: number) => {
+  //     // await api.delete<Lab>(`api/labs/${id}`);
+  //     // getData();
+  //   };
+
+  //   const onEdit = (lab: Absence) => {
+  //     // selectedLab.current = lab;
+  //     // setYear(lab.lab_year);
+  //     // setSemester(lab.lab_semester);
+  //     // openModal(ModalMode.update);
+  //   };
+
+  //   const getYearsRange = () => {
+  //     const range = 5;
+  //     const startRange = currentYear - range;
+  //     const endRange = currentYear + range;
+  //     const years = [];
+  //     for (let year = startRange; year < endRange; year++) {
+  //       years.push(year);
+  //     }
+
+  //     return years;
+  //   };
+
+  //   const getSemesters = () => {
+  //     const semesters = [];
+  //     for (let semester = 1; semester <= 8; semester++) {
+  //       semesters.push(semester);
+  //     }
+  //     return semesters;
+  //   };
+
+  //   const years = useRef(getYearsRange());
+
+  //   const semesters = useRef(getSemesters());
+
+  //   const addNew = () => {
+  //     selectedLab.current = {
+  //       lab_name: "",
+  //       lab_description: "",
+  //       lab_year: year,
+  //       lab_semester: semester,
+  //     };
+  //     openModal(ModalMode.create);
+  //   };
+
+  //   const openModal = (mode: ModalMode) => {
+  //     setModalMode(mode);
+  //     setModal(true);
+  //   };
+
+  //   const closeModal = () => {
+  //     setModalMode(undefined);
+  //     setModal(false);
+  //   };
+
+  const updateAbcense = async (
+    subscription: Subscription,
+    i: number,
+    op: "increment" | "decrement"
+  ) => {
+    const subs = [...subscriptions];
+    if (op === "increment") {
+      subs[i].absences = subs[i].absences + 1;
     } else {
-      setIsValid(false);
-      return false;
+      subs[i].absences = subs[i].absences - 1;
     }
-  };
-
-  const sendEdit = async () => {
-    if (!checkValidation()) return;
-    setIsProcessing(true);
-    await api.put<Lab>(
-      `api/labs/${selectedLab.current.id}`,
-      selectedLab.current
-    );
-    setIsProcessing(false);
-    closeModal();
-    getData();
-  };
-
-  const sendNew = async () => {
-    if (!checkValidation()) return;
-    setIsProcessing(true);
-    await api.post<Lab>(`api/labs`, selectedLab.current);
-    setIsProcessing(false);
-    closeModal();
-    getData();
-  };
-
-  const sendDelete = async (id: number) => {
-    await api.delete<Lab>(`api/labs/${id}`);
-    getData();
-  };
-
-  const onEdit = (lab: Lab) => {
-    selectedLab.current = lab;
-    setYear(lab.lab_year);
-    setSemester(lab.lab_semester);
-    openModal(ModalMode.update);
-  };
-
-  const getYearsRange = () => {
-    const range = 5;
-    const startRange = currentYear - range;
-    const endRange = currentYear + range;
-    const years = [];
-    for (let year = startRange; year < endRange; year++) {
-      years.push(year);
+    try {
+      await api.put(`api/subscriptions/${id}`, {
+        labInstanceId: id,
+        studentId: subscription.id,
+        absense: subs[i].absences,
+      });
+      setSubscriptions(subs);
+    } catch (error) {
+      console.log(error);
     }
-
-    return years;
-  };
-
-  const getSemesters = () => {
-    const semesters = [];
-    for (let semester = 1; semester <= 8; semester++) {
-      semesters.push(semester);
-    }
-    return semesters;
-  };
-
-  const years = useRef(getYearsRange());
-
-  const semesters = useRef(getSemesters());
-
-  const addNew = () => {
-    selectedLab.current = {
-      lab_name: "",
-      lab_description: "",
-      lab_year: year,
-      lab_semester: semester,
-    };
-    openModal(ModalMode.create);
-  };
-
-  const openModal = (mode: ModalMode) => {
-    setModalMode(mode);
-    setModal(true);
-  };
-
-  const closeModal = () => {
-    setModalMode(undefined);
-    setModal(false);
   };
 
   return (
@@ -170,56 +199,63 @@ const Absences = () => {
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
           <div className="text-2xl">Εργαστίρια</div>
-          <Button size={"md"} onClick={addNew}>
+          <Button size={"md"}>
             <IoMdAdd className="mr-2" />
             Προσθήκη
           </Button>
         </div>
         <Table hoverable>
           <Table.Head>
-            <Table.HeadCell>Όνομα Εργαστίριου</Table.HeadCell>
-            <Table.HeadCell>Ακαδημαϊκό έτος</Table.HeadCell>
-            <Table.HeadCell>Εξάμηνο</Table.HeadCell>
-            <Table.HeadCell className=" w-3">
-              <span className="sr-only">Delete</span>
-            </Table.HeadCell>
-            <Table.HeadCell className=" w-3">
+            <Table.HeadCell>A/M</Table.HeadCell>
+            <Table.HeadCell>Όνομα</Table.HeadCell>
+            <Table.HeadCell>Ημερομινία Εγγραφής</Table.HeadCell>
+            <Table.HeadCell>Απουσίες</Table.HeadCell>
+            {/* <Table.HeadCell className=" w-3">
               <span className="sr-only">Edit</span>
-            </Table.HeadCell>
+            </Table.HeadCell> */}
           </Table.Head>
 
           <Table.Body className="divide-y">
-            {subscriptions.map((lab) => (
+            {subscriptions.map((subscription, i) => (
               <Table.Row
-                key={lab.id}
+                key={subscription.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {lab.lab_name}
+                  {subscription.register_number}
                 </Table.Cell>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {lab.lab_year}
+                  {subscription.name}
                 </Table.Cell>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {lab.lab_semester}
+                  {subscription.subscribedDate}
                 </Table.Cell>
-                <Table.Cell>
-                  <Button
-                    pill
-                    size={"xs"}
-                    color="failure"
-                    onClick={() =>
-                      typeof lab.id === "number" && sendDelete(lab.id)
-                    }
-                  >
-                    <MdDelete />
-                  </Button>
+                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                  <div className="flex flex-row gap-3 items-center">
+                    <Button
+                      color="gray"
+                      onClick={() =>
+                        updateAbcense(subscription, i, "decrement")
+                      }
+                    >
+                      <AiOutlineMinus />
+                    </Button>
+                    <div className=" text-base">{subscription.absences}</div>
+                    <Button
+                      color="gray"
+                      onClick={() =>
+                        updateAbcense(subscription, i, "increment")
+                      }
+                    >
+                      <AiOutlinePlus />
+                    </Button>
+                  </div>
                 </Table.Cell>
-                <Table.Cell>
-                  <Button pill size={"xs"} onClick={() => onEdit(lab)}>
+                {/* <Table.Cell>
+                  <Button pill size={"xs"}>
                     <MdEdit />
                   </Button>
-                </Table.Cell>
+                </Table.Cell> */}
               </Table.Row>
             ))}
           </Table.Body>
@@ -230,102 +266,6 @@ const Absences = () => {
           </div>
         )}
       </div>
-
-      <Modal onClose={closeModal} position="center" show={modal}>
-        <Modal.Header>
-          {modalMode === ModalMode.update
-            ? selectedLab.current.lab_name
-            : "Νέο Εργαστίριο"}
-        </Modal.Header>
-        <Modal.Body>
-          <div className="space-y-6">
-            <div>
-              <div className="mb-2 block">
-                <Label value="Όνομα Εργαστίριου" />
-              </div>
-              <TextInput
-                color={isValid ? undefined : "failure"}
-                helperText={
-                  isValid ? undefined : (
-                    <>
-                      <span className="font-medium"></span>Το όνομα εργαστιρίου
-                      είναι υποχρεωτικό.
-                    </>
-                  )
-                }
-                defaultValue={selectedLab.current.lab_name}
-                onChange={(e) => {
-                  selectedLab.current.lab_name = e.target.value;
-                  if (!isValid && e.target.value.length > 0) {
-                    setIsValid(true);
-                    setTimeout(() => {
-                      e.target.focus();
-                    });
-                  }
-                }}
-              />
-            </div>
-            <div>
-              <div className="mb-2 block">
-                <Label value="Lab Description" />
-              </div>
-              <Textarea
-                defaultValue={selectedLab.current.lab_description}
-                onChange={(e) =>
-                  (selectedLab.current.lab_description = e.target.value)
-                }
-                placeholder="Περιγραφή εργαστιρίου..."
-                required
-                rows={4}
-                style={{ resize: "none" }}
-              />
-            </div>
-            <div className="flex flex-row gap-2">
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Ακαδημαϊκό έτος" />
-                </div>
-                <Select
-                  value={year}
-                  onChange={(e) => {
-                    setYear(parseInt(e.target.value));
-                  }}
-                  required
-                >
-                  {years.current.map((year) => (
-                    <option key={year}>{year}</option>
-                  ))}
-                </Select>
-              </div>
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Εξάμηνο" />
-                </div>
-                <Select
-                  value={semester}
-                  onChange={(e) => setSemester(parseInt(e.target.value))}
-                  required
-                >
-                  {semesters.current.map((semester) => (
-                    <option key={semester}>{semester}</option>
-                  ))}
-                </Select>
-              </div>
-            </div>
-          </div>
-        </Modal.Body>
-        <Modal.Footer className="justify-end">
-          <Button color="gray" onClick={closeModal}>
-            Άκυρο
-          </Button>
-          <Button
-            isProcessing={isProcessing}
-            onClick={modalMode === ModalMode.update ? sendEdit : sendNew}
-          >
-            Αποθήκευση
-          </Button>
-        </Modal.Footer>
-      </Modal>
     </ModuleWrapper>
   );
 };
