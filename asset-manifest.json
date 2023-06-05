@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/thesis_frontend/static/css/main.9c56271a.css",
-    "main.js": "/thesis_frontend/static/js/main.fdc9cf73.js",
+    "main.js": "/thesis_frontend/static/js/main.a1850b7b.js",
     "static/css/780.2b48ece9.css": "/thesis_frontend/static/css/780.2b48ece9.css",
     "static/js/780.dac47981.js": "/thesis_frontend/static/js/780.dac47981.js",
     "index.html": "/thesis_frontend/index.html",
     "main.9c56271a.css.map": "/thesis_frontend/static/css/main.9c56271a.css.map",
-    "main.fdc9cf73.js.map": "/thesis_frontend/static/js/main.fdc9cf73.js.map",
+    "main.a1850b7b.js.map": "/thesis_frontend/static/js/main.a1850b7b.js.map",
     "780.2b48ece9.css.map": "/thesis_frontend/static/css/780.2b48ece9.css.map",
     "780.dac47981.js.map": "/thesis_frontend/static/js/780.dac47981.js.map"
   },
@@ -14,6 +14,6 @@
     "static/css/780.2b48ece9.css",
     "static/js/780.dac47981.js",
     "static/css/main.9c56271a.css",
-    "static/js/main.fdc9cf73.js"
+    "static/js/main.a1850b7b.js"
   ]
 }
