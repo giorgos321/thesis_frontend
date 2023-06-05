@@ -40,7 +40,7 @@ interface LabInstance {
   id?: number;
   startTime?: string;
   endTime?: string;
-  daysOfWeek?: number;
+  daysOfWeek?: string;
   startRecur?: string;
   endRecur?: string;
   labId?: number;
@@ -57,13 +57,13 @@ enum ModalMode {
 }
 
 const daysOfWeek = [
-  "Κυριακή",
+  // "Κυριακή",
   "Δευτέρα",
   "Τρίτη",
   "Τετάρτη",
   "Πέμπτη",
   "Παρασκευή",
-  "Σάββατο",
+  // "Σάββατο",
 ];
 
 const emptyLabInstance: LabInstance = {
@@ -86,6 +86,11 @@ const colorList = [
   "#9C27B0", // Purple
   "#FF5722", // Deep Orange
 ];
+
+const weekends = {
+  weekendsVisible: false,
+  currentEvents: [],
+};
 
 moment.locale("el");
 
@@ -157,7 +162,7 @@ const Calendar = ({
         ...form,
         labId: labs[0]?.id,
         teacherId: teachers[0]?.id,
-        daysOfWeek: 1,
+        daysOfWeek: "1",
         color: colorList[0],
       });
     }
@@ -265,21 +270,12 @@ const Calendar = ({
     setIsProcessing(false);
   };
 
-  const weekends = {
-    weekendsVisible: false,
-    currentEvents: [],
-  };
-
   const eventClick = (e: EventClickArg) => {
     const eventObj = e.event.toPlainObject();
 
     const labInstance: LabInstance = eventObj.extendedProps.instanceData;
     labInstance.teacherId = labInstance.teacher?.id;
     labInstance.labId = labInstance.lab?.id;
-
-    delete labInstance.teacher;
-    delete labInstance.lab;
-    delete labInstance.students;
 
     setStartRecur(moment(labInstance.startRecur));
     setEndRecur(moment(labInstance.endRecur));
@@ -299,8 +295,7 @@ const Calendar = ({
     labInstance.labId = labInstance.lab?.id;
     labInstance.startTime = moment(e.event.startStr).format("HH:mm");
     labInstance.endTime = moment(e.event.endStr).format("HH:mm");
-    labInstance.daysOfWeek = moment(e.event.endStr).day() + 1;
-    console.log(labInstance.daysOfWeek);
+    labInstance.daysOfWeek = `${moment(e.event.endStr).day()}`;
 
     delete labInstance.teacher;
     delete labInstance.lab;
@@ -338,7 +333,7 @@ const Calendar = ({
       id: undefined,
       labId: labs[0]?.id,
       teacherId: teachers[0]?.id,
-      daysOfWeek: 1,
+      daysOfWeek: "1",
       color: colorList[0],
       startRecur: getDateFormat(moment()),
       endRecur: getDateFormat(moment()),
@@ -360,7 +355,7 @@ const Calendar = ({
   //   setStartTime(moment(form.startTime, "HH:mm"));
   //   setEndTime(moment(form.endTime, "HH:mm"));
   // }, [form.startTime, form.endTime]);
-  console.log(startRecur.format("yyyy-MM-DD"), form);
+  // console.log(startRecur.format("yyyy-MM-DD"), form);
 
   return (
     <div className="w-full">
@@ -517,13 +512,13 @@ const Calendar = ({
                 </div>
                 <Select
                   id="daysOfWeek"
-                  defaultValue={1}
+                  defaultValue={"1"}
                   value={form.daysOfWeek}
                   onChange={handleChange}
                   required
                 >
                   {daysOfWeek.map((day, i) => (
-                    <option key={day} value={i}>
+                    <option key={day} value={`${i + 1}`}>
                       {day}
                     </option>
                   ))}
