@@ -1,4 +1,8 @@
-import type { EventChangeArg, EventClickArg } from "@fullcalendar/core";
+import type {
+  EventChangeArg,
+  EventClickArg,
+  EventContentArg,
+} from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
@@ -13,6 +17,7 @@ import { Accordion, Button, Label, Modal, Radio, Select } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
 import { useEffect, useMemo, useState } from "react";
+import { AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +60,12 @@ enum ModalMode {
   create,
   update,
 }
+
+// function isCalendarEvent(
+//   evt: EventClickArg | MouseEventHandler
+// ): evt is EventClickArg {
+//   return (evt as EventClickArg).jsEvent !== undefined;
+// }
 
 const daysOfWeek = [
   // "Κυριακή",
@@ -129,7 +140,7 @@ const Calendar = ({
       data.map((lab: LabInstance) => ({
         ...lab,
         instanceData: lab,
-        title: `${lab.lab?.lab_name} - ${lab.teacher?.name}`,
+        title: `${lab.lab?.lab_name}`,
         startTime: lab.startTime,
         endTime: lab.endTime,
         daysOfWeek: [lab.daysOfWeek],
@@ -270,7 +281,9 @@ const Calendar = ({
     setIsProcessing(false);
   };
 
-  const eventClick = (e: EventClickArg) => {
+  const eventClick = (e: EventClickArg | EventContentArg) => {
+    // if (isCalendarEvent(e)) {
+    // e.jsEvent.stopPropagation();
     const eventObj = e.event.toPlainObject();
 
     const labInstance: LabInstance = eventObj.extendedProps.instanceData;
@@ -285,6 +298,7 @@ const Calendar = ({
     setModal(true);
     setForm(labInstance);
     setModalMode(ModalMode.update);
+    // }
   };
 
   const eventChanged = async (e: EventChangeArg) => {
@@ -357,6 +371,10 @@ const Calendar = ({
   // }, [form.startTime, form.endTime]);
   // console.log(startRecur.format("yyyy-MM-DD"), form);
 
+  const navigateToLabinstance = (id: number) => {
+    navigate(`/subscriptions/${id}`);
+  };
+
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
@@ -383,18 +401,46 @@ const Calendar = ({
         }}
         locale="el"
         weekends={weekends.weekendsVisible}
-        eventClick={eventClick}
+        eventClick={(e) => {
+          const obj = e.event.toPlainObject();
+          navigateToLabinstance(obj.id);
+        }}
         eventChange={eventChanged}
         events={events}
-        eventDisplay=""
-        eventDidMount={(e) => {
-          setTimeout(() => {
-            const el = e.el.querySelector(".fc-event-title") as Element;
-            // const innerHtml = el.textContent?.replace("-", "<br>") as string;
-            el.firstElementChild?.remove();
-            // el.innerHTML = innerHtml;
-          }, 100);
+        eventContent={(event) => {
+          const obj = event.event.toPlainObject();
+          console.log(obj);
+
+          return (
+            <div className=" overflow-hidden" style={{ height: "inherit" }}>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row gap-1">
+                  <span className="overflow-hidden text-ellipsis font-semibold">
+                    {obj.title}
+                  </span>
+                  <div className="flex grow flex-row justify-end">
+                    <AiFillEdit
+                      size={"15"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        eventClick(event);
+                      }}
+                    ></AiFillEdit>
+                  </div>
+                </div>
+                <div>
+                  {moment(obj.start).format("HH:mm")} -{" "}
+                  {moment(obj.end).format("HH:mm")}
+                </div>
+                <div className="overflow-hidden text-ellipsis">
+                  {obj.extendedProps.teacher.name}
+                </div>
+              </div>
+            </div>
+          );
         }}
+        eventDisplay=""
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}
