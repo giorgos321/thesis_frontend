@@ -21,6 +21,8 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
+import { Tooltip } from "react-tooltip";
+import "react-tooltip/dist/react-tooltip.css";
 import api, { apiParams } from "../api";
 import type { actions, appState } from "../appReducer";
 import { actionsEnum, appReducer } from "../appReducer";
@@ -257,6 +259,7 @@ export const Root: FC = () => {
           </main>
         </div>
       </AppContext.Provider>
+      <Tooltip id={"tooltip"} style={{ zIndex: 99999 }}></Tooltip>
     </div>
   );
 };

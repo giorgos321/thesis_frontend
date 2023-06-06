@@ -17,7 +17,7 @@ import { Accordion, Button, Label, Modal, Radio, Select } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
 import { useEffect, useMemo, useState } from "react";
-import { AiFillEdit } from "react-icons/ai";
+import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -375,6 +375,11 @@ const Calendar = ({
     navigate(`/subscriptions/${id}`);
   };
 
+  const deleteLabInstance = async (id: number) => {
+    await api.delete(`api/labinstance/${id}`);
+    refresh();
+  };
+
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
@@ -409,24 +414,41 @@ const Calendar = ({
         events={events}
         eventContent={(event) => {
           const obj = event.event.toPlainObject();
-          console.log(obj);
 
           return (
-            <div className=" overflow-hidden" style={{ height: "inherit" }}>
+            <div className="overflow-hidden" style={{ height: "inherit" }}>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row gap-1">
-                  <span className="overflow-hidden text-ellipsis font-semibold">
+                  <span
+                    data-tooltip-id="tooltip"
+                    data-tooltip-content={obj.title}
+                    className="overflow-hidden text-ellipsis font-semibold"
+                  >
                     {obj.title}
                   </span>
                   <div className="flex grow flex-row justify-end">
-                    <AiFillEdit
-                      size={"15"}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        eventClick(event);
-                      }}
-                    ></AiFillEdit>
+                    <div className="h-fit w-fit rounded-full p-1">
+                      <AiFillEdit
+                        size={"15"}
+                        className=" hover:text-gray-700"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          eventClick(event);
+                        }}
+                      ></AiFillEdit>
+                    </div>
+                    <div className="h-fit w-fit rounded-full p-1">
+                      <AiFillDelete
+                        size={"15"}
+                        className="hover:text-red-800"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          deleteLabInstance(obj.id);
+                        }}
+                      ></AiFillDelete>
+                    </div>
                   </div>
                 </div>
                 <div>
@@ -440,7 +462,6 @@ const Calendar = ({
             </div>
           );
         }}
-        eventDisplay=""
         longPressDelay={1000}
         eventLongPressDelay={1000}
         selectLongPressDelay={1000}

@@ -65,7 +65,8 @@
     "flowbite-react": "^0.4.6",
     "moment": "^2.29.4",
     "react-icons": "^4.4.0",
-    "react-indiana-drag-scroll": "^2.2.0"
+    "react-indiana-drag-scroll": "^2.2.0",
+    "react-tooltip": "^5.13.1"
   },
   "peerDependencies": {
     "flowbite": "^1",
