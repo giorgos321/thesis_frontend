@@ -14,9 +14,9 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { BiMinus } from "react-icons/bi";
 import { BsPlusLg } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdArrowBack } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../../api";
 import ModuleWrapper from "../components/ModuleWrapper";
 
@@ -173,7 +173,12 @@ const Absences = () => {
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
-          <div className="text-2xl">Απουσίες</div>
+          <div className="flex flex-row items-center gap-3">
+            <Link to={"/"}>
+              <IoMdArrowBack size={25}></IoMdArrowBack>
+            </Link>
+            <div className="text-2xl">Απουσίες</div>
+          </div>
           <Button size={"md"} onClick={openModal}>
             <IoMdAdd className="mr-2" />
             Εγγραφή φοιτητή
@@ -338,7 +343,7 @@ const ModalComponent: FC<{
 
   return (
     <Modal onClose={closeModal} position="center" show={modal}>
-      <Modal.Header>{"Νέο Εργαστίριο"}</Modal.Header>
+      <Modal.Header>{"Νέο Εργαστήριο"}</Modal.Header>
       <Modal.Body>
         <div className="flex flex-col gap-3">
           <TextInput

@@ -13,13 +13,21 @@ import {
   TimeClock,
 } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { Accordion, Button, Label, Modal, Radio, Select } from "flowbite-react";
+import {
+  Accordion,
+  Alert,
+  Button,
+  Label,
+  Modal,
+  Radio,
+  Select,
+} from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
 import { useEffect, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
-import { IoMdAdd } from "react-icons/io";
+import { IoMdAdd, IoMdAlert } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 // import useToast from "../../hooks/useToast";
@@ -120,6 +128,9 @@ const Calendar = ({
 
   const [form, setForm] = useState<LabInstance>(emptyLabInstance);
   const [invalid, setInvalid] = useState(true);
+  const [alert, setAlert] = useState<
+    undefined | { text1: string; text2: string }
+  >();
 
   const [labs, setLabs] = useState<Lab[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -325,7 +336,20 @@ const Calendar = ({
   useEffect(() => {
     const timeIsNotGood = startTime.isSameOrAfter(endTime);
     const dateIsNotGood = moment(form.startRecur).isSameOrAfter(form.endRecur);
+
     if (timeIsNotGood || dateIsNotGood) {
+      if (dateIsNotGood) {
+        setAlert({
+          text1: "Μη έγκυρο εύρος ημερομηνιών!",
+          text2:
+            "Βεβαιωθείτε ότι η ημερομηνία έναρξης προηγείται της ημερομηνίας λήξης",
+        });
+      } else if (timeIsNotGood) {
+        setAlert({
+          text1: "Μη έγκυρο εύρος χρόνου!",
+          text2: "Βεβαιωθείτε ότι η ώρα έναρξης προηγείται της ώρας λήξης",
+        });
+      }
       setInvalid(true);
       return;
     }
@@ -338,6 +362,9 @@ const Calendar = ({
       if (v === undefined) {
         invalid = true;
       }
+    }
+    if (!invalid) {
+      setAlert(undefined);
     }
     setInvalid(invalid);
   }, [form]);
@@ -383,7 +410,7 @@ const Calendar = ({
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
-        <div className="text-2xl">Πρόγραμμα Εργαστιρίων</div>
+        <div className="text-2xl">Πρόγραμμα Εργαστηρίων</div>
         <Button
           size={"md"}
           onClick={() => {
@@ -410,7 +437,14 @@ const Calendar = ({
           const obj = e.event.toPlainObject();
           navigateToLabinstance(obj.id);
         }}
+        selectable={false}
         eventChange={eventChanged}
+        eventDidMount={(arg) => {
+          arg.el.addEventListener("contextmenu", (jsEvent) => {
+            jsEvent.preventDefault();
+            eventClick(arg as unknown as EventClickArg);
+          });
+        }}
         events={events}
         eventContent={(event) => {
           const obj = event.event.toPlainObject();
@@ -452,8 +486,8 @@ const Calendar = ({
                   </div>
                 </div>
                 <div>
-                  {moment(obj.start).format("HH:mm")} -{" "}
-                  {moment(obj.end).format("HH:mm")}
+                  {moment(obj.start).format("hh:mm a")} -{" "}
+                  {moment(obj.end).format("hh:mm a")}
                 </div>
                 <div className="overflow-hidden text-ellipsis">
                   {obj.extendedProps.teacher.name}
@@ -462,10 +496,6 @@ const Calendar = ({
             </div>
           );
         }}
-        longPressDelay={1000}
-        eventLongPressDelay={1000}
-        selectLongPressDelay={1000}
-        dayMaxEvents={true}
         allDaySlot={false}
         editable={true}
         height="700px"
@@ -480,15 +510,15 @@ const Calendar = ({
       <Modal onClose={closeModal} position="center" show={modal} size={"3xl"}>
         <Modal.Header>
           {modalMode === ModalMode.create
-            ? "Νέο Εργαστίριο"
-            : "Ενημέρωση εργαστιρίου"}
+            ? "Νέο Εργαστήριο"
+            : "Ενημέρωση εργαστηρίου"}
         </Modal.Header>
         <Modal.Body>
           <div className="space-y-6">
             <div className="flex flex-row gap-2">
               <div className="flex-1">
                 <div className="mb-2 block">
-                  <Label value="Εργαστίριο" />
+                  <Label value="Εργαστήριο" />
                 </div>
                 <Select
                   id="labId"
@@ -619,7 +649,7 @@ const Calendar = ({
               <Accordion collapseAll>
                 <Accordion.Panel>
                   <Accordion.Title>
-                    Επιλογή περιόδου εργαστιρίου
+                    Επιλογή περιόδου εργαστηρίου
                   </Accordion.Title>
                   <Accordion.Content>
                     <div className="flex flex-row">
@@ -667,14 +697,16 @@ const Calendar = ({
                 </Accordion.Panel>
               </Accordion>
             </LocalizationProvider>
-            {/* <Alert color="failure" icon={IoMdAlert}>
-              <span>
-                <p>
-                  <span className="font-medium">Info alert!</span>
-                  Change a few things up and try submitting again.
-                </p>
-              </span>
-            </Alert> */}
+            {alert && (
+              <Alert color="failure" icon={IoMdAlert}>
+                <span>
+                  <p>
+                    <span className="mr-2 font-medium">{alert.text1}</span>
+                    {alert.text2}
+                  </p>
+                </span>
+              </Alert>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer className="justify-end">

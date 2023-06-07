@@ -55,7 +55,7 @@ export const routes: RouteProps[] = [
     protected: false,
   },
   {
-    title: "Εργαστίρια",
+    title: "Εργαστήρια",
     icon: ImLab,
     href: "/labs",
     component: <Labs />,

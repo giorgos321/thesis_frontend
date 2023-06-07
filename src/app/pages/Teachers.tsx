@@ -29,6 +29,11 @@ const Teachers = () => {
   const [load, setLoad] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
+  const [isValid, setIsValid] = useState(true);
+  const teacherName = useRef<HTMLInputElement>(null);
+  const [modalDisplayName, setModalDisplayName] = useState<
+    string | undefined
+  >();
   const selectedTeacher = useRef<Teacher>({
     id: NaN,
     name: "",
@@ -52,7 +57,18 @@ const Teachers = () => {
     }
   };
 
+  const checkValidation = () => {
+    const nameLength = selectedTeacher.current.name.length;
+    if (nameLength > 0) {
+      return true;
+    } else {
+      setIsValid(false);
+      return false;
+    }
+  };
+
   const sendEdit = async () => {
+    if (!checkValidation()) return;
     await api.put<Teacher>(
       `api/teacher/${selectedTeacher.current.id}`,
       selectedTeacher.current
@@ -62,6 +78,7 @@ const Teachers = () => {
   };
 
   const sendNew = async () => {
+    if (!checkValidation()) return;
     await api.post<Teacher>(`api/teacher`, selectedTeacher.current);
     closeModal();
     getData();
@@ -72,27 +89,38 @@ const Teachers = () => {
     getData();
   };
 
-  const onEdit = (lab: Teacher) => {
-    selectedTeacher.current = lab;
+  const onEdit = (teacher: Teacher) => {
+    setModalDisplayName(teacher.name);
+    selectedTeacher.current = { ...teacher };
+    if (teacherName.current) {
+      teacherName.current.value = teacher.name;
+    }
     openModal(ModalMode.update);
   };
 
   const addNew = () => {
+    setModalDisplayName(undefined);
     selectedTeacher.current = {
       name: "",
     };
+    if (teacherName.current) {
+      teacherName.current.value = "";
+    }
+    setIsValid(true);
     openModal(ModalMode.create);
   };
 
   const openModal = (mode: ModalMode) => {
     setModalMode(mode);
     setModal(true);
+    setIsValid(true);
   };
 
   const closeModal = () => {
     setModalMode(undefined);
     setModal(false);
   };
+  console.log(teachers);
 
   return (
     <ModuleWrapper>
@@ -155,7 +183,7 @@ const Teachers = () => {
       <Modal onClose={closeModal} position="center" show={modal}>
         <Modal.Header>
           {modalMode === ModalMode.update
-            ? selectedTeacher.current.name
+            ? modalDisplayName
             : "Εισαγωγή Καθηγητή"}
         </Modal.Header>
         <Modal.Body>
@@ -165,9 +193,25 @@ const Teachers = () => {
                 <Label value="Ονομα" />
               </div>
               <TextInput
+                ref={teacherName}
                 defaultValue={selectedTeacher.current.name}
-                onChange={(e) =>
-                  (selectedTeacher.current.name = e.target.value)
+                onChange={(e) => {
+                  selectedTeacher.current.name = e.target.value;
+                  if (!isValid && e.target.value.length > 0) {
+                    setIsValid(true);
+                    setTimeout(() => {
+                      e.target.focus();
+                    });
+                  }
+                }}
+                color={isValid ? undefined : "failure"}
+                helperText={
+                  isValid ? undefined : (
+                    <>
+                      <span className="font-medium"></span>Το όνομα καθηγητή
+                      είναι υποχρεωτικό.
+                    </>
+                  )
                 }
               />
             </div>
