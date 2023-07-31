@@ -490,7 +490,7 @@ const Calendar = ({
                   {moment(obj.end).format("hh:mm a")}
                 </div>
                 <div className="overflow-hidden text-ellipsis">
-                  {obj.extendedProps.teacher.username}
+                  {obj.extendedProps.user.username}
                 </div>
               </div>
             </div>

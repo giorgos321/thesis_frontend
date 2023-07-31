@@ -14,7 +14,7 @@ import ModuleWrapper from "../components/ModuleWrapper";
 
 interface Teacher {
   id?: number;
-  name: string;
+  username: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -36,7 +36,7 @@ const Teachers = () => {
   >();
   const selectedTeacher = useRef<Teacher>({
     id: NaN,
-    name: "",
+    username: "",
     createdAt: "",
     updatedAt: "",
   });
@@ -58,7 +58,7 @@ const Teachers = () => {
   };
 
   const checkValidation = () => {
-    const nameLength = selectedTeacher.current.name.length;
+    const nameLength = selectedTeacher.current.username.length;
     if (nameLength > 0) {
       return true;
     } else {
@@ -90,10 +90,10 @@ const Teachers = () => {
   };
 
   const onEdit = (teacher: Teacher) => {
-    setModalDisplayName(teacher.name);
+    setModalDisplayName(teacher.username);
     selectedTeacher.current = { ...teacher };
     if (teacherName.current) {
-      teacherName.current.value = teacher.name;
+      teacherName.current.value = teacher.username;
     }
     openModal(ModalMode.update);
   };
@@ -101,7 +101,7 @@ const Teachers = () => {
   const addNew = () => {
     setModalDisplayName(undefined);
     selectedTeacher.current = {
-      name: "",
+      username: "",
     };
     if (teacherName.current) {
       teacherName.current.value = "";
@@ -150,7 +150,7 @@ const Teachers = () => {
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {teacher.name}
+                  {teacher.username}
                 </Table.Cell>
                 <Table.Cell>
                   <Button
@@ -194,9 +194,9 @@ const Teachers = () => {
               </div>
               <TextInput
                 ref={teacherName}
-                defaultValue={selectedTeacher.current.name}
+                defaultValue={selectedTeacher.current.username}
                 onChange={(e) => {
-                  selectedTeacher.current.name = e.target.value;
+                  selectedTeacher.current.username = e.target.value;
                   if (!isValid && e.target.value.length > 0) {
                     setIsValid(true);
                     setTimeout(() => {
