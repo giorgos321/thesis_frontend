@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/thesis_frontend/static/css/main.9a401c9c.css",
-    "main.js": "/thesis_frontend/static/js/main.03aafa16.js",
+    "main.js": "/thesis_frontend/static/js/main.32ad7401.js",
     "static/css/290.a7fc33da.css": "/thesis_frontend/static/css/290.a7fc33da.css",
     "static/js/290.bb41e360.js": "/thesis_frontend/static/js/290.bb41e360.js",
     "index.html": "/thesis_frontend/index.html",
     "main.9a401c9c.css.map": "/thesis_frontend/static/css/main.9a401c9c.css.map",
-    "main.03aafa16.js.map": "/thesis_frontend/static/js/main.03aafa16.js.map",
+    "main.32ad7401.js.map": "/thesis_frontend/static/js/main.32ad7401.js.map",
     "290.a7fc33da.css.map": "/thesis_frontend/static/css/290.a7fc33da.css.map",
     "290.bb41e360.js.map": "/thesis_frontend/static/js/290.bb41e360.js.map"
   },
@@ -14,6 +14,6 @@
     "static/css/290.a7fc33da.css",
     "static/js/290.bb41e360.js",
     "static/css/main.9a401c9c.css",
-    "static/js/main.03aafa16.js"
+    "static/js/main.32ad7401.js"
   ]
 }
