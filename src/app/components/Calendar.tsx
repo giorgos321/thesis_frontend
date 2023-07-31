@@ -44,7 +44,7 @@ interface Lab {
 
 interface Teacher {
   id?: number;
-  name: string;
+  username: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -490,7 +490,7 @@ const Calendar = ({
                   {moment(obj.end).format("hh:mm a")}
                 </div>
                 <div className="overflow-hidden text-ellipsis">
-                  {obj.extendedProps.teacher.name}
+                  {obj.extendedProps.teacher.username}
                 </div>
               </div>
             </div>
@@ -545,7 +545,7 @@ const Calendar = ({
                 >
                   {teachers.map((teacher) => (
                     <option key={teacher.id} value={teacher.id}>
-                      {teacher.name}
+                      {teacher.username}
                     </option>
                   ))}
                 </Select>
