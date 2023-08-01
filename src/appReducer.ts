@@ -15,14 +15,29 @@ interface hideToast extends toast {
 }
 
 type toastContent = showToast | hideToast;
+
+export enum Roles {
+  teacher = "1",
+  student = "2",
+  admin = "3",
+}
+
+export type User = {
+  id: number;
+  username: string;
+  role: string;
+  email: string;
+};
 export interface appState {
   auth: boolean;
   toast: toastContent;
+  currentUser?: User;
 }
 
 export enum actionsEnum {
   auth,
   toast,
+  currentUser,
 }
 
 interface appStateActions {
@@ -40,7 +55,12 @@ export interface toastAction extends appStateActions {
   payload: toastContent;
 }
 
-export type actions = changeAuthAction | toastAction;
+export interface currentUserAction extends appStateActions {
+  type: actionsEnum.currentUser;
+  payload: User;
+}
+
+export type actions = changeAuthAction | toastAction | currentUserAction;
 
 export const appReducer = (state: appState, action: actions): appState => {
   switch (action.type) {
@@ -48,6 +68,8 @@ export const appReducer = (state: appState, action: actions): appState => {
       return { ...state, auth: action.payload.auth };
     case actionsEnum.toast:
       return { ...state, toast: action.payload };
+    case actionsEnum.currentUser:
+      return { ...state, currentUser: action.payload };
     default:
       return state;
   }

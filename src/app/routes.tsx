@@ -4,6 +4,7 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import { GoSignIn } from "react-icons/go";
 import { HiHome, HiUserAdd } from "react-icons/hi";
 import { ImLab } from "react-icons/im";
+import { Roles } from "../appReducer";
 import Home from "./pages/Home";
 import Labs from "./pages/Labs";
 import SingIn from "./pages/SignIn";
@@ -23,6 +24,7 @@ export type RouteProps = {
   component: ReactNode;
   protected: boolean;
   group: boolean;
+  role?: Roles;
   card?: ComponentCardItem;
 };
 
@@ -52,6 +54,7 @@ export const routes: RouteProps[] = [
     href: "/",
     component: <Home />,
     group: false,
+    role: Roles.teacher,
     protected: false,
   },
   {
@@ -60,6 +63,7 @@ export const routes: RouteProps[] = [
     href: "/labs",
     component: <Labs />,
     group: false,
+    role: Roles.teacher,
     protected: true,
   },
   {
@@ -68,6 +72,7 @@ export const routes: RouteProps[] = [
     href: "/teachers",
     component: <Teachers />,
     group: false,
+    role: Roles.admin,
     protected: true,
   },
   {
@@ -76,6 +81,7 @@ export const routes: RouteProps[] = [
     href: "/students",
     component: <Students />,
     group: false,
+    role: Roles.teacher,
     protected: true,
   },
 ];

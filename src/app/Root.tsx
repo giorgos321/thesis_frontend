@@ -24,8 +24,8 @@ import {
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import api, { apiParams } from "../api";
-import type { actions, appState } from "../appReducer";
-import { actionsEnum, appReducer } from "../appReducer";
+import type { actions, appState, User } from "../appReducer";
+import { actionsEnum, appReducer, Roles } from "../appReducer";
 import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { Toast } from "../lib";
 import Absences from "./pages/Absences";
@@ -75,11 +75,24 @@ export const Root: FC = () => {
     setLabs(data);
   };
 
+  const getMe = async () => {
+    const { data } = await api.get<User>("api/user");
+    dispatch({
+      type: actionsEnum.currentUser,
+      payload: { ...data },
+    });
+  };
+
   const routes = _routes.filter((r) => {
-    if (state.auth) {
+    if (!state.currentUser) {
+      return !r.protected;
+    }
+    if (state.currentUser?.role === Roles.admin) {
       return true;
     }
-    return !r.protected;
+    if (r.role) {
+      return r.role === state.currentUser?.role;
+    }
   });
 
   const bottomRoutes = _bottomRoutes.filter(() => !state.auth);
@@ -97,6 +110,7 @@ export const Root: FC = () => {
       logout();
       setLabs([]);
     } else {
+      getMe();
       getLabs();
     }
   }, [state.auth]);

@@ -24,12 +24,14 @@ import {
 } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd, IoMdAlert } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
+import { Roles } from "../../appReducer";
+import { AppContext } from "../Root";
 // import useToast from "../../hooks/useToast";
 
 interface Lab {
@@ -407,6 +409,14 @@ const Calendar = ({
     refresh();
   };
 
+  const { state } = useContext(AppContext);
+  const plugins = [];
+  if (state.currentUser?.role === Roles.teacher) {
+    plugins.push(...[timeGridPlugin, dayGridPlugin]);
+  } else {
+    plugins.push(...[timeGridPlugin, dayGridPlugin, interactionPlugin]);
+  }
+
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
@@ -424,7 +434,7 @@ const Calendar = ({
         </Button>
       </div>
       <FullCalendar
-        plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+        plugins={plugins}
         initialView="timeGridWeek"
         headerToolbar={{
           left: "prev,next today",

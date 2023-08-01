@@ -20,7 +20,7 @@ const RootUtils: FC<PropsWithChildren> = ({ children }) => {
 
         if (response) {
           showToast("error", response.data.message, 5000);
-          if (response.status === 401 || response.status === 403) {
+          if (response.status === 401) {
             dispatch({ type: actionsEnum.auth, payload: { auth: false } });
           }
         } else {
