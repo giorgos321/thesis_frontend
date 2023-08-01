@@ -57,7 +57,7 @@ export interface toastAction extends appStateActions {
 
 export interface currentUserAction extends appStateActions {
   type: actionsEnum.currentUser;
-  payload: User;
+  payload: User | undefined;
 }
 
 export type actions = changeAuthAction | toastAction | currentUserAction;

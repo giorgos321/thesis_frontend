@@ -30,7 +30,11 @@ import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { Toast } from "../lib";
 import Absences from "./pages/Absences";
 import RootUtils from "./RootUtils";
-import { bottomRoutes as _bottomRoutes, routes as _routes } from "./routes";
+import {
+  bottomRoutes as _bottomRoutes,
+  RouteProps,
+  routes as _routes,
+} from "./routes";
 
 interface Lab {
   id?: number;
@@ -60,6 +64,7 @@ export const Root: FC = () => {
 
   const [state, dispatch] = useReducer(appReducer, defaultState);
   const [labs, setLabs] = useState<Lab[]>([]);
+  const [routes, setRoutes] = useState<RouteProps[]>([]);
 
   const navigate = useNavigate();
 
@@ -83,17 +88,21 @@ export const Root: FC = () => {
     });
   };
 
-  const routes = _routes.filter((r) => {
-    if (!state.currentUser) {
-      return !r.protected;
-    }
-    if (state.currentUser?.role === Roles.admin) {
-      return true;
-    }
-    if (r.role) {
-      return r.role === state.currentUser?.role;
-    }
-  });
+  useEffect(() => {
+    const r = _routes.filter((r) => {
+      if (!state.currentUser) {
+        return !r.protected;
+      }
+      if (state.currentUser?.role === Roles.admin) {
+        return true;
+      }
+      if (r.role) {
+        return r.role === state.currentUser?.role;
+      }
+      return false;
+    });
+    setRoutes(r);
+  }, [state.currentUser]);
 
   const bottomRoutes = _bottomRoutes.filter(() => !state.auth);
 
@@ -102,6 +111,7 @@ export const Root: FC = () => {
       api.interceptors.request.eject(apiParams.authInterceptorId);
     }
     localStorage.removeItem("token");
+    dispatch({ type: actionsEnum.currentUser, payload: undefined });
     navigate("/signin");
   };
 
