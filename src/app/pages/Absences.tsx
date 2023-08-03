@@ -1,102 +1,58 @@
-import {
-  Button,
-  //   Label,
-  Modal,
-  //   Select,
-  Spinner,
-  Table,
-  TextInput,
-} from "flowbite-react";
-// import moment from "moment";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { Button, Card, Spinner, Table, TextInput } from "flowbite-react";
+import { groupBy, sortBy } from "lodash";
 import moment from "moment";
-import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import { BiMinus } from "react-icons/bi";
-import { BsPlusLg } from "react-icons/bs";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { IoMdAdd, IoMdArrowBack } from "react-icons/io";
+import { IoMdAdd, IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { Link, useParams } from "react-router-dom";
 import api from "../../api";
+import AbsencesModal from "../components/Absences.modal";
 import ModuleWrapper from "../components/ModuleWrapper";
 
 interface Subscription {
   id: number;
   name: string;
-  absences: number;
-  register_number: number;
-  subscribedDate: string;
+  register_number: string;
+  subscriptionDate: string;
 }
 
-interface Student {
+export interface Student {
   id: number;
   name: string;
   register_number: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
-
-// enum ModalMode {
-//   create,
-//   update,
-// }
-
-// const currentYear = moment().year();
 
 const Absences = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>();
   const [students, setStudents] = useState<Student[]>([]);
   const [load, setLoad] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
+  // @ts-ignore
   const [search, setSearch] = useState<string>("");
-  const [max, setMax] = useState<number>(0);
-  //   const [modalMode, setModalMode] = useState<ModalMode | undefined>();
-  //   const [isValid, setIsValid] = useState(true);
-  //   const [year, setYear] = useState<number>(currentYear);
-  //   const [semester, setSemester] = useState<number>(1);
-
-  //   const selectedLab = useRef<Absence>({
-  //     id: NaN,
-  //     lab_name: "",
-  //     lab_description: "",
-  //     lab_year: currentYear,
-  //     lab_semester: 1,
-  //     createdAt: "",
-  //     updatedAt: "",
-  //   });
 
   const { id: labInstanceId } = useParams();
   const id = parseInt(labInstanceId as string);
-  //   console.log(id);
-
-  //   useEffect(() => {
-  //     selectedLab.current.lab_year = year;
-  //     selectedLab.current.lab_semester = semester;
-  //   }, [year, semester]);
-
-  const getStudents = async (subs: Subscription[]) => {
-    const studentIds = subs.map((sub) => sub.id);
+  const getStudents = async () => {
     try {
       const { data } = await api.get<Student[]>("api/student");
-      const students = data.filter(
-        (student) => !studentIds.includes(student.id)
-      );
-      console.log("setting students");
-      setStudents(students);
+      setStudents(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getData().then((subs) => {
-      getStudents(subs);
+    getData().then(() => {
+      getStudents();
     });
   }, []);
 
   const refresh = () => {
-    getData().then((subs) => {
-      getStudents(subs);
+    getData().then(() => {
+      getStudents();
     });
   };
 
@@ -104,176 +60,172 @@ const Absences = () => {
     setLoad(true);
     setSubscriptions([]);
     try {
-      const { data } = await api.get<any[]>(`api/subscriptions/${id}`);
-      const subscriptions: Subscription[] = data.map((el) => ({
-        id: el.studentId,
-        name: el.students[0].name,
-        absences: el.absense,
-        register_number: el.students[0].register_number,
-        subscribedDate: moment(el.createdAt).format("DD/MM/YYYY"),
-      }));
-      setSubscriptions(subscriptions);
+      const { data } = await api.get<Subscription[]>(`api/subscriptions/${id}`);
+      setSubscriptions(data);
       setLoad(false);
-      return subscriptions;
     } catch (error) {
       setLoad(false);
-      return [];
     }
   };
 
-  const searchedSubs = useMemo(() => {
-    return subscriptions.filter((s) => s.name.includes(search));
-  }, [subscriptions, search]);
-
-  const _subs = useMemo(() => {
-    return searchedSubs.filter((s) => s.absences >= max);
-  }, [searchedSubs, max]);
-
   const openModal = () => {
-    // setModalMode(mode);
     setModal(true);
   };
 
   const closeModal = () => {
-    // setModalMode(undefined);
     setModal(false);
-  };
-
-  const updateAbcense = async (
-    subscription: Subscription,
-    i: number,
-    op: "increment" | "decrement"
-  ) => {
-    const subs = [...subscriptions];
-    if (op === "increment") {
-      subs[i].absences = subs[i].absences + 1;
-    } else {
-      subs[i].absences = subs[i].absences - 1;
-    }
-    try {
-      await api.put(`api/subscriptions/${id}`, {
-        labInstanceId: id,
-        studentId: subscription.id,
-        absense: subs[i].absences,
-      });
-      setSubscriptions(subs);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const sendDelete = async (sub: Subscription) => {
     await api.delete(`api/subscriptions/${id}`, {
-      data: { labInstanceId: id, studentId: sub.id },
+      data: {
+        labInstanceId: id,
+        studentId: sub.id,
+        subscriptionDate: sub.subscriptionDate,
+      },
     });
     refresh();
   };
 
+  const subsObj = useMemo(() => {
+    return groupBy(subscriptions, (s) =>
+      moment(s.subscriptionDate).format("YYYY-MM-DD")
+    );
+  }, [subscriptions]);
+
+  const subs = useMemo(() => {
+    const subEntries = Object.entries(subsObj);
+    const todaySubs = subEntries.find((e) => {
+      return moment(e[0]).isSame(new Date(), "day");
+    });
+    if (!todaySubs) {
+      subEntries.push([`${moment().format("YYYY-MM-DD")}`, []]);
+    }
+    return subEntries;
+  }, [subsObj]);
+
+  const currentSubs = useMemo(() => {
+    if (selectedDate) {
+      if (Array.isArray(subsObj[selectedDate])) {
+        return subsObj[selectedDate];
+      } else {
+        return [];
+      }
+    } else {
+      return [];
+    }
+  }, [subsObj, selectedDate]);
+
+  const filteredStudents: Student[] = useMemo<Student[]>(() => {
+    if (selectedDate) {
+      const studentIds = subsObj[selectedDate]?.map((s) => s.id);
+      return students.filter((s) => !studentIds?.includes(s.id));
+    } else {
+      return students;
+    }
+  }, [students, selectedDate, subsObj]);
+
   return (
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
-        <div className="flex flex-row items-center justify-between">
-          <div className="flex flex-row items-center gap-3">
-            <Link to={"/"}>
-              <IoMdArrowBack size={25}></IoMdArrowBack>
-            </Link>
-            <div className="text-2xl">Απουσίες</div>
-          </div>
-          <Button size={"md"} onClick={openModal}>
-            <IoMdAdd className="mr-2" />
-            Εγγραφή φοιτητή
-          </Button>
-        </div>
-        <div className=" flex flex-row justify-between">
-          <TextInput
-            id="search"
-            placeholder="Αναζήτηση"
-            className=" basis-[400px]"
-            rightIcon={FiSearch}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setTimeout(() => {
-                e.target.focus();
-              });
-            }}
-            type="text"
-          />
-          <TextInput
-            id="absencemax"
-            placeholder="Αριθμός απουσιών"
-            className=" basis-[400px]"
-            onChange={(e) => {
-              setMax(
-                parseInt(e.target.value.length === 0 ? "0" : e.target.value)
-              );
-              setTimeout(() => {
-                e.target.focus();
-              });
-            }}
-            type="number"
-          />
-        </div>
-        <Table hoverable>
-          <Table.Head>
-            <Table.HeadCell>A/M</Table.HeadCell>
-            <Table.HeadCell>Όνομα</Table.HeadCell>
-            <Table.HeadCell>Ημερομινία Εγγραφής</Table.HeadCell>
-            <Table.HeadCell>Απουσίες</Table.HeadCell>
-            <Table.HeadCell className=" w-3">
-              <span className="sr-only">Delete</span>
-            </Table.HeadCell>
-          </Table.Head>
+        {selectedDate && (
+          <div>
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center gap-3">
+                <div onClick={() => setSelectedDate(undefined)}>
+                  <IoMdArrowBack size={25}></IoMdArrowBack>
+                </div>
+                <div className="text-2xl">
+                  {moment(selectedDate).format("Do MMMM YYYY")}
+                </div>
+              </div>
+              <Button size={"md"} onClick={openModal}>
+                <IoMdAdd className="mr-2" />
+                Εγγραφή φοιτητών
+              </Button>
+            </div>
+            <div className=" flex flex-row justify-between">
+              <TextInput
+                id="search"
+                placeholder="Αναζήτηση"
+                className=" basis-[400px]"
+                rightIcon={FiSearch}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setTimeout(() => {
+                    e.target.focus();
+                  });
+                }}
+                type="text"
+              />
+            </div>
+            <Table hoverable>
+              <Table.Head>
+                <Table.HeadCell>A/M</Table.HeadCell>
+                <Table.HeadCell>Όνομα</Table.HeadCell>
+                <Table.HeadCell className=" w-3">
+                  <span className="sr-only">Delete</span>
+                </Table.HeadCell>
+              </Table.Head>
 
-          <Table.Body className="divide-y">
-            {_subs.map((subscription, i) => (
-              <Table.Row
-                key={subscription.id}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
-              >
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {subscription.register_number}
-                </Table.Cell>
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {subscription.name}
-                </Table.Cell>
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {subscription.subscribedDate}
-                </Table.Cell>
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  <div className="flex flex-row items-center gap-3">
-                    <Button
-                      color="gray"
-                      onClick={() =>
-                        updateAbcense(subscription, i, "decrement")
-                      }
-                    >
-                      <AiOutlineMinus />
-                    </Button>
-                    <div className="text-base">{subscription.absences}</div>
-                    <Button
-                      color="gray"
-                      onClick={() =>
-                        updateAbcense(subscription, i, "increment")
-                      }
-                    >
-                      <AiOutlinePlus />
-                    </Button>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  <Button
-                    pill
-                    size={"xs"}
-                    color="failure"
-                    onClick={() => sendDelete(subscription)}
+              <Table.Body className="divide-y">
+                {currentSubs.map((subscription) => (
+                  <Table.Row
+                    key={subscription.id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
                   >
-                    <MdDelete />
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {subscription.register_number}
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {subscription.name}
+                    </Table.Cell>
+
+                    <Table.Cell>
+                      <Button
+                        pill
+                        size={"xs"}
+                        color="failure"
+                        onClick={() => sendDelete(subscription)}
+                      >
+                        <MdDelete />
+                      </Button>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+            {currentSubs.length === 0 && (
+              <div className="mt-3 text-center text-sm text-gray-400">
+                Κανένας εγγεγραμμένος φοιτητής
+              </div>
+            )}
+          </div>
+        )}
+
+        {!selectedDate && (
+          <>
+            <div className="flex flex-row items-center justify-between">
+              <div className="flex flex-row items-center gap-3">
+                <Link to={"/"}>
+                  <IoMdArrowBack size={25}></IoMdArrowBack>
+                </Link>
+                <div className="text-2xl">Επιλογή Ημερομινίας</div>
+              </div>
+            </div>
+
+            <div className="flex flex-row flex-wrap gap-4">
+              {sortBy(subs, (s) => s[0]).map(([subscriptionDate, subs]) => (
+                <CardWithActionButton
+                  key={subscriptionDate}
+                  date={subscriptionDate}
+                  subs={subs}
+                  setDate={setSelectedDate}
+                />
+              ))}
+            </div>
+          </>
+        )}
         {load && (
           <div className="w-full text-center">
             <Spinner className="text-center" size={"xl"} />
@@ -281,192 +233,56 @@ const Absences = () => {
         )}
       </div>
       {modal && (
-        <ModalComponent
+        <AbsencesModal
           closeModal={closeModal}
           modal={modal}
-          students={students}
+          students={filteredStudents}
           labId={id}
           refresh={refresh}
+          date={selectedDate}
         />
       )}
     </ModuleWrapper>
   );
 };
 
-const ModalComponent: FC<{
-  closeModal: () => void;
-  refresh: () => void;
-  modal: boolean;
-  students: Student[];
-  labId: number;
-}> = ({ closeModal, modal, students, labId, refresh }) => {
-  const [newSubscriptions, setNewSubscriptions] = useState<Student[]>([]);
-  const [search, setSearch] = useState<string>("");
-  const [isProcessing, setIsProcessing] = useState<boolean>(false);
-
-  const ref1 = useRef<HTMLDivElement>(null);
-
-  const ref2 = useRef<HTMLDivElement>(null);
-
-  const _students = useMemo(() => {
-    const ids = newSubscriptions.map((s) => s.id);
-    return students.filter((s) => !ids.includes(s.id));
-  }, [newSubscriptions, modal, students]);
-
-  const filteredStudents = useMemo(() => {
-    return _students.filter((s) => s.name.includes(search));
-  }, [_students, search]);
-
-  const addStudentForSubscription = (student: Student) => {
-    setNewSubscriptions([...newSubscriptions, student]);
-  };
-
-  const removeStudentForSubscription = (student: Student) => {
-    setNewSubscriptions([
-      ...newSubscriptions.filter((s) => s.id !== student.id),
-    ]);
-  };
-
-  const sendSubscriptions = async () => {
-    const subs = newSubscriptions.map((s) => ({
-      absense: 0,
-      labInstanceId: labId,
-      studentId: s.id,
-    }));
-    setIsProcessing(true);
-    await api.post(`api/subscriptions/`, subs);
-    setNewSubscriptions([]);
-    refresh();
-    closeModal();
-    setIsProcessing(false);
-  };
-
+function CardWithActionButton({
+  date,
+  subs,
+  setDate,
+}: {
+  date: string;
+  subs: Subscription[];
+  setDate: Dispatch<SetStateAction<string | undefined>>;
+}) {
+  const { firstThree, rest } = useMemo(() => {
+    const firstThree = subs.slice(0, 3);
+    const rest = subs.slice(3);
+    return { firstThree, rest };
+  }, [subs]);
+  const isToday = moment(date).isSame(new Date(), "day");
   return (
-    <Modal onClose={closeModal} position="center" show={modal}>
-      <Modal.Header>{"Νέο Εργαστήριο"}</Modal.Header>
-      <Modal.Body>
-        <div className="flex flex-col gap-3">
-          <TextInput
-            id="search"
-            placeholder="Αναζήτηση"
-            required
-            rightIcon={FiSearch}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setTimeout(() => {
-                e.target.focus();
-              });
-            }}
-            type="text"
-          />
-          <div
-            className="max-h-[230px] overflow-y-auto"
-            onWheel={(e) => {
-              const delta = e.deltaY;
-              if (ref1.current) {
-                if (delta > 0) {
-                  ref1.current.scrollTop += 20;
-                } else {
-                  ref1.current.scrollTop -= 20;
-                }
-              }
-            }}
-            ref={ref1}
-          >
-            <Table hoverable>
-              <Table.Head style={{ position: "sticky", top: "0px" }}>
-                <Table.HeadCell className="w-5">A/M</Table.HeadCell>
-                <Table.HeadCell>Όνομα</Table.HeadCell>
-                <Table.HeadCell className=" w-3">
-                  <span className="sr-only">Add</span>
-                </Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y">
-                {filteredStudents.map((student) => (
-                  <Table.Row
-                    key={student.id}
-                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                  >
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      {student.register_number}
-                    </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      {student.name}
-                    </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      <Button
-                        size={"xs"}
-                        color={"light"}
-                        onClick={() => addStudentForSubscription(student)}
-                      >
-                        <BsPlusLg />
-                      </Button>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-          </div>
-          <div
-            className="max-h-[230px] overflow-y-auto"
-            onWheel={(e) => {
-              const delta = e.deltaY;
-              if (ref2.current) {
-                if (delta > 0) {
-                  ref2.current.scrollTop += 20;
-                } else {
-                  ref2.current.scrollTop -= 20;
-                }
-              }
-            }}
-            ref={ref2}
-          >
-            <Table hoverable>
-              <Table.Head style={{ position: "sticky", top: "0px" }}>
-                <Table.HeadCell className="w-5">A/M</Table.HeadCell>
-                <Table.HeadCell>Όνομα</Table.HeadCell>
-                <Table.HeadCell className=" w-3">
-                  <span className="sr-only">Add</span>
-                </Table.HeadCell>
-              </Table.Head>
-              <Table.Body className="divide-y">
-                {newSubscriptions.map((student) => (
-                  <Table.Row
-                    key={student.id}
-                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                  >
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      {student.register_number}
-                    </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      {student.name}
-                    </Table.Cell>
-                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                      <Button
-                        size={"xs"}
-                        color={"light"}
-                        onClick={() => removeStudentForSubscription(student)}
-                      >
-                        <BiMinus />
-                      </Button>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
-          </div>
+    <Card className="max-w-sm">
+      <h5 className="text-left text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <p>
+          {moment(date).format("Do MMMM YYYY")}{" "}
+          {isToday && <span className="text-base text-gray-500">(Σήμερα)</span>}
+        </p>
+      </h5>
+      <div className="max-h-24 min-w-[334px] grow font-normal text-gray-700 dark:text-gray-400">
+        <div className="flex flex-col items-start">
+          {firstThree.map((sub) => (
+            <div key={sub.id}>{sub.name}</div>
+          ))}
+          {rest?.length > 0 && <>+ {rest?.length} φοιτητές</>}
         </div>
-      </Modal.Body>
-      <Modal.Footer className="justify-end">
-        <Button color="gray" onClick={closeModal}>
-          Άκυρο
-        </Button>
-        <Button isProcessing={isProcessing} onClick={sendSubscriptions}>
-          Αποθήκευση
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </div>
+      <Button onClick={() => setDate(date)}>
+        <p>Παρουσιολόγιο</p>
+        <IoMdArrowForward />
+      </Button>
+    </Card>
   );
-};
+}
 
 export default Absences;
