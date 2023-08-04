@@ -46,7 +46,7 @@ const AbsencesModal: FC<{
   const [search, setSearch] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [addNewStudent, setAddNewStudent] = useState<boolean>(false);
-  const newStudentModal = useRef<{ sendNewStudent: () => void }>();
+  const newStudentModal = useRef<{ sendNewStudent: () => Promise<Student> }>();
 
   const ref1 = useRef<HTMLDivElement>(null);
 
@@ -86,8 +86,11 @@ const AbsencesModal: FC<{
     setIsProcessing(false);
   };
 
-  const sendNewStudent = () => {
-    newStudentModal.current?.sendNewStudent();
+  const sendNewStudent = async () => {
+    const newStudent = await newStudentModal.current?.sendNewStudent();
+    if (newStudent) {
+      addStudentForSubscription(newStudent);
+    }
     refresh();
     setAddNewStudent(false);
   };
@@ -243,13 +246,14 @@ const NewStudentComponent = forwardRef((_props, ref) => {
 
   useImperativeHandle(ref, () => ({
     sendNewStudent() {
-      sendStudent(selectedStudent.current);
+      return sendStudent(selectedStudent.current);
     },
   }));
 
-  const sendStudent = async (student: PostStudent) => {
+  const sendStudent = async (student: PostStudent): Promise<Student | void> => {
     if (!checkValidation(student)) return;
-    await api.post<Student>(`api/student`, student);
+    const { data } = await api.post<Student>(`api/student`, student);
+    return data;
     // closeModal();
     // getData();
   };
