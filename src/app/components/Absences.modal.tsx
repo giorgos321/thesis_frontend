@@ -96,7 +96,7 @@ const AbsencesModal: FC<{
   };
 
   return (
-    <Modal onClose={closeModal} position="center" show={modal}>
+    <Modal onClose={closeModal} position="center" show={modal} size={"5xl"}>
       <Modal.Header>{"Εγγραφή φοιτητών"}</Modal.Header>
       <Modal.Body>
         {!addNewStudent ? (
@@ -114,101 +114,105 @@ const AbsencesModal: FC<{
               }}
               type="text"
             />
-            <div
-              className="max-h-[230px] overflow-y-auto"
-              onWheel={(e) => {
-                const delta = e.deltaY;
-                if (ref1.current) {
-                  if (delta > 0) {
-                    ref1.current.scrollTop += 20;
-                  } else {
-                    ref1.current.scrollTop -= 20;
+            <div className="flex flex-row gap-1">
+              <div
+                className="max-h-[230px] w-0 grow overflow-y-auto"
+                onWheel={(e) => {
+                  const delta = e.deltaY;
+                  if (ref1.current) {
+                    if (delta > 0) {
+                      ref1.current.scrollTop += 20;
+                    } else {
+                      ref1.current.scrollTop -= 20;
+                    }
                   }
-                }
-              }}
-              ref={ref1}
-            >
-              <Table hoverable>
-                <Table.Head style={{ position: "sticky", top: "0px" }}>
-                  <Table.HeadCell className="w-5">A/M</Table.HeadCell>
-                  <Table.HeadCell>Όνομα</Table.HeadCell>
-                  <Table.HeadCell className=" w-3">
-                    <span className="sr-only">Add</span>
-                  </Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                  {filteredStudents.map((student) => (
-                    <Table.Row
-                      key={student.id}
-                      className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {student.register_number}
-                      </Table.Cell>
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {student.name}
-                      </Table.Cell>
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        <Button
-                          size={"xs"}
-                          color={"light"}
-                          onClick={() => addStudentForSubscription(student)}
-                        >
-                          <BsPlusLg />
-                        </Button>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-            </div>
-            <div
-              className="max-h-[230px] overflow-y-auto"
-              onWheel={(e) => {
-                const delta = e.deltaY;
-                if (ref2.current) {
-                  if (delta > 0) {
-                    ref2.current.scrollTop += 20;
-                  } else {
-                    ref2.current.scrollTop -= 20;
+                }}
+                ref={ref1}
+              >
+                <Table hoverable>
+                  <Table.Head style={{ position: "sticky", top: "0px" }}>
+                    <Table.HeadCell className="w-1">A/M</Table.HeadCell>
+                    <Table.HeadCell>Όνομα</Table.HeadCell>
+                    <Table.HeadCell className="w-3">
+                      <span className="sr-only">Add</span>
+                    </Table.HeadCell>
+                  </Table.Head>
+                  <Table.Body className="divide-y">
+                    {filteredStudents.map((student) => (
+                      <Table.Row
+                        key={student.id}
+                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                      >
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          {student.register_number}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          {student.name}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          <Button
+                            size={"xs"}
+                            color={"light"}
+                            onClick={() => addStudentForSubscription(student)}
+                          >
+                            <BsPlusLg />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </div>
+              <div
+                className="max-h-[230px] w-0 grow overflow-y-auto"
+                onWheel={(e) => {
+                  const delta = e.deltaY;
+                  if (ref2.current) {
+                    if (delta > 0) {
+                      ref2.current.scrollTop += 20;
+                    } else {
+                      ref2.current.scrollTop -= 20;
+                    }
                   }
-                }
-              }}
-              ref={ref2}
-            >
-              <Table hoverable>
-                <Table.Head style={{ position: "sticky", top: "0px" }}>
-                  <Table.HeadCell className="w-5">A/M</Table.HeadCell>
-                  <Table.HeadCell>Όνομα</Table.HeadCell>
-                  <Table.HeadCell className=" w-3">
-                    <span className="sr-only">Add</span>
-                  </Table.HeadCell>
-                </Table.Head>
-                <Table.Body className="divide-y">
-                  {newSubscriptions.map((student) => (
-                    <Table.Row
-                      key={student.id}
-                      className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {student.register_number}
-                      </Table.Cell>
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {student.name}
-                      </Table.Cell>
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        <Button
-                          size={"xs"}
-                          color={"light"}
-                          onClick={() => removeStudentForSubscription(student)}
-                        >
-                          <BiMinus />
-                        </Button>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
+                }}
+                ref={ref2}
+              >
+                <Table hoverable>
+                  <Table.Head style={{ position: "sticky", top: "0px" }}>
+                    <Table.HeadCell className="w-1">A/M</Table.HeadCell>
+                    <Table.HeadCell>Όνομα</Table.HeadCell>
+                    <Table.HeadCell className=" w-3">
+                      <span className="sr-only">Add</span>
+                    </Table.HeadCell>
+                  </Table.Head>
+                  <Table.Body className="divide-y">
+                    {newSubscriptions.map((student) => (
+                      <Table.Row
+                        key={student.id}
+                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                      >
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          {student.register_number}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          {student.name}
+                        </Table.Cell>
+                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                          <Button
+                            size={"xs"}
+                            color={"light"}
+                            onClick={() =>
+                              removeStudentForSubscription(student)
+                            }
+                          >
+                            <BiMinus />
+                          </Button>
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              </div>
             </div>
           </div>
         ) : (
@@ -220,7 +224,7 @@ const AbsencesModal: FC<{
           Άκυρο
         </Button>
         <Button color="gray" onClick={() => setAddNewStudent(!addNewStudent)}>
-          New Student Toogle
+          {addNewStudent ? "Εγγραφή φοιτητών" : "Αποθήκευση νέου φοιτητή"}
         </Button>
         <Button
           isProcessing={isProcessing}

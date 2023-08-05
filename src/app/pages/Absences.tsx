@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Button, Card, Spinner, Table, TextInput } from "flowbite-react";
+import greelUtils from "greek-utils";
 import { groupBy, sortBy } from "lodash";
 import moment from "moment";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
@@ -30,7 +31,7 @@ const Absences = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [load, setLoad] = useState<boolean>(true);
   const [modal, setModal] = useState<boolean>(false);
-  // @ts-ignore
+
   const [search, setSearch] = useState<string>("");
 
   const { id: labInstanceId } = useParams();
@@ -116,6 +117,25 @@ const Absences = () => {
     }
   }, [subsObj, selectedDate]);
 
+  const searchedSubs = useMemo(() => {
+    const numSerch = parseInt(search);
+    let key: "name" | "register_number" = "register_number";
+    if (isNaN(numSerch)) {
+      key = "name";
+    }
+
+    return currentSubs.filter((s) => {
+      let searchStr = s[key];
+      if (typeof searchStr !== "string") {
+        searchStr = `${searchStr}`;
+      } else {
+        searchStr = greelUtils.toGreeklish(searchStr.toLowerCase());
+      }
+
+      return searchStr.includes(search);
+    });
+  }, [currentSubs, search]);
+
   const filteredStudents: Student[] = useMemo<Student[]>(() => {
     if (selectedDate) {
       const studentIds = subsObj[selectedDate]?.map((s) => s.id);
@@ -129,7 +149,7 @@ const Absences = () => {
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
         {selectedDate && (
-          <div>
+          <>
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-row items-center gap-3">
                 <div onClick={() => setSelectedDate(undefined)}>
@@ -169,7 +189,7 @@ const Absences = () => {
               </Table.Head>
 
               <Table.Body className="divide-y">
-                {currentSubs.map((subscription) => (
+                {searchedSubs.map((subscription) => (
                   <Table.Row
                     key={subscription.id}
                     className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -200,7 +220,7 @@ const Absences = () => {
                 Κανένας εγγεγραμμένος φοιτητής
               </div>
             )}
-          </div>
+          </>
         )}
 
         {!selectedDate && (
