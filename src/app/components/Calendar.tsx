@@ -24,13 +24,14 @@ import {
 } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState, useRef } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd, IoMdAlert } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import { Roles } from "../../appReducer";
+import useTheme, { THEME_CHANGE_EVENT } from "../../hooks/useTheme";
 import { AppContext } from "../Root";
 // import useToast from "../../hooks/useToast";
 
@@ -122,6 +123,9 @@ const Calendar = ({
   data: any;
   refresh: () => Promise<void>;
 }) => {
+  const { theme } = useTheme();
+  
+  const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
   const [modal, setModal] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<ModalMode | undefined>(
@@ -389,17 +393,6 @@ const Calendar = ({
     setEndTime(moment());
   };
 
-  // useEffect(() => {
-  //   setStartRecur(moment(form.startRecur));
-  //   setEndRecur(moment(form.endRecur));
-  // }, [form.startRecur, form.endRecur]);
-
-  // useEffect(() => {
-  //   setStartTime(moment(form.startTime, "HH:mm"));
-  //   setEndTime(moment(form.endTime, "HH:mm"));
-  // }, [form.startTime, form.endTime]);
-  // console.log(startRecur.format("yyyy-MM-DD"), form);
-
   const navigateToLabinstance = (id: number) => {
     navigate(`/subscriptions/${id}`);
   };
@@ -416,11 +409,85 @@ const Calendar = ({
   } else {
     plugins.push(...[timeGridPlugin, dayGridPlugin, interactionPlugin]);
   }
+  
+  const calendarRef = useRef(null);
 
+  // Watch for theme changes
+  useEffect(() => {
+    // Initialize from localStorage
+    const checkTheme = () => {
+      const theme = localStorage.getItem('theme');
+      const isDark = theme === 'dark' || 
+        (theme === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      setIsDarkMode(isDark);
+    };
+
+    // Check initially
+    checkTheme();
+
+    // Set up an observer to watch for class changes on html element
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          // Use requestAnimationFrame to schedule state update outside React's rendering cycle
+          requestAnimationFrame(() => {
+            const htmlElement = document.documentElement;
+            const hasDarkClass = htmlElement.classList.contains('dark');
+            setIsDarkMode(hasDarkClass);
+          });
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    // Also watch for localStorage changes
+    const storageListener = () => {
+      checkTheme();
+    };
+    
+    // Listen for custom theme change event
+    const themeChangeListener = (e: CustomEvent) => {
+      const newTheme = e.detail?.theme;
+      if (newTheme === 'dark' || newTheme === 'light') {
+        // Use requestAnimationFrame to schedule state update outside React's rendering cycle
+        requestAnimationFrame(() => {
+          setIsDarkMode(newTheme === 'dark');
+        });
+      }
+    };
+    
+    window.addEventListener('storage', storageListener);
+    window.addEventListener(THEME_CHANGE_EVENT, themeChangeListener as EventListener);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('storage', storageListener);
+      window.removeEventListener(THEME_CHANGE_EVENT, themeChangeListener as EventListener);
+    };
+  }, []);
+
+  // Update isDarkMode when theme prop changes
+  useEffect(() => {
+    // Use requestAnimationFrame to schedule state update outside React's rendering cycle
+    requestAnimationFrame(() => {
+      setIsDarkMode(theme === 'dark');
+    });
+  }, [theme]);
+
+  // Force rerender when theme changes to ensure calendar updates
+  useEffect(() => {
+    // If calendar has been rendered, force a window resize event
+    // This is a common trick to make FullCalendar redraw itself
+    if (calendarRef.current) {
+      window.dispatchEvent(new Event('resize'));
+    }
+  }, [isDarkMode]);
+  
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
-        <div className="text-2xl">Πρόγραμμα Εργαστηρίων</div>
+        <div className="text-2xl dark:text-white light:text-black">Πρόγραμμα Εργαστηρίων</div>
         <Button
           size={"md"}
           onClick={() => {
@@ -433,90 +500,94 @@ const Calendar = ({
           Προσθήκη
         </Button>
       </div>
-      <FullCalendar
-        plugins={plugins}
-        initialView="timeGridWeek"
-        headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "timeGridWeek,timeGridDay",
-        }}
-        locale="el"
-        weekends={weekends.weekendsVisible}
-        eventClick={(e) => {
-          const obj = e.event.toPlainObject();
-          navigateToLabinstance(obj.id);
-        }}
-        selectable={false}
-        eventChange={eventChanged}
-        eventDidMount={(arg) => {
-          arg.el.addEventListener("contextmenu", (jsEvent) => {
-            jsEvent.preventDefault();
-            eventClick(arg as unknown as EventClickArg);
-          });
-        }}
-        events={events}
-        eventContent={(event) => {
-          const obj = event.event.toPlainObject();
 
-          return (
-            <div className="overflow-hidden" style={{ height: "inherit" }}>
-              <div className="flex flex-col gap-2">
-                <div className="flex flex-row gap-1">
-                  <span
-                    data-tooltip-id="tooltip"
-                    data-tooltip-content={obj.title}
-                    className="overflow-hidden text-ellipsis font-semibold"
-                  >
-                    {obj.title}
-                  </span>
-                  <div className="flex grow flex-row justify-end">
-                    <div className="h-fit w-fit rounded-full p-1">
-                      <AiFillEdit
-                        size={"15"}
-                        className=" hover:text-gray-700"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          eventClick(event);
-                        }}
-                      ></AiFillEdit>
-                    </div>
-                    <div className="h-fit w-fit rounded-full p-1">
-                      <AiFillDelete
-                        size={"15"}
-                        className="hover:text-red-800"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                          deleteLabInstance(obj.id);
-                        }}
-                      ></AiFillDelete>
+      <div className={`fullcalendar-container ${isDarkMode ? 'fc-dark-theme' : ''}`}>
+        <FullCalendar
+          ref={calendarRef}
+          plugins={plugins}
+          initialView="timeGridWeek"
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "timeGridWeek,timeGridDay",
+          }}
+          locale="el"
+          weekends={weekends.weekendsVisible}
+          eventClick={(e) => {
+            const obj = e.event.toPlainObject();
+            navigateToLabinstance(obj.id);
+          }}
+          selectable={false}
+          eventChange={eventChanged}
+          eventDidMount={(arg) => {
+            arg.el.addEventListener("contextmenu", (jsEvent) => {
+              jsEvent.preventDefault();
+              eventClick(arg as unknown as EventClickArg);
+            });
+          }}
+          events={events}
+          eventContent={(event) => {
+            const obj = event.event.toPlainObject();
+
+            return (
+              <div className="overflow-hidden" style={{ height: "inherit" }}>
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-row gap-1">
+                    <span
+                      data-tooltip-id="tooltip"
+                      data-tooltip-content={obj.title}
+                      className="overflow-hidden text-ellipsis font-semibold"
+                    >
+                      {obj.title}
+                    </span>
+                    <div className="flex grow flex-row justify-end">
+                      <div className="h-fit w-fit rounded-full p-1">
+                        <AiFillEdit
+                          size={"15"}
+                          className="hover:text-gray-700 dark:hover:text-gray-300"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            eventClick(event);
+                          }}
+                        ></AiFillEdit>
+                      </div>
+                      <div className="h-fit w-fit rounded-full p-1">
+                        <AiFillDelete
+                          size={"15"}
+                          className="hover:text-red-800"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            deleteLabInstance(obj.id);
+                          }}
+                        ></AiFillDelete>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div>
-                  {moment(obj.start).format("hh:mm a")} -{" "}
-                  {moment(obj.end).format("hh:mm a")}
-                </div>
-                <div className="overflow-hidden text-ellipsis">
-                  {obj.extendedProps.user.username}
+                  <div>
+                    {moment(obj.start).format("hh:mm a")} -{" "}
+                    {moment(obj.end).format("hh:mm a")}
+                  </div>
+                  <div className="overflow-hidden text-ellipsis">
+                    {obj.extendedProps.user.username}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        }}
-        allDaySlot={false}
-        editable={true}
-        height="700px"
-        buttonText={{
-          today: "Σήμερα",
-          month: "Μήνας",
-          week: "Εβδομάδα",
-          day: "Ημέρα",
-          list: "Λίστα",
-        }}
-      />
+            );
+          }}
+          allDaySlot={false}
+          editable={true}
+          height="700px"
+          buttonText={{
+            today: "Σήμερα",
+            month: "Μήνας",
+            week: "Εβδομάδα",
+            day: "Ημέρα",
+            list: "Λίστα",
+          }}
+        />
+      </div>
       <Modal onClose={closeModal} position="center" show={modal} size={"3xl"}>
         <Modal.Header>
           {modalMode === ModalMode.create
@@ -638,7 +709,6 @@ const Calendar = ({
                 <fieldset
                   className="flex h-[40px] flex-row items-center justify-center gap-6"
                   id="color"
-                  onChange={handleChange}
                 >
                   {colorList.map((color, i) => (
                     <Radio
@@ -648,6 +718,7 @@ const Calendar = ({
                       checked={form.color === color}
                       name={"colors"}
                       value={color}
+                      onChange={handleChange}
                       style={{ color }}
                     />
                   ))}

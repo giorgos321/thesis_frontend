@@ -14,3 +14,83 @@ body {
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-300 hover:bg-gray-400 dark:border-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600;
 }
+
+/* FullCalendar Dark Theme */
+.fc-dark-theme .fc-toolbar-title,
+.fc-dark-theme .fc-col-header-cell-cushion,
+.fc-dark-theme .fc-daygrid-day-number,
+.fc-dark-theme .fc-timegrid-slot-label-cushion {
+  @apply text-white;
+}
+
+.fc-dark-theme .fc-button {
+  @apply bg-gray-700 text-white border-gray-600 hover:bg-gray-600 focus:bg-gray-600 active:bg-gray-600;
+}
+
+.fc-dark-theme .fc-button-primary:not(:disabled).fc-button-active,
+.fc-dark-theme .fc-button-primary:not(:disabled):active {
+  @apply bg-blue-700 border-blue-800;
+}
+
+.fc-dark-theme .fc-timegrid-slot,
+.fc-dark-theme .fc-timegrid-axis,
+.fc-dark-theme .fc-scrollgrid,
+.fc-dark-theme .fc-scrollgrid td,
+.fc-dark-theme .fc-scrollgrid th,
+.fc-dark-theme table,
+.fc-dark-theme .fc-scrollgrid-section-header th,
+.fc-dark-theme .fc-scrollgrid-section-footer th,
+.fc-dark-theme .fc-col-header-cell,
+.fc-dark-theme .fc-timegrid-axis,
+.fc-dark-theme .fc-timegrid-slot {
+  @apply border-gray-700;
+}
+
+.fc-dark-theme .fc-scrollgrid-section-header,
+.fc-dark-theme .fc-scrollgrid-section-footer,
+.fc-dark-theme .fc-timegrid-axis,
+.fc-dark-theme .fc-timegrid-slot,
+.fc-dark-theme .fc-col-header {
+  @apply bg-gray-800;
+}
+
+.fc-dark-theme .fc-timegrid-slot-lane,
+.fc-dark-theme .fc-daygrid-day-frame {
+  @apply bg-gray-900;
+}
+
+.fc-dark-theme .fc-highlight {
+  @apply bg-blue-800/50;
+}
+
+.fc-dark-theme .fc-event {
+  @apply border-gray-700;
+}
+
+.fc-dark-theme .fc-event .fc-event-main {
+  @apply bg-opacity-90;
+}
+
+.fc-dark-theme .fc-timegrid-now-indicator-line {
+  @apply border-red-500;
+}
+
+.fc-dark-theme .fc-timegrid-now-indicator-arrow {
+  @apply border-red-500 text-red-500;
+}
+
+.fc-dark-theme .fc-popover {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.fc-dark-theme .fc-popover-header {
+  @apply bg-gray-700 text-white;
+}
+
+.fc-dark-theme .fc-list-day-cushion {
+  @apply bg-gray-800 text-white;
+}
+
+.fc-dark-theme .fc-list-event:hover td {
+  @apply bg-gray-700;
+}

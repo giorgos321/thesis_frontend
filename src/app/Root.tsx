@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import {
+import React, {
   createContext,
   Suspense,
   useEffect,
@@ -12,7 +12,7 @@ import { GoSignOut } from "react-icons/go";
 import { HiCheck, HiExclamation, HiMenuAlt1, HiX } from "react-icons/hi";
 // import { SiStorybook } from 'react-icons/si';
 import { Draggable } from "@fullcalendar/interaction";
-import { DarkThemeToggle, Navbar, Sidebar, Spinner } from "flowbite-react";
+import { Navbar, Sidebar, Spinner } from "flowbite-react";
 import {
   Link,
   Navigate,
@@ -27,6 +27,8 @@ import api, { apiParams } from "../api";
 import type { actions, appState, User } from "../appReducer";
 import { actionsEnum, appReducer, Roles } from "../appReducer";
 import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
+import ThemeProvider from "../hooks/ThemeProvider";
+import DarkThemeToggle from "./components/DarkThemeToggle";
 import { Toast } from "../lib";
 import Absences from "./pages/Absences";
 import RootUtils from "./RootUtils";
@@ -158,50 +160,81 @@ export const Root: FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full flex-col overflow-hidden">
-      <Navbar fluid>
-        <div className="flex items-center">
-          <HiMenuAlt1
-            className="mr-6 h-6 w-6 cursor-pointer text-gray-600 dark:text-gray-400"
-            onClick={() => setCollapsed(!collapsed)}
-          />
-          <span className="text-xl font-semibold dark:text-white">
-            Διαχηριστικό απουσιών
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          {/* <a
-            className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            href={`${process.env.PUBLIC_URL}/storybook`}
-            title="Storybook"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <SiStorybook className="h-5 w-5" />
-          </a> */}
-          {/* <a
-            className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-            href="https://github.com/themesberg/flowbite-react"
-            title="Github Repository"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <BsGithub className="h-5 w-5" />
-          </a> */}
-          <DarkThemeToggle />
-        </div>
-      </Navbar>
-      <AppContext.Provider value={{ state, dispatch }}>
-        <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
-          <Sidebar
-            collapsed={collapsed}
-            className="h-full border-r-2 border-gray-200"
-          >
-            <Sidebar.Items className="h-full">
-              <div className=" flex h-full flex-col">
-                <div className="grow">
+    <ThemeProvider>
+      <div className="flex h-screen w-full flex-col overflow-hidden">
+        <Navbar fluid>
+          <div className="flex items-center">
+            <HiMenuAlt1
+              className="mr-6 h-6 w-6 cursor-pointer text-gray-600 dark:text-gray-400"
+              onClick={() => setCollapsed(!collapsed)}
+            />
+            <span className="text-xl font-semibold dark:text-white">
+              Διαχηριστικό απουσιών
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* <a
+              className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+              href={`${import.meta.env.BASE_URL}storybook`}
+              title="Storybook"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <SiStorybook className="h-5 w-5" />
+            </a> */}
+            {/* <a
+              className="cursor-pointer rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+              href="https://github.com/themesberg/flowbite-react"
+              title="Github Repository"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <BsGithub className="h-5 w-5" />
+            </a> */}
+            <DarkThemeToggle />
+          </div>
+        </Navbar>
+        <AppContext.Provider value={{ state, dispatch }}>
+          <div className="flex h-full overflow-hidden bg-white dark:bg-gray-900">
+            <Sidebar
+              collapsed={collapsed}
+              className="h-full border-r-2 border-gray-200"
+            >
+              <Sidebar.Items className="h-full">
+                <div className=" flex h-full flex-col">
+                  <div className="grow">
+                    <Sidebar.ItemGroup>
+                      {routes.map(({ href, icon, title }, key) => (
+                        <Sidebar.Item
+                          key={key}
+                          icon={icon}
+                          as={Link}
+                          to={href}
+                          active={href === pathname}
+                          onClick={() => mainRef.current?.scrollTo({ top: 0 })}
+                        >
+                          {title}
+                        </Sidebar.Item>
+                      ))}
+                    </Sidebar.ItemGroup>
+                  </div>
                   <Sidebar.ItemGroup>
-                    {routes.map(({ href, icon, title }, key) => (
+                    {state.auth && (
+                      <Sidebar.Item
+                        as={Link}
+                        to={"/signin"}
+                        icon={GoSignOut}
+                        onClick={() =>
+                          dispatch({
+                            type: actionsEnum.auth,
+                            payload: { auth: false },
+                          })
+                        }
+                      >
+                        Αποσύνδεση
+                      </Sidebar.Item>
+                    )}
+                    {bottomRoutes.map(({ href, icon, title }, key) => (
                       <Sidebar.Item
                         key={key}
                         icon={icon}
@@ -215,75 +248,46 @@ export const Root: FC = () => {
                     ))}
                   </Sidebar.ItemGroup>
                 </div>
-                <Sidebar.ItemGroup>
-                  {state.auth && (
-                    <Sidebar.Item
-                      as={Link}
-                      to={"/signin"}
-                      icon={GoSignOut}
-                      onClick={() =>
-                        dispatch({
-                          type: actionsEnum.auth,
-                          payload: { auth: false },
-                        })
-                      }
-                    >
-                      Αποσύνδεση
-                    </Sidebar.Item>
-                  )}
-                  {bottomRoutes.map(({ href, icon, title }, key) => (
-                    <Sidebar.Item
-                      key={key}
-                      icon={icon}
-                      as={Link}
-                      to={href}
-                      active={href === pathname}
-                      onClick={() => mainRef.current?.scrollTo({ top: 0 })}
-                    >
-                      {title}
-                    </Sidebar.Item>
-                  ))}
-                </Sidebar.ItemGroup>
-              </div>
-            </Sidebar.Items>
-          </Sidebar>
-          <main
-            className="flex-1 overflow-auto bg-white p-4 dark:bg-gray-900"
-            ref={mainRef}
-          >
-            <Suspense
-              fallback={
-                <div className="flex h-full items-center justify-center">
-                  <Spinner />
-                </div>
-              }
+              </Sidebar.Items>
+            </Sidebar>
+            <main
+              className="flex-1 overflow-auto bg-white p-4 dark:bg-gray-900"
+              ref={mainRef}
             >
-              <RootUtils>
-                <Routes>
-                  {[...routes, ...bottomRoutes].map(
-                    ({ href, component: Component }) => (
-                      <Route key={href} path={href} element={Component} />
-                    )
-                  )}
-                  <Route path="/subscriptions/:id" element={<Absences />} />
-                  <Route path="*" element={<Navigate to="/" />}></Route>
-                </Routes>
-                <div className="fixed bottom-3 right-8">
-                  <Toast style={{ zIndex: 9999 }}>
-                    {typeof state.toast.toastType === "string" &&
-                      getToastIcon(state.toast.toastType)}
-                    <div className="ml-3 text-sm font-normal">
-                      {state.toast.message}
-                    </div>
-                    <Toast.Toggle />
-                  </Toast>
-                </div>
-              </RootUtils>
-            </Suspense>
-          </main>
-        </div>
-      </AppContext.Provider>
-      <Tooltip id={"tooltip"} style={{ zIndex: 99999 }}></Tooltip>
-    </div>
+              <Suspense
+                fallback={
+                  <div className="flex h-full items-center justify-center">
+                    <Spinner />
+                  </div>
+                }
+              >
+                <RootUtils>
+                  <Routes>
+                    {[...routes, ...bottomRoutes].map(
+                      ({ href, component: Component }) => (
+                        <Route key={href} path={href} element={Component} />
+                      )
+                    )}
+                    <Route path="/subscriptions/:id" element={<Absences />} />
+                    <Route path="*" element={<Navigate to="/" />}></Route>
+                  </Routes>
+                  <div className="fixed bottom-3 right-8">
+                    <Toast style={{ zIndex: 9999 }}>
+                      {typeof state.toast.toastType === "string" &&
+                        getToastIcon(state.toast.toastType)}
+                      <div className="ml-3 text-sm font-normal">
+                        {state.toast.message}
+                      </div>
+                      <Toast.Toggle />
+                    </Toast>
+                  </div>
+                </RootUtils>
+              </Suspense>
+            </main>
+          </div>
+        </AppContext.Provider>
+        <Tooltip id={"tooltip"} style={{ zIndex: 99999 }}></Tooltip>
+      </div>
+    </ThemeProvider>
   );
 };
