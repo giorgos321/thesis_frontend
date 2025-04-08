@@ -1,0 +1,298 @@
+/* Calendar dark/light mode styles */
+
+/* Color radio button styles */
+.color-radio-input {
+  appearance: none;
+  width: 24px !important;
+  height: 24px !important;
+  border: 2px solid;
+  border-radius: 50%;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition: all 0.2s ease;
+}
+
+.color-radio-input:checked {
+  border-width: 6px;
+}
+
+.color-radio-input:focus {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 0 4px currentColor;
+}
+
+.color-radio-input:hover {
+  transform: scale(1.1);
+}
+
+/* Error calendar styles */
+.error-calendar.dark-calendar {
+  background-color: rgba(220, 38, 38, 0.1) !important;
+  border: 1px solid rgba(220, 38, 38, 0.5) !important;
+  border-radius: 8px;
+}
+
+.error-calendar.light-calendar {
+  background-color: rgba(254, 226, 226, 0.6) !important;
+  border: 1px solid rgba(220, 38, 38, 0.5) !important;
+  border-radius: 8px;
+}
+
+.error-calendar .MuiPickersDay-root.Mui-selected {
+  background-color: rgb(220, 38, 38) !important;
+}
+
+.error-calendar .MuiClock-pin,
+.error-calendar .MuiClockPointer-root {
+  background-color: rgb(220, 38, 38) !important;
+}
+
+.error-calendar .MuiClockPointer-thumb {
+  background-color: rgb(220, 38, 38) !important;
+  border-color: rgb(220, 38, 38) !important;
+}
+
+/* Dark mode calendar styles */
+.dark-calendar {
+  color: white !important;
+}
+
+.dark-calendar .MuiPickersDay-root {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersDay-root.Mui-selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.dark-calendar .MuiDayCalendar-weekDayLabel {
+  color: #9ca3af !important;
+}
+
+.dark-calendar .MuiPickersDay-root:hover {
+  background-color: #374151 !important;
+}
+
+.dark-calendar .MuiPickersDay-today {
+  border-color: #6b7280 !important;
+}
+
+.dark-calendar .MuiTypography-root {
+  color: #e5e7eb !important;
+}
+
+/* Navigation buttons for dark mode */
+.dark-calendar .MuiPickersArrowSwitcher-button {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersArrowSwitcher-button:hover {
+  background-color: #374151 !important;
+}
+
+.dark-calendar .MuiPickersArrowSwitcher-button.Mui-disabled {
+  color: #6b7280 !important;
+}
+
+/* Month/year selection in dark mode */
+.dark-calendar .MuiPickersCalendarHeader-label {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersCalendarHeader-switchViewButton {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersCalendarHeader-switchViewButton:hover {
+  background-color: #374151 !important;
+}
+
+/* Year selection view in dark mode */
+.dark-calendar .MuiPickersYear-root {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersYear-yearButton {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiPickersYear-yearButton.Mui-selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.dark-calendar .MuiPickersYear-yearButton:hover {
+  background-color: #374151 !important;
+}
+
+/* TimeClock styles for dark mode */
+.dark-calendar .MuiClock-clock {
+  background-color: #1f2937 !important;
+  border-color: #4b5563 !important;
+}
+
+.dark-calendar .MuiClockNumber-root {
+  color: #e5e7eb !important;
+}
+
+.dark-calendar .MuiClockNumber-root.Mui-selected {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.dark-calendar .MuiClock-pin,
+.dark-calendar .MuiClockPointer-root {
+  background-color: #3b82f6 !important;
+}
+
+.dark-calendar .MuiClockPointer-thumb {
+  background-color: #3b82f6 !important;
+  border-color: #3b82f6 !important;
+}
+
+.dark-calendar .MuiTabs-root .MuiTab-root {
+  color: #9ca3af !important;
+}
+
+.dark-calendar .MuiTabs-root .MuiTab-root.Mui-selected {
+  color: #3b82f6 !important;
+}
+
+.dark-calendar .MuiTabs-indicator {
+  background-color: #3b82f6 !important;
+}
+
+/* Light mode calendar styles */
+.light-calendar {
+  background-color: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersDay-root {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersDay-root.Mui-selected {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.light-calendar .MuiDayCalendar-weekDayLabel {
+  color: #4b5563 !important;
+}
+
+.light-calendar .MuiPickersDay-root:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.light-calendar .MuiPickersDay-today {
+  border-color: #9ca3af !important;
+}
+
+/* Navigation buttons for light mode */
+.light-calendar .MuiPickersArrowSwitcher-button {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersArrowSwitcher-button:hover {
+  background-color: #f3f4f6 !important;
+}
+
+.light-calendar .MuiPickersArrowSwitcher-button.Mui-disabled {
+  color: #9ca3af !important;
+}
+
+/* Month/year selection in light mode */
+.light-calendar .MuiPickersCalendarHeader-label {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersCalendarHeader-switchViewButton {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersCalendarHeader-switchViewButton:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* Year selection view in light mode */
+.light-calendar .MuiPickersYear-root {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersYear-yearButton {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiPickersYear-yearButton.Mui-selected {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.light-calendar .MuiPickersYear-yearButton:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* TimeClock styles for light mode */
+.light-calendar .MuiClock-clock {
+  background-color: #ffffff !important;
+  border-color: #e5e7eb !important;
+}
+
+.light-calendar .MuiClockNumber-root {
+  color: #1f2937 !important;
+}
+
+.light-calendar .MuiClockNumber-root.Mui-selected {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+.light-calendar .MuiClock-pin,
+.light-calendar .MuiClockPointer-root {
+  background-color: #2563eb !important;
+}
+
+.light-calendar .MuiClockPointer-thumb {
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+}
+
+.light-calendar .MuiTabs-root .MuiTab-root {
+  color: #4b5563 !important;
+}
+
+.light-calendar .MuiTabs-root .MuiTab-root.Mui-selected {
+  color: #2563eb !important;
+}
+
+.light-calendar .MuiTabs-indicator {
+  background-color: #2563eb !important;
+}
+
+/* FullCalendar dark theme modifications */
+.fc-dark-theme .fc-toolbar-title,
+.fc-dark-theme .fc-col-header-cell-cushion,
+.fc-dark-theme .fc-daygrid-day-number,
+.fc-dark-theme .fc-timegrid-axis-cushion,
+.fc-dark-theme .fc-timegrid-slot-label-cushion,
+.fc-dark-theme .fc-list-day-cushion {
+  color: #e5e7eb !important;
+}
+
+.fc-dark-theme .fc-button {
+  background-color: #374151 !important;
+  border-color: #4b5563 !important;
+}
+
+.fc-dark-theme .fc-button:hover {
+  background-color: #4b5563 !important;
+}
+
+.fc-dark-theme .fc-button-active {
+  background-color: #3b82f6 !important;
+  border-color: #2563eb !important;
+}

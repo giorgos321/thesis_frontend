@@ -151,7 +151,7 @@ const Absences = () => {
         {selectedDate && (
           <>
             <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center gap-3">
+              <div className="flex flex-row items-center gap-3 dark:text-white">
                 <div onClick={() => setSelectedDate(undefined)}>
                   <IoMdArrowBack size={25}></IoMdArrowBack>
                 </div>
@@ -226,7 +226,7 @@ const Absences = () => {
         {!selectedDate && (
           <>
             <div className="flex flex-row items-center justify-between">
-              <div className="flex flex-row items-center gap-3">
+              <div className="flex flex-row items-center gap-3 dark:text-white">
                 <Link to={"/"}>
                   <IoMdArrowBack size={25}></IoMdArrowBack>
                 </Link>

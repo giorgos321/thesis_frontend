@@ -1,12 +1,4 @@
-import {
-  Button,
-  Label,
-  //   Label,
-  Modal,
-  Table,
-  TextInput,
-} from "flowbite-react";
-// import moment from "moment";
+import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import moment from "moment";
 import {
   FC,
@@ -27,6 +19,10 @@ interface PostStudent {
   register_number: string;
 }
 
+interface StudentWithSubscription extends Student {
+  isSubscribed: boolean;
+}
+
 const AbsencesModal: FC<{
   closeModal: () => void;
   refresh: () => void;
@@ -42,7 +38,9 @@ const AbsencesModal: FC<{
   refresh,
   date = moment().format("YYYY-MM-DD"),
 }) => {
-  const [newSubscriptions, setNewSubscriptions] = useState<Student[]>([]);
+  const [studentsWithSubscription, setStudentsWithSubscription] = useState<
+    StudentWithSubscription[]
+  >([]);
   const [search, setSearch] = useState<string>("");
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [addNewStudent, setAddNewStudent] = useState<boolean>(false);
@@ -50,37 +48,49 @@ const AbsencesModal: FC<{
 
   const ref1 = useRef<HTMLDivElement>(null);
 
-  const ref2 = useRef<HTMLDivElement>(null);
-
-  const _students = useMemo(() => {
-    const ids = newSubscriptions.map((s) => s.id);
-    return students.filter((s) => !ids.includes(s.id));
-  }, [newSubscriptions, modal, students]);
+  // Initialize or update students with subscription flag when modal opens or students prop changes
+  useMemo(() => {
+    if (students.length && modal) {
+      setStudentsWithSubscription(
+        students.map((student) => ({
+          ...student,
+          isSubscribed: false,
+        }))
+      );
+    }
+  }, [students, modal]);
 
   const filteredStudents = useMemo(() => {
-    return _students.filter((s) => s.name.includes(search));
-  }, [_students, search]);
+    return studentsWithSubscription.filter((s) => s.name.includes(search));
+  }, [studentsWithSubscription, search]);
 
-  const addStudentForSubscription = (student: Student) => {
-    setNewSubscriptions([...newSubscriptions, student]);
-  };
-
-  const removeStudentForSubscription = (student: Student) => {
-    setNewSubscriptions([
-      ...newSubscriptions.filter((s) => s.id !== student.id),
-    ]);
+  const toggleStudentSubscription = (student: StudentWithSubscription) => {
+    setStudentsWithSubscription(
+      studentsWithSubscription.map((s) =>
+        s.id === student.id ? { ...s, isSubscribed: !s.isSubscribed } : s
+      )
+    );
   };
 
   const sendSubscriptions = async () => {
-    const subs = newSubscriptions.map((s) => ({
+    const subscribedStudents = studentsWithSubscription.filter(
+      (s) => s.isSubscribed
+    );
+    const subs = subscribedStudents.map((s) => ({
       absense: 0,
       labInstanceId: labId,
       studentId: s.id,
       subscriptionDate: date,
     }));
+
     setIsProcessing(true);
     await api.post(`api/subscriptions/`, subs);
-    setNewSubscriptions([]);
+
+    // Reset all subscription flags
+    setStudentsWithSubscription(
+      studentsWithSubscription.map((s) => ({ ...s, isSubscribed: false }))
+    );
+
     refresh();
     closeModal();
     setIsProcessing(false);
@@ -89,7 +99,11 @@ const AbsencesModal: FC<{
   const sendNewStudent = async () => {
     const newStudent = await newStudentModal.current?.sendNewStudent();
     if (newStudent) {
-      addStudentForSubscription(newStudent);
+      // Add the new student with the subscription flag set to true
+      setStudentsWithSubscription([
+        ...studentsWithSubscription,
+        { ...newStudent, isSubscribed: true },
+      ]);
     }
     refresh();
     setAddNewStudent(false);
@@ -114,105 +128,55 @@ const AbsencesModal: FC<{
               }}
               type="text"
             />
-            <div className="flex flex-row gap-1">
-              <div
-                className="max-h-[230px] w-0 grow overflow-y-auto"
-                onWheel={(e) => {
-                  const delta = e.deltaY;
-                  if (ref1.current) {
-                    if (delta > 0) {
-                      ref1.current.scrollTop += 20;
-                    } else {
-                      ref1.current.scrollTop -= 20;
-                    }
+            <div
+              className="max-h-[460px] w-full overflow-y-auto"
+              onWheel={(e) => {
+                const delta = e.deltaY;
+                if (ref1.current) {
+                  if (delta > 0) {
+                    ref1.current.scrollTop += 20;
+                  } else {
+                    ref1.current.scrollTop -= 20;
                   }
-                }}
-                ref={ref1}
-              >
-                <Table hoverable>
-                  <Table.Head style={{ position: "sticky", top: "0px" }}>
-                    <Table.HeadCell className="w-1">A/M</Table.HeadCell>
-                    <Table.HeadCell>Όνομα</Table.HeadCell>
-                    <Table.HeadCell className="w-3">
-                      <span className="sr-only">Add</span>
-                    </Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body className="divide-y">
-                    {filteredStudents.map((student) => (
-                      <Table.Row
-                        key={student.id}
-                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          {student.register_number}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          {student.name}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          <Button
-                            size={"xs"}
-                            color={"light"}
-                            onClick={() => addStudentForSubscription(student)}
-                          >
-                            <BsPlusLg />
-                          </Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </div>
-              <div
-                className="max-h-[230px] w-0 grow overflow-y-auto"
-                onWheel={(e) => {
-                  const delta = e.deltaY;
-                  if (ref2.current) {
-                    if (delta > 0) {
-                      ref2.current.scrollTop += 20;
-                    } else {
-                      ref2.current.scrollTop -= 20;
-                    }
-                  }
-                }}
-                ref={ref2}
-              >
-                <Table hoverable>
-                  <Table.Head style={{ position: "sticky", top: "0px" }}>
-                    <Table.HeadCell className="w-1">A/M</Table.HeadCell>
-                    <Table.HeadCell>Όνομα</Table.HeadCell>
-                    <Table.HeadCell className=" w-3">
-                      <span className="sr-only">Add</span>
-                    </Table.HeadCell>
-                  </Table.Head>
-                  <Table.Body className="divide-y">
-                    {newSubscriptions.map((student) => (
-                      <Table.Row
-                        key={student.id}
-                        className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                      >
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          {student.register_number}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          {student.name}
-                        </Table.Cell>
-                        <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                          <Button
-                            size={"xs"}
-                            color={"light"}
-                            onClick={() =>
-                              removeStudentForSubscription(student)
-                            }
-                          >
-                            <BiMinus />
-                          </Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </div>
+                }
+              }}
+              ref={ref1}
+            >
+              <Table hoverable>
+                <Table.Head style={{ position: "sticky", top: "0px" }}>
+                  <Table.HeadCell className="w-1">A/M</Table.HeadCell>
+                  <Table.HeadCell>Όνομα</Table.HeadCell>
+                  <Table.HeadCell className="w-3 text-right"></Table.HeadCell>
+                </Table.Head>
+                <Table.Body className="divide-y">
+                  {filteredStudents.map((student) => (
+                    <Table.Row
+                      key={student.id}
+                      className={
+                        student.isSubscribed
+                          ? "bg-gray-50 dark:border-gray-700 dark:bg-gray-700"
+                          : "bg-white dark:border-gray-700 dark:bg-gray-800"
+                      }
+                    >
+                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                        {student.register_number}
+                      </Table.Cell>
+                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                        {student.name}
+                      </Table.Cell>
+                      <Table.Cell className="whitespace-nowrap text-right font-medium text-gray-900 dark:text-white">
+                        <Button
+                          size={"xs"}
+                          color={student.isSubscribed ? "failure" : "success"}
+                          onClick={() => toggleStudentSubscription(student)}
+                        >
+                          {student.isSubscribed ? <BiMinus /> : <BsPlusLg />}
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
             </div>
           </div>
         ) : (

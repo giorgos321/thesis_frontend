@@ -14,7 +14,6 @@ export const authInterceptor = (config: AxiosRequestConfig) => {
   return config;
 };
 
-
 const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8080/";
 
 export default axios.create({

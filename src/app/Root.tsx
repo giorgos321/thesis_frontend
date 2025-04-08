@@ -26,10 +26,10 @@ import "react-tooltip/dist/react-tooltip.css";
 import api, { apiParams } from "../api";
 import type { actions, appState, User } from "../appReducer";
 import { actionsEnum, appReducer, Roles } from "../appReducer";
-import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import ThemeProvider from "../hooks/ThemeProvider";
-import DarkThemeToggle from "./components/DarkThemeToggle";
+import useDidUpdateEffect from "../hooks/useDidUpdateEffect";
 import { Toast } from "../lib";
+import DarkThemeToggle from "./components/DarkThemeToggle";
 import Absences from "./pages/Absences";
 import RootUtils from "./RootUtils";
 import {

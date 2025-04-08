@@ -1,3 +1,4 @@
+/* eslint-disable tailwindcss/no-custom-classname */
 import type {
   EventChangeArg,
   EventClickArg,
@@ -14,17 +15,18 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import {
-  Accordion,
   Alert,
   Button,
   Label,
   Modal,
   Radio,
   Select,
+  Tabs,
+  ToggleSwitch,
 } from "flowbite-react";
 import moment, { Moment } from "moment";
 import "moment/locale/el";
-import { useContext, useEffect, useMemo, useState, useRef } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import { IoMdAdd, IoMdAlert } from "react-icons/io";
@@ -34,6 +36,8 @@ import { Roles } from "../../appReducer";
 import useTheme, { THEME_CHANGE_EVENT } from "../../hooks/useTheme";
 import { AppContext } from "../Root";
 // import useToast from "../../hooks/useToast";
+
+import "./calendarStyles.css";
 
 interface Lab {
   id?: number;
@@ -124,8 +128,8 @@ const Calendar = ({
   refresh: () => Promise<void>;
 }) => {
   const { theme } = useTheme();
-  
-  const [isDarkMode, setIsDarkMode] = useState(theme === 'dark');
+
+  const [isDarkMode, setIsDarkMode] = useState(theme === "dark");
   const [modal, setModal] = useState<boolean>(false);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [modalMode, setModalMode] = useState<ModalMode | undefined>(
@@ -137,6 +141,8 @@ const Calendar = ({
   const [alert, setAlert] = useState<
     undefined | { text1: string; text2: string }
   >();
+  const [dateError, setDateError] = useState<boolean>(false);
+  const [timeError, setTimeError] = useState<boolean>(false);
 
   const [labs, setLabs] = useState<Lab[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -146,6 +152,7 @@ const Calendar = ({
 
   const [startRecur, setStartRecur] = useState<Moment>(moment());
   const [endRecur, setEndRecur] = useState<Moment>(moment());
+  const [useHtmlTimePicker, setUseHtmlTimePicker] = useState<boolean>(false);
   const navigate = useNavigate();
 
   // const { showToast } = useToast();
@@ -200,7 +207,9 @@ const Calendar = ({
     if (typeof moment === "string") {
       return moment;
     } else {
-      return forForm ? moment.format("HH:mm") : moment.format("hh:mm a");
+      return forForm
+        ? moment.format("HH:mm")
+        : moment.locale("el").format("HH:mm");
     }
   };
 
@@ -208,7 +217,7 @@ const Calendar = ({
     if (typeof moment === "string") {
       return moment;
     } else {
-      return moment.format("YYYY-MM-DD");
+      return moment.locale("el").format("YYYY-MM-DD");
     }
   };
 
@@ -343,6 +352,9 @@ const Calendar = ({
     const timeIsNotGood = startTime.isSameOrAfter(endTime);
     const dateIsNotGood = moment(form.startRecur).isSameOrAfter(form.endRecur);
 
+    setTimeError(timeIsNotGood);
+    setDateError(dateIsNotGood);
+
     if (timeIsNotGood || dateIsNotGood) {
       if (dateIsNotGood) {
         setAlert({
@@ -409,16 +421,19 @@ const Calendar = ({
   } else {
     plugins.push(...[timeGridPlugin, dayGridPlugin, interactionPlugin]);
   }
-  
+
   const calendarRef = useRef(null);
 
   // Watch for theme changes
   useEffect(() => {
     // Initialize from localStorage
     const checkTheme = () => {
-      const theme = localStorage.getItem('theme');
-      const isDark = theme === 'dark' || 
-        (theme === null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      const theme = localStorage.getItem("theme");
+      const isDark =
+        theme === "dark" ||
+        (theme === null &&
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
       setIsDarkMode(isDark);
     };
 
@@ -428,11 +443,11 @@ const Calendar = ({
     // Set up an observer to watch for class changes on html element
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
+        if (mutation.attributeName === "class") {
           // Use requestAnimationFrame to schedule state update outside React's rendering cycle
           requestAnimationFrame(() => {
             const htmlElement = document.documentElement;
-            const hasDarkClass = htmlElement.classList.contains('dark');
+            const hasDarkClass = htmlElement.classList.contains("dark");
             setIsDarkMode(hasDarkClass);
           });
         }
@@ -445,25 +460,31 @@ const Calendar = ({
     const storageListener = () => {
       checkTheme();
     };
-    
+
     // Listen for custom theme change event
     const themeChangeListener = (e: CustomEvent) => {
       const newTheme = e.detail?.theme;
-      if (newTheme === 'dark' || newTheme === 'light') {
+      if (newTheme === "dark" || newTheme === "light") {
         // Use requestAnimationFrame to schedule state update outside React's rendering cycle
         requestAnimationFrame(() => {
-          setIsDarkMode(newTheme === 'dark');
+          setIsDarkMode(newTheme === "dark");
         });
       }
     };
-    
-    window.addEventListener('storage', storageListener);
-    window.addEventListener(THEME_CHANGE_EVENT, themeChangeListener as EventListener);
+
+    window.addEventListener("storage", storageListener);
+    window.addEventListener(
+      THEME_CHANGE_EVENT,
+      themeChangeListener as EventListener
+    );
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('storage', storageListener);
-      window.removeEventListener(THEME_CHANGE_EVENT, themeChangeListener as EventListener);
+      window.removeEventListener("storage", storageListener);
+      window.removeEventListener(
+        THEME_CHANGE_EVENT,
+        themeChangeListener as EventListener
+      );
     };
   }, []);
 
@@ -471,7 +492,7 @@ const Calendar = ({
   useEffect(() => {
     // Use requestAnimationFrame to schedule state update outside React's rendering cycle
     requestAnimationFrame(() => {
-      setIsDarkMode(theme === 'dark');
+      setIsDarkMode(theme === "dark");
     });
   }, [theme]);
 
@@ -480,14 +501,16 @@ const Calendar = ({
     // If calendar has been rendered, force a window resize event
     // This is a common trick to make FullCalendar redraw itself
     if (calendarRef.current) {
-      window.dispatchEvent(new Event('resize'));
+      window.dispatchEvent(new Event("resize"));
     }
   }, [isDarkMode]);
-  
+
   return (
     <div className="w-full">
       <div className="flex flex-row items-center justify-between pb-8">
-        <div className="text-2xl dark:text-white light:text-black">Πρόγραμμα Εργαστηρίων</div>
+        <div className="light:text-black text-2xl dark:text-white">
+          Πρόγραμμα Εργαστηρίων
+        </div>
         <Button
           size={"md"}
           onClick={() => {
@@ -501,7 +524,11 @@ const Calendar = ({
         </Button>
       </div>
 
-      <div className={`fullcalendar-container ${isDarkMode ? 'fc-dark-theme' : ''}`}>
+      <div
+        className={`fullcalendar-container ${
+          isDarkMode ? "fc-dark-theme" : ""
+        }`}
+      >
         <FullCalendar
           ref={calendarRef}
           plugins={plugins}
@@ -632,56 +659,6 @@ const Calendar = ({
                 </Select>
               </div>
             </div>
-            {/* 
-            <div className="flex flex-row items-center gap-2">
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Άρχη περιόδου μαθήματος" />
-                </div>
-                <TextInput 
-                  id="startRecur"
-                  type="date"
-                  value={form.startRecur}
-                  onChange={handleChange}
-                  required></TextInput>
-              </div>
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Τέλος περιόδου μαθήματος" />
-                </div>
-                <TextInput 
-                  id="endRecur"
-                  type="date"
-                  value={form.endRecur}
-                  onChange={handleChange}
-                  required></TextInput>
-              </div>
-            </div>
-
-            <div className="flex flex-row items-center gap-2">
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Ώρα έναρξης" />
-                </div>
-                <TextInput 
-                  id="startTime"
-                  type="time"
-                  value={form.startTime}
-                  onChange={handleChange}
-                  required ></TextInput>
-              </div>
-              <div className="flex-1">
-                <div className="mb-2 block">
-                  <Label value="Ώρα λήξης" />
-                </div>
-                <TextInput 
-                  id="endTime"
-                  type="time"
-                  value={form.endTime}
-                  onChange={handleChange}
-                  required></TextInput>
-              </div>
-            </div> */}
 
             <div className="flex flex-row items-center gap-2">
               <div className="flex-1">
@@ -719,50 +696,168 @@ const Calendar = ({
                       name={"colors"}
                       value={color}
                       onChange={handleChange}
-                      style={{ color }}
+                      className="color-radio-input"
+                      style={{
+                        accentColor: color,
+                        backgroundColor:
+                          form.color === color ? color : "transparent",
+                        borderColor: color,
+                      }}
                     />
                   ))}
                 </fieldset>
               </div>
             </div>
 
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <Accordion collapseAll>
-                <Accordion.Panel>
-                  <Accordion.Title>
-                    Επιλογή περιόδου εργαστηρίου
-                  </Accordion.Title>
-                  <Accordion.Content>
-                    <div className="flex flex-row">
+            <LocalizationProvider
+              dateAdapter={AdapterMoment}
+              adapterLocale="el"
+            >
+              <Tabs.Group aria-label="Calendar picker tabs" style="underline">
+                <Tabs.Item
+                  active
+                  title={
+                    <span
+                      className={dateError ? "font-medium text-red-600" : ""}
+                    >
+                      Επιλογή περιόδου εργαστηρίου
+                      {dateError && <span className="ml-2">⚠️</span>}
+                    </span>
+                  }
+                >
+                  <div className="mt-4 flex flex-row">
+                    <div className="flex flex-1 flex-col items-center">
+                      <h3
+                        className={`mb-3 text-base font-medium dark:text-white ${
+                          dateError ? "text-red-600 dark:text-red-400" : ""
+                        }`}
+                      >
+                        Ημερομηνία έναρξης:{" "}
+                        {startRecur.locale("el").format("DD MMMM YYYY")}
+                      </h3>
                       <DateCalendar
                         value={startRecur}
                         onChange={(e: any) => setStartRecur(moment(e))}
+                        className={`${
+                          isDarkMode ? "dark-calendar" : "light-calendar"
+                        } ${dateError ? "error-calendar" : ""}`}
                       />
+                    </div>
+                    <div className="flex flex-1 flex-col items-center">
+                      <h3
+                        className={`mb-3 text-base font-medium dark:text-white ${
+                          dateError ? "text-red-600 dark:text-red-400" : ""
+                        }`}
+                      >
+                        Ημερομηνία λήξης:{" "}
+                        {endRecur.locale("el").format("DD MMMM YYYY")}
+                      </h3>
                       <DateCalendar
                         value={endRecur}
                         onChange={(e: any) => setEndRecur(moment(e))}
+                        className={`${
+                          isDarkMode ? "dark-calendar" : "light-calendar"
+                        } ${dateError ? "error-calendar" : ""}`}
                       />
                     </div>
-                  </Accordion.Content>
-                </Accordion.Panel>
-                <Accordion.Panel>
-                  <Accordion.Title>Επιλογή ώρας</Accordion.Title>
-                  <Accordion.Content>
-                    <div className="flex flex-row gap-2 text-center text-base font-bold">
-                      <div className="flex-1">
+                  </div>
+                </Tabs.Item>
+                <Tabs.Item
+                  title={
+                    <span
+                      className={timeError ? "font-medium text-red-600" : ""}
+                    >
+                      Επιλογή ώρας
+                      {timeError && <span className="ml-2">⚠️</span>}
+                    </span>
+                  }
+                >
+                  <div className="mb-4 flex w-full flex-row items-center justify-between gap-2">
+                    <div className="flex w-full flex-row gap-2 text-center text-base font-bold">
+                      <div className="flex-1 dark:text-white">
                         Αρχή {getTimeFormat(startTime)}
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 dark:text-white">
                         Τέλος {getTimeFormat(endTime)}
                       </div>
                     </div>
+                  </div>
+                  <ToggleSwitch
+                    checked={useHtmlTimePicker}
+                    className="mb-4"
+                    onChange={setUseHtmlTimePicker}
+                    label="Απλοποιημένη επιλογή ώρας"
+                  />
+
+                  {useHtmlTimePicker ? (
+                    <div className="flex flex-row items-center justify-center gap-8 py-8">
+                      <div className="flex flex-col gap-2">
+                        <Label
+                          htmlFor="htmlStartTime"
+                          value="Ώρα έναρξης"
+                          className={timeError ? "text-red-600" : ""}
+                        />
+                        <input
+                          id="htmlStartTime"
+                          type="time"
+                          className={`rounded-lg border px-4 py-2 dark:bg-gray-700 dark:text-white ${
+                            timeError
+                              ? "border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-900/20"
+                              : "border-gray-300 dark:border-gray-600"
+                          }`}
+                          value={startTime.format("HH:mm")}
+                          onChange={(e) => {
+                            const [hours, minutes] = e.target.value.split(":");
+                            const newTime = moment()
+                              .hours(Number(hours))
+                              .minutes(Number(minutes));
+                            setStartTime(newTime);
+                            setForm({
+                              ...form,
+                              startTime: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Label
+                          htmlFor="htmlEndTime"
+                          value="Ώρα λήξης"
+                          className={timeError ? "text-red-600" : ""}
+                        />
+                        <input
+                          id="htmlEndTime"
+                          type="time"
+                          className={`rounded-lg border px-4 py-2 dark:bg-gray-700 dark:text-white ${
+                            timeError
+                              ? "border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-900/20"
+                              : "border-gray-300 dark:border-gray-600"
+                          }`}
+                          value={endTime.format("HH:mm")}
+                          onChange={(e) => {
+                            const [hours, minutes] = e.target.value.split(":");
+                            const newTime = moment()
+                              .hours(Number(hours))
+                              .minutes(Number(minutes));
+                            setEndTime(newTime);
+                            setForm({
+                              ...form,
+                              endTime: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ) : (
                     <div className="flex flex-row">
                       <TimeClock
                         showViewSwitcher={true}
                         ampm={false}
                         value={startTime}
                         ampmInClock={true}
-                        className="flex-1"
+                        className={`flex-1 ${
+                          isDarkMode ? "dark-calendar" : "light-calendar"
+                        } ${timeError ? "error-calendar" : ""}`}
                         onChange={(e: any) => setStartTime(moment(e))}
                       />
                       <TimeClock
@@ -770,13 +865,15 @@ const Calendar = ({
                         ampm={false}
                         value={endTime}
                         ampmInClock={true}
-                        className="flex-1"
+                        className={`flex-1 ${
+                          isDarkMode ? "dark-calendar" : "light-calendar"
+                        } ${timeError ? "error-calendar" : ""}`}
                         onChange={(e: any) => setEndTime(moment(e))}
                       />
                     </div>
-                  </Accordion.Content>
-                </Accordion.Panel>
-              </Accordion>
+                  )}
+                </Tabs.Item>
+              </Tabs.Group>
             </LocalizationProvider>
             {alert && (
               <Alert color="failure" icon={IoMdAlert}>

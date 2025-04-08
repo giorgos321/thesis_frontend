@@ -139,7 +139,9 @@ const Students = () => {
     <ModuleWrapper>
       <div className="flex w-full flex-col gap-6">
         <div className="flex flex-row items-center justify-between">
-          <div className="text-2xl dark:text-white light:text-black">Φοιτητές</div>
+          <div className="light:text-black text-2xl dark:text-white">
+            Φοιτητές
+          </div>
           <Button size={"md"} onClick={addNew}>
             <IoMdAdd className="mr-2" />
             Προσθήκη
